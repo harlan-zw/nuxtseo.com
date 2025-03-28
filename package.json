@@ -1,0 +1,81 @@
+{
+  "name": "nuxt-seo-docs",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.7.0+sha512.6b865ad4b62a1d9842b61d674a393903b871d9244954f652b8842c2b553c72176b278f64c463e52d40fff8aba385c235c8c9ecf5cc7de4fd78b8bb6d49633ab6",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "nuxi dev",
+    "build": "cd .. && pnpm dev:prepare && cd docs && nuxi prepare && nuxi build",
+    "deploy": "NITRO_PRESET=netlify nuxt build && npx netlify deploy",
+    "lint:docs": "markdownlint ./content && case-police 'content/**/*.md' *.md",
+    "lint:docs:fix": "markdownlint ./content --fix && case-police 'content/**/*.md' *.md --fix",
+    "twoslash:verify": "nuxt-content-twoslash verify --content-dir content"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.10.1",
+    "@iconify-json/carbon": "^1.2.8",
+    "@iconify-json/heroicons": "^1.2.2",
+    "@iconify-json/logos": "^1.2.4",
+    "@iconify-json/material-symbols": "^1.2.17",
+    "@iconify-json/noto": "^1.2.3",
+    "@iconify-json/ph": "^1.2.2",
+    "@iconify-json/radix-icons": "^1.2.2",
+    "@iconify-json/simple-icons": "^1.2.29",
+    "@iconify-json/uil": "^1.2.3",
+    "@iconify-json/unjs": "^1.2.0",
+    "@iconify-json/vscode-icons": "^1.2.17",
+    "@inspira-ui/plugins": "^0.0.1",
+    "@nuxt/content": "^3.4.0",
+    "@nuxt/devtools": "2.3.2",
+    "@nuxt/fonts": "^0.11.0",
+    "@nuxt/image": "^1.10.0",
+    "@nuxt/scripts": "^0.11.5",
+    "@nuxt/ui-pro": "^3.0.1",
+    "@nuxthub/core": "^0.8.21",
+    "@nuxtjs/seo": "^3.0.1",
+    "@unovis/vue": "^1.5.1",
+    "@vueuse/core": "^13.0.0",
+    "eslint": "^9.22.0",
+    "@vueuse/nuxt": "^13.0.0",
+    "better-sqlite3": "^11.9.1",
+    "case-police": "^1.0.0",
+    "clsx": "^2.1.1",
+    "consola": "^3.4.2",
+    "date-fns": "^4.1.0",
+    "markdownlint-cli": "^0.44.0",
+    "motion-v": "^0.13.1",
+    "nuxt": "3.16.1",
+    "nuxt-build-cache": "^0.1.1",
+    "nuxt-content-twoslash": "^0.1.2",
+    "nuxt-llms": "^0.1.2",
+    "nuxt-lodash": "^2.5.3",
+    "nuxt-rebundle": "^0.0.2",
+    "octokit": "^4.1.2",
+    "ofetch": "^1.4.1",
+    "shiki": "^3.2.1",
+    "shiki-transformer-color-highlight": "^1.0.0",
+    "sponsorkit": "^16.4.2",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "4.0.17",
+    "tailwindcss-animate": "^1.0.7",
+    "wrangler": "^4.5.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "better-sqlite3",
+      "esbuild",
+      "maplibre-gl",
+      "sharp",
+      "vue-demi",
+      "workerd"
+    ]
+  },
+  "resolutions": {
+    "@vue/server-renderer": "3.5.13",
+    "vue": "3.5.13"
+  }
+}

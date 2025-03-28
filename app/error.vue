@@ -1,0 +1,214 @@
+<script setup lang="ts">
+import type { NuxtError } from '#app'
+import { modules } from '@nuxtjs/seo/const'
+import Fuse from 'fuse.js'
+import { useModule } from '~/composables/module'
+
+const props = defineProps<{
+  error: NuxtError
+}>()
+
+const appConfig = useAppConfig()
+
+useSeoMeta({
+  title: props.error.statusCode === 404 ? 'Page not found' : props.error.statusMessage,
+  description: 'We are sorry but this page could not be found.',
+})
+
+const recommendedLinks = ref()
+
+const module = useModule([])
+console.log({ slug: module.value.slug })
+if (module) {
+  const { data: navigation } = await useAsyncData(`navigation`, () => queryCollectionNavigation(module.value.slug), {
+    transform(val) {
+      return val[0].children
+    },
+  })
+  const { data: search } = await useLazyAsyncData(`search`, () => queryCollectionSearchSections(module.value.slug))
+  console.log(navigation.value, search.value)
+
+  if (props.error.statusCode) {
+    const walkChildren = (children: any[], parents: string[] = []) => {
+      return (children || []).flatMap((item) => {
+        if (item.children) {
+          // If this is a parent with children, add its title to the parents array
+          // and pass that to recursive calls
+          const currentPath = [...parents, item.title]
+          return walkChildren(item.children, currentPath)
+        }
+        // For leaf nodes, include the hierarchy information
+        return {
+          ...item,
+          hierarchy: parents,
+          fullTitle: [...parents, item.title].join(' -> '),
+        }
+      })
+    }
+    const childrenOnly = walkChildren(navigation.value).map((i) => {
+      return {
+        title: i.title,
+        path: i.path,
+        lastPathSegment: i.path.split('/').slice(-1)[0],
+        hierarchy: i.hierarchy,
+        fullTitle: i.fullTitle,
+      }
+    })
+
+    // do a fuse search for a page link it
+    const fuse = new Fuse<{ path: string, lastPathSegment: string }>(childrenOnly, {
+      keys: [
+        {
+          name: 'path',
+          weight: 0.9,
+        },
+        {
+          name: 'lastPathSegment',
+          weight: 2,
+        },
+      ],
+      ignoreLocation: true,
+      isCaseSensitive: false,
+      includeScore: true,
+    })
+
+    const path = useRoute().path
+    const lastSegment = path.split('/').slice(-1)[0]
+    const explicitMatch = childrenOnly.filter(i => i.lastPathSegment === lastSegment)
+    // search for last segment see if we can find 1 direct match
+    if (explicitMatch?.length === 1) {
+      // redirect to the found path
+      await navigateTo(explicitMatch[0].path, { redirectCode: 301 })
+    }
+    else {
+      const res = fuse.search(path, {
+        limit: 3,
+      })
+      if (res.length) {
+        const { item, score } = res[0]
+        // can't be ambigious
+        const matchingScore = res[1]?.score === score || res[2]?.score === score
+        if (score < 0.01 && !matchingScore) {
+          await navigateTo(item.path, { redirectCode: 301 })
+        }
+        else {
+          recommendedLinks.value = res
+        }
+      }
+    }
+  }
+}
+// Provide
+provide('modules', modules)
+</script>
+
+<template>
+  <UApp :toaster="appConfig?.toaster">
+    <NuxtLoadingIndicator color="#FFF" />
+    <Header class="z-100" />
+    <UContainer>
+      <UMain class="flex flex-col items-center justify-center">
+        <div class="min-h-[60vh] flex flex-col gap-10 min-w-[50vw] px-4 py-12 mb-15">
+          <div class="w-4xl max-w-full">
+            <!-- Error Title -->
+            <h1 class="text-4xl font-bold  mb-4 flex items-center gap-2">
+              <UIcon name="i-carbon-warning-square" class="size-15" />
+              {{ error.statusCode === 404 ? 'Page Not Found' : 'Something Went Wrong' }}
+            </h1>
+
+            <!-- Error Description -->
+            <p class="text-xl  text-[var(--ui-text-dimmed)] mb-8">
+              {{ error.statusCode === 404 ? 'Oops... we can\'t find that page.' : 'Uh oh, looks like an error :(' }}
+            </p>
+
+            <!-- Additional Error Message (if not 404) -->
+            <div v-if="error.statusCode !== 404" class="text-red-500 mb-8 p-4 bg-red-50 rounded-lg">
+              {{ error.message }}
+            </div>
+
+            <!-- Home Link -->
+            <div v-else class="mb-3 text-[var(--ui-text-muted)]">
+              <div>
+                <span class="">Go back</span>
+                <NuxtLink
+                  to="/"
+                  class="text-indigo-600 font-medium hover:text-indigo-500 transition-colors duration-300 underline"
+                  @click="clearError"
+                >
+                  home
+                </NuxtLink>
+                <span class="">or search elsewhere.</span>
+              </div>
+            </div>
+            <!-- Search Box -->
+            <div class="w-1/2">
+              <UInput
+                type="search"
+                class="w-full"
+                placeholder="Search..."
+                @click="openSearch = true"
+              >
+                <template #leading>
+                  <UContentSearchButton size="sm" class="p-0 opacity-70 hover:opacity-100" />
+                </template>
+              </UInput>
+            </div>
+          </div>
+
+          <!-- "Did you mean?" Section -->
+          <div v-if="error.statusCode === 404" class="max-w-2xl">
+            <h2 class="text-xl font-semibold  mb-4">
+              Did you mean?
+            </h2>
+
+            <!-- Recommended Links -->
+            <div class="bg-[var(--ui-bg)] border-[var(--ui-border)] rounded-lg shadow-sm border  overflow-hidden">
+              <nav>
+                <ul class="divide-y divide-gray-100 dark:divide-neutral-800">
+                  <li
+                    v-for="(link, index) in recommendedLinks"
+                    :key="index"
+                    class="hover:bg-[var(--ui-bg-elevated)] transition-colors duration-150"
+                  >
+                    <NuxtLink
+                      :to="link.item.path"
+                      class="p-4 text-[var(--ui-text)] hover:text-[var(--ui-text-inverse)] block"
+                    >
+                      <div class="text-sm text-[var(--ui-text-dimmed)] mb-1">
+                        {{ link.item.hierarchy.slice(-3).join(' > ') }}
+                      </div>
+                      <div class="font-medium">
+                        {{ link.item.title }}
+                      </div>
+                      <div
+                        v-if="!link.item.html" class="flex items-center justify-between gap-2 w-full"
+                        :class="link.item.deprecated ? 'opacity-50' : ''"
+                      >
+                        <div class="flex items-center gap-2">
+                          {{ link.title }}
+                        </div>
+                        <UIcon v-if="link.tag" :name="`i-logos-${link.tag}`" dynamclic ass="w-4 h-4" />
+                      </div>
+                      <div v-else :class="link.item.deprecated ? 'opacity-50' : ''">
+                        <UIcon v-if="link.item.icon" :name="link.icon" class="w-4 h-4 text-(--ui-primary)-400 dark:text-sky-200" />
+                        <div v-html="link.item.title" />
+                      </div>
+                    </NuxtLink>
+                  </li>
+                  <!-- Empty state if no recommended links -->
+                  <li v-if="!recommendedLinks || recommendedLinks.length === 0" class="p-4 text-center text-gray-500">
+                    No suggestions available
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </UMain>
+    </UContainer>
+
+    <ClientOnly />
+
+    <Footer />
+  </UApp>
+</template>
