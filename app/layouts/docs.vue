@@ -13,11 +13,11 @@ provide('module', activeModule)
 const {
   data: search,
   refresh: refreshSearch,
-} = await useLazyAsyncData(`search`, () => queryCollectionSearchSections(activeModule.value.contentCollection))
+} = await useLazyAsyncData(`search-${activeModule.value.slug}`, () => queryCollectionSearchSections(activeModule.value.contentCollection))
 const {
   data: navigation,
   refresh: refreshNavigation,
-} = await useLazyAsyncData(`navigation`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
+} = await useLazyAsyncData(`navigation-${activeModule.value.slug}`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
   default: () => [],
   async transform(res) {
     const nav = mapPath(res)

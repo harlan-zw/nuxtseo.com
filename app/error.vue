@@ -21,7 +21,7 @@ const recommendedLinks = ref()
 const activeModule = await useModule()
 provide('module', activeModule)
 if (activeModule.value.slug) {
-  const { data: navigation } = await useAsyncData(`navigation`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
+  const { data: navigation } = await useAsyncData(`navigation-${activeModule.value.slug}`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
     default: () => [],
     async transform(res) {
       const nav = mapPath(res)
@@ -83,7 +83,7 @@ if (activeModule.value.slug) {
     },
   })
   provide('navigation', navigation)
-  const { data: search } = await useLazyAsyncData(`search`, () => queryCollectionSearchSections(activeModule.value.contentCollection))
+  const { data: search } = await useLazyAsyncData(`search-${activeModule.value.slug}`, () => queryCollectionSearchSections(activeModule.value.contentCollection))
   provide('search', search)
   if (props.error.statusCode) {
     const walkChildren = (children: any[], parents: string[] = []) => {
