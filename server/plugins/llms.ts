@@ -23,17 +23,5 @@ export default defineNitroPlugin((nitroApp) => {
       })
       return section
     })
-    // Add a new section to llms.txt
-    options.sections.push({
-      title: 'API Documentation',
-      description: 'REST API endpoints and usage',
-      links: [
-        {
-          title: 'Authentication',
-          description: 'API authentication methods',
-          href: `${options.domain}/api/auth`,
-        },
-      ],
-    })
   })
 })

@@ -8,7 +8,12 @@ export default defineEventHandler(async (e) => {
     if (module) {
       try {
         const page = await queryCollection(e, module.contentCollection).path(path.replace('.md', '')).first()
-        const text = await cachedFetchGitHubRaw(e, `${module.repo}/${module.contentPrefix}${page.id.split('/').slice(3).join('/')}`)
+        let repo = `${module.repo}/${module.contentPrefix}`
+        // doc has moved
+        if (repo.startsWith('harlan-zw/nuxt-seo')) {
+          repo = 'harlan-zw/nuxtseo.com/content'
+        }
+        const text = await cachedFetchGitHubRaw(e, `${repo}${page.id.split('/').slice(3).join('/')}`)
         // set headers for markdown - needs to be utf8
         setHeader(e, 'Content-Type', 'text/markdown; charset=utf-8')
         setHeader(e, 'Cache-Control', 'no-cache')
