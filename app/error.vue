@@ -3,6 +3,7 @@ import type { NuxtError } from '#app'
 import { modules } from '@nuxtjs/seo/const'
 import Fuse from 'fuse.js'
 import { useModule } from '~/composables/module'
+import {queryCollectionNavigation, useAsyncData} from "#imports";
 
 const props = defineProps<{
   error: NuxtError
@@ -17,13 +18,73 @@ useSeoMeta({
 
 const recommendedLinks = ref()
 
-const module = await useModule()
-if (module.value.slug) {
-  const { data: navigation } = await useAsyncData(`navigation`, () => queryCollectionNavigation(module.value.contentCollection), {
-    transform(val) {
-      return val[0].children
+const activeModule = await useModule()
+provide('module', activeModule)
+if (activeModule.value.slug) {
+  const { data: navigation } = await useAsyncData(`navigation`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
+    default: () => [],
+    async transform(res) {
+      const nav = mapPath(res)
+      return (nav || []).map((m) => {
+        if (m.path.includes('/api')) {
+          m.icon = 'i-logos-nuxt-icon'
+          m.title = 'Nuxt API'
+        }
+        else if (m.path.includes('/nitro-api')) {
+          m.icon = 'i-unjs-nitro'
+          m.title = 'Nitro API'
+        }
+        else if (m.path.includes('/releases')) {
+          m.icon = 'i-noto-sparkles'
+          m.title = 'Releases'
+        }
+        else if (m.path.includes('/migration-guide')) {
+          m.icon = 'i-noto-globe-with-meridians'
+          m.title = 'Migration Guides'
+        }
+        else if (m.path.includes('/guides')) {
+          m.title = 'Core Concepts'
+        }
+        if (m.children?.length) {
+          m.children = m.children.map((c) => {
+            if (c.children?.length === 1) {
+              c = c.children[0]
+            }
+            return c
+          })
+          m.children = m.children.map((c) => {
+            if (c.path.includes('/api/config')) {
+              c.icon = 'i-vscode-icons-file-type-typescript-official'
+              c.title = 'nuxt.config.ts'
+            }
+            else if (c.path.includes('/api/schema')) {
+              c.icon = 'i-vscode-icons-file-type-typescript-official'
+              c.title = 'runtime/types.ts'
+            }
+            else if (c.title.endsWith('()')) {
+              c.html = true
+              const [fnName] = c.title.split('()')
+              c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span style="--shiki-light: #6F42C1; --shiki-default: #6F42C1; --shiki-dark: #82AAFF;">${fnName}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #BABED8;">()</span></code>`
+            }
+            else if (c.title.startsWith('<') && c.title.endsWith('>') && !c.title.includes('<code')) {
+              const inner = c.title.slice(1, -1)
+              c.html = true
+              c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span class="line" line="2"><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;">  &lt;</span><span style="--shiki-light: #22863A; --shiki-default: #22863A; --shiki-dark: #F07178;">${inner}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;"> /&gt;
+</span></span></code>`
+            }
+            if (c.children?.length === 1) {
+              c = c.children[0]
+            }
+            return c
+          })
+        }
+        return m
+      })
     },
   })
+  provide('navigation', navigation)
+  const { data: search } = await useLazyAsyncData(`search`, () => queryCollectionSearchSections(activeModule.value.contentCollection))
+  provide('search', search)
   if (props.error.statusCode) {
     const walkChildren = (children: any[], parents: string[] = []) => {
       return (children || []).flatMap((item) => {
@@ -103,12 +164,13 @@ provide('modules', modules)
     <NuxtLoadingIndicator color="#FFF" />
     <Header class="z-100" />
 
-    <NuxtLayout v-if="module">
+    <NuxtLayout v-if="activeModule">
       <div class="w-4xl max-w-full">
         <UPageHeader
           :title="error.statusCode === 404 ? error.message : 'Something Went Wrong'"
           :description="error.statusCode === 404 ? 'Oops... we can\'t find that.' : 'Uh oh, looks like an error :('"
-          class="mb-10"
+          class="mb-10 whitespace-break"
+          :ui="{ title: 'max-w-full' }"
         />
         <!-- "Did you mean?" Section -->
         <div v-if="error.statusCode === 404" class="max-w-2xl">
@@ -132,8 +194,7 @@ provide('modules', modules)
                     <div class="text-sm text-[var(--ui-text-dimmed)] mb-1">
                       {{ link.item.hierarchy.slice(-3).join(' > ') }}
                     </div>
-                    <div class="font-medium">
-                      {{ link.item.title }}
+                    <div class="font-medium" v-html="link.item.title">
                     </div>
                     <div
                       v-if="!link.item.html" class="flex items-center justify-between gap-2 w-full"

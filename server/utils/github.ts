@@ -25,9 +25,9 @@ export const cachedFetchGitHubRaw = defineCachedFunction(async (e: H3Event, full
     throw new Error('Missing githubAccessToken')
   }
   fullPath = fullPath.replace('@', '/')
-  // if (!path?.startsWith('nuxt') && !path?.startsWith('harlan-zw/')) {
-  //   throw new Error(`Invalid repo ${path}`)
-  // }
+  if (!fullPath?.startsWith('nuxt') && !fullPath?.startsWith('harlan-zw/')) {
+    throw new Error(`Invalid repo ${fullPath}`)
+  }
   const repo = fullPath.split('/')[1]
   const owner = fullPath.split('/')[0]
   const path = fullPath.split('/').slice(2).join('/')
@@ -38,17 +38,14 @@ export const cachedFetchGitHubRaw = defineCachedFunction(async (e: H3Event, full
     owner,
     repo,
     path,
+  }).catch((err) => {
+    throw new Error(`Failed to fetch file content from GitHub for ${fullPath}`, err)
   })
-
-  // GitHub API returns file content as base64
-  if (!data.content) {
-    throw new Error('No content found in response')
-  }
 
   // Decode the Base64 content
   return Buffer.from(data.content, 'base64').toString('utf-8')
 }, {
-  maxAge: 0,
-  name: 'ghRawMd',
+  maxAge: 60 * 60, // 1 hour
+  name: 'ghRaw',
   getKey: (event: H3Event, fullPath: string) => fullPath,
 })

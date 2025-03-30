@@ -5,6 +5,7 @@ import { isHydratingRef, useCurrentDocPage } from '~/composables/data'
 const router = useRouter()
 const route = router.currentRoute
 const activeModule = inject('module')
+console.log({ activeModule })
 const search = inject('search')
 const navigation = inject('navigation')
 const currentPage = await useCurrentDocPage()
@@ -16,7 +17,7 @@ watch(router.currentRoute, async () => {
   currentPage.lastCommit.value = newData.lastCommit.value
 })
 
-const page = computed(() => currentPage.page.value)
+const page = computed(() => currentPage.page?.value)
 
 const searchTerm = ref('')
 
