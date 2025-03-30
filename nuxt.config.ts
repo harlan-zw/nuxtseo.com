@@ -58,6 +58,7 @@ export default defineNuxtConfig({
   sitemap: {
     exclude: [
       '**/.navigation',
+      '/__nuxt_content/**',
     ],
     xslColumns: [
       { label: 'URL', width: '100%' },
@@ -123,6 +124,7 @@ export default defineNuxtConfig({
           exclude: [
             '/docs/*',
             '/learn/*',
+            '/__nuxt_content/*',
             // old links still get added for some reason
             '/nuxt-seo/*',
             '/og-image/*',
@@ -243,7 +245,6 @@ export default defineNuxtConfig({
       '/api/github/sponsors.json': { prerender: true },
       '/api/_mdc/highlight': { cache: { group: 'mdc', name: 'highlight', maxAge: 60 * 60 } },
       '/api/_nuxt_icon': { cache: { group: 'icon', name: 'icon', maxAge: 60 * 60 * 24 * 7 } },
-      // '/__nuxt_content/**': { cache: { group: 'content', name: 'query', maxAge: 60 * 60 } },
     },
     scripts: {
       registry: {

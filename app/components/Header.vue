@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { motion } from 'motion-v'
-import { modules } from '~~/utils/modules'
 import { useStats } from '../composables/data'
 import { menu } from '../composables/nav'
 
@@ -47,44 +45,6 @@ const navigation = computed(() => {
     </template>
 
     <template #body>
-      <div v-if="activeModule">
-        <div class="space-y-2 mb-3">
-          <div class="text-center dark:text-blue-200 group-hover:text-blue-500 transition-all">
-            {{ activeModule.label }}
-          </div>
-          <ul v-if="motion" class="z-10 gap-1 text-blue-200 group-hover:text-blue-500 items-center justify-center flex transition-all relative">
-            <motion.li
-              v-for="module in [activeModule, ...modules.filter(m => m.slug !== activeModule.slug)]"
-              :key="module.slug"
-              :while-hover="{ scale: 1.2 }"
-              layout
-              :transition="{
-                type: 'spring',
-                damping: 20,
-                stiffness: 300,
-                duration: 2,
-              }"
-              :while-press="{
-                scale: activeModule.slug === module.slug ? 1.2 : 0.8,
-                rotate: activeModule.slug === module.slug ? 1.2 : 0.8,
-                transform: activeModule.slug === module.slug ? 'rotate(33deg)' : 'rotate(0deg)',
-              }"
-            >
-              <UButton
-                :title="`Switch to ${module.label}`" :aria-label="module.label" type="button"
-                class="cursor-pointer transition-all "
-                :to="module.to"
-                :class="[module.slug === activeModule.slug ? ['text-blue-400 dark:text-blue-300'] : ['text-[var(--ui-text-dimmed)] hover:text-blue-400']]"
-                variant="ghost"
-              >
-                <UIcon v-if="module.icon" dynamic :name="module.icon" class="w-5 h-5" />
-              </UButton>
-            </motion.li>
-          </ul>
-        </div>
-        <DocsSidebarHeader />
-        <USeparator class="mb-5" />
-      </div>
       <UContentNavigation :navigation="navigation">
         <template #link="{ link }">
           <div class="flex items-center gap-2">
@@ -115,21 +75,19 @@ const navigation = computed(() => {
           </UButton>
         </UTooltip>
 
-        <div class="flex items-center lg:gap-1.5">
-          <ColorModeButton />
+        <ColorModeButton />
 
-          <UTooltip text="Open Nuxt SEO on GitHub">
-            <UButton
-              aria-label="Nuxt SEO on GitHub"
-              to="https://github.com/harlan-zw/nuxt-seo"
-              target="_blank"
-              color="neutral"
-              variant="ghost"
-              class="hidden lg:inline-flex transition opacity-85"
-              icon="i-carbon-logo-github"
-            />
-          </UTooltip>
-        </div>
+        <UTooltip text="Open Nuxt SEO on GitHub">
+          <UButton
+            aria-label="Nuxt SEO on GitHub"
+            to="https://github.com/harlan-zw/nuxt-seo"
+            target="_blank"
+            color="neutral"
+            variant="ghost"
+            class="hidden lg:inline-flex transition opacity-85"
+            icon="i-carbon-logo-github"
+          />
+        </UTooltip>
       </div>
     </template>
   </UHeader>

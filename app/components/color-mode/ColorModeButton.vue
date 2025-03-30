@@ -36,6 +36,10 @@ const isDark = computed({
       <UIcon v-if="isDark" name="i-ph-moon-stars-duotone" class="w-5 h-5" />
       <UIcon v-else name="i-ph-sun-dim-duotone" class="w-5 h-5" />
       <span v-if="verbose">{{ isDark ? 'Light mode' : 'Dark mode' }}</span>
+      <template #fallback>
+        <!-- this will be rendered on server side -->
+        <div class="w-5 h-5" />
+      </template>
     </ClientOnly>
   </UButton>
 </template>

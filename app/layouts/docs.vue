@@ -1,20 +1,103 @@
 <script lang="ts" setup>
+import { queryCollectionNavigation } from '#imports'
 import { motion } from 'motion-v'
+import { modules } from '~~/utils/modules'
 import { isHydratingRef, useCurrentDocPage } from '~/composables/data'
+import { useModule } from '~/composables/module'
 
-const router = useRouter()
-const route = router.currentRoute
-const activeModule = inject('module')
-console.log({ activeModule })
-const search = inject('search')
-const navigation = inject('navigation')
+const route = useRoute()
+const navOpen = ref(false)
+
+const activeModule = useModule(useRouter().currentRoute.value.params.slug[0])
+provide('module', activeModule)
+const {
+  data: search,
+  refresh: refreshSearch,
+} = await useLazyAsyncData(`search`, () => queryCollectionSearchSections(activeModule.value.contentCollection))
+const {
+  data: navigation,
+  refresh: refreshNavigation,
+} = await useLazyAsyncData(`navigation`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
+  default: () => [],
+  async transform(res) {
+    const nav = mapPath(res)
+    return (nav || []).map((m) => {
+      if (m.path.includes('/api')) {
+        m.icon = 'i-logos-nuxt-icon'
+        m.title = 'Nuxt API'
+      }
+      else if (m.path.includes('/nitro-api')) {
+        m.icon = 'i-unjs-nitro'
+        m.title = 'Nitro API'
+      }
+      else if (m.path.includes('/releases')) {
+        m.icon = 'i-noto-sparkles'
+        m.title = 'Releases'
+      }
+      else if (m.path.includes('/migration-guide')) {
+        m.icon = 'i-noto-globe-with-meridians'
+        m.title = 'Migration Guides'
+      }
+      else if (m.path.includes('/guides')) {
+        m.title = 'Core Concepts'
+      }
+      if (m.children?.length) {
+        m.children = m.children.map((c) => {
+          if (c.children?.length === 1) {
+            c = c.children[0]
+          }
+          return c
+        })
+        m.children = m.children.map((c) => {
+          if (c.path.includes('/api/config')) {
+            c.icon = 'i-vscode-icons-file-type-typescript-official'
+            c.title = 'nuxt.config.ts'
+          }
+          else if (c.path.includes('/api/schema')) {
+            c.icon = 'i-vscode-icons-file-type-typescript-official'
+            c.title = 'runtime/types.ts'
+          }
+          else if (c.title.endsWith('()')) {
+            c.html = true
+            const [fnName] = c.title.split('()')
+            c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span style="--shiki-light: #6F42C1; --shiki-default: #6F42C1; --shiki-dark: #82AAFF;">${fnName}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #BABED8;">()</span></code>`
+          }
+          else if (c.title.startsWith('<') && c.title.endsWith('>') && !c.title.includes('<code')) {
+            const inner = c.title.slice(1, -1)
+            c.html = true
+            c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span class="line" line="2"><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;">  &lt;</span><span style="--shiki-light: #22863A; --shiki-default: #22863A; --shiki-dark: #F07178;">${inner}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;"> /&gt;
+</span></span></code>`
+          }
+          if (c.children?.length === 1) {
+            c = c.children[0]
+          }
+          return c
+        })
+      }
+      return m
+    })
+  },
+})
+provide('search', search)
+provide('navigation', navigation)
+watch(activeModule, async () => {
+  if (activeModule.value) {
+    await Promise.all([refreshNavigation(), refreshSearch()])
+  }
+})
+// const activeModule = provide('module')
+// const search = provide('search')
+// const navigation = provide('navigation')
 const currentPage = await useCurrentDocPage()
 provide('currentPage', currentPage)
-watch(router.currentRoute, async () => {
-  const newData = await useCurrentDocPage()
-  currentPage.page.value = newData.page.value
-  currentPage.surround.value = newData.surround.value
-  currentPage.lastCommit.value = newData.lastCommit.value
+watch(() => route.path, async () => {
+  navOpen.value = false
+  if (route.path.startsWith('/docs')) {
+    const newData = await useCurrentDocPage()
+    currentPage.page.value = newData.page.value
+    currentPage.surround.value = newData.surround.value
+    currentPage.lastCommit.value = newData.lastCommit.value
+  }
 })
 
 const page = computed(() => currentPage.page?.value)
@@ -22,23 +105,26 @@ const page = computed(() => currentPage.page?.value)
 const searchTerm = ref('')
 
 const subSectionLinks = computed(() => {
+  if (!activeModule.value) {
+    return []
+  }
   return [
     {
       label: 'Guides',
       to: `/docs/${activeModule.value.slug}/getting-started/introduction`,
-      active: !route.value.path.startsWith(`/docs/${activeModule.value.slug}/releases`) && !route.value.path.startsWith(`/docs/${activeModule.value.slug}/api`),
+      active: !route.path.startsWith(`/docs/${activeModule.value.slug}/releases`) && !route.path.startsWith(`/docs/${activeModule.value.slug}/api`),
     },
     {
       label: 'API',
       icon: 'i-heroicons-code',
       to: navigation.value.find(m => m.path.endsWith('/api'))?.children?.[0]?.path,
-      active: route.value.path.startsWith(`/docs/${activeModule.value.slug}/api`),
+      active: route.path.startsWith(`/docs/${activeModule.value.slug}/api`),
     },
     {
       label: 'Releases',
       icon: 'i-carbon-version',
       to: navigation.value.find(m => m.path.endsWith('/releases'))?.children?.[0]?.path,
-      active: route.value.path.startsWith(`/docs/${activeModule.value.slug}/releases`),
+      active: route.path.startsWith(`/docs/${activeModule.value.slug}/releases`),
     },
   ].filter(i => !!i.to)
 })
@@ -56,6 +142,10 @@ const isHydrating = isHydratingRef()
   <div>
     <div class=" h-12">
       <div class="relative max-w-[1452px] px-6 mx-auto flex lg:grid grid-cols-10 h-full justify-between lg:justify-center items-center w-full">
+        <UButton variant="link" class="font-semibold mr-3 font-sm lg:hidden flex items-center gap-2 cursor-pointer" @click="navOpen = true">
+          <UIcon name="i-carbon-open-panel-bottom" size="w-6 h-6" />
+          {{ activeModule.label }}
+        </UButton>
         <div class="col-span-2 flex h-12">
           <div class="h-full flex text-sm space-x-6">
             <div v-for="item in subSectionLinks" :key="item.to">
@@ -69,14 +159,14 @@ const isHydrating = isHydratingRef()
             </div>
           </div>
         </div>
-        <div class="col-span-6">
+        <div class="col-span-6 hidden lg:flex ">
           <div class="max-w-[66ch] mx-auto flex items-center gap-2 ">
             <div class="z-10  flex gap-2 items-center dark:text-blue-200 group-hover:text-blue-500 transition-all">
-              <div v-if="motion" class="font-semibold">
+              <div class="font-semibold">
                 {{ activeModule.label }}
               </div>
             </div>
-            <ul v-if="motion" class="z-10 gap-1 text-blue-200 group-hover:text-blue-500 hidden lg:flex transition-all relative">
+            <ul v-if="motion" class="z-10 gap-1 text-blue-200 flex group-hover:text-blue-500 transition-all relative">
               <motion.li
                 v-for="module in [activeModule, ...modules.filter(m => m.slug !== activeModule.slug)]"
                 :key="module.slug"
@@ -97,7 +187,7 @@ const isHydrating = isHydratingRef()
                 <UButton
                   :title="`Switch to ${module.label}`" :aria-label="module.label" type="button"
                   class="cursor-pointer transition-all "
-                  :to="route.path.endsWith('') ? module.to : module.to"
+                  :to="module.to"
                   :class="[module.slug === activeModule.slug ? ['text-blue-400 dark:text-blue-300'] : ['text-[var(--ui-text-dimmed)] hover:text-blue-400']]"
                   variant="ghost"
                 >
@@ -150,7 +240,7 @@ const isHydrating = isHydratingRef()
           </template>
           <template #left>
             <UPageAside class="max-w-[300px] pt-8">
-              <DocsSidebarHeader :key="activeModule?.slug || 'slug'" />
+              <DocsSidebarHeader :key="`${activeModule?.slug || ''}-${navigation?.length || 0}`" />
             </UPageAside>
           </template>
           <AnimatePresence v-if="motion" mode="wait">
@@ -181,5 +271,44 @@ const isHydrating = isHydratingRef()
         :fuse="{ resultLimit: 42 }"
       />
     </ClientOnly>
+    <UDrawer v-model:open="navOpen">
+      <template #content>
+        <div class="px-5">
+          <div class="space-y-2 mb-3 mt-5 px-5">
+            <ul v-if="motion" class="z-10 gap-1 text-blue-200 group-hover:text-blue-500 items-center justify-center flex transition-all relative">
+              <motion.li
+                v-for="module in [activeModule, ...modules.filter(m => m.slug !== activeModule.slug)]"
+                :key="module.slug"
+                :while-hover="{ scale: 1.2 }"
+                layout
+                :transition="{
+                  type: 'spring',
+                  damping: 20,
+                  stiffness: 300,
+                  duration: 2,
+                }"
+                :while-press="{
+                  scale: activeModule.slug === module.slug ? 1.2 : 0.8,
+                  rotate: activeModule.slug === module.slug ? 1.2 : 0.8,
+                  transform: activeModule.slug === module.slug ? 'rotate(33deg)' : 'rotate(0deg)',
+                }"
+              >
+                <UButton
+                  :title="`Switch to ${module.label}`" :aria-label="module.label" type="button"
+                  class="cursor-pointer transition-all "
+                  :to="module.to"
+                  :class="[module.slug === activeModule.slug ? ['text-blue-400 dark:text-blue-300'] : ['text-[var(--ui-text-dimmed)] hover:text-blue-400']]"
+                  variant="ghost"
+                >
+                  <UIcon v-if="module.icon" dynamic :name="module.icon" class="w-5 h-5" />
+                </UButton>
+              </motion.li>
+            </ul>
+          </div>
+          <DocsSidebarHeader />
+          <USeparator class="mb-5" />
+        </div>
+      </template>
+    </UDrawer>
   </div>
 </template>

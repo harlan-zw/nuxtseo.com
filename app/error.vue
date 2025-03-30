@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
+import { queryCollectionNavigation, useAsyncData } from '#imports'
 import { modules } from '@nuxtjs/seo/const'
 import Fuse from 'fuse.js'
 import { useModule } from '~/composables/module'
-import {queryCollectionNavigation, useAsyncData} from "#imports";
 
 const props = defineProps<{
   error: NuxtError
@@ -194,8 +194,7 @@ provide('modules', modules)
                     <div class="text-sm text-[var(--ui-text-dimmed)] mb-1">
                       {{ link.item.hierarchy.slice(-3).join(' > ') }}
                     </div>
-                    <div class="font-medium" v-html="link.item.title">
-                    </div>
+                    <div class="font-medium" v-html="link.item.title" />
                     <div
                       v-if="!link.item.html" class="flex items-center justify-between gap-2 w-full"
                       :class="link.item.deprecated ? 'opacity-50' : ''"

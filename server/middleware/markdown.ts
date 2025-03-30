@@ -13,7 +13,8 @@ export default defineEventHandler(async (e) => {
         setHeader(e, 'Content-Type', 'text/markdown; charset=utf-8')
         setHeader(e, 'Cache-Control', 'no-cache')
         return text
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
         return 'Failed to load markdown'
       }

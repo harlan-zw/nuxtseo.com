@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { getLastPathSegment, getPathSubSection } from '~~/utils/urls'
 
-const activeModule = await useModule()
 const route = useRoute()
 const navigation = inject('navigation')
+const activeModule = inject('module')
 
 const bottom = computed(() => {
-  const links = (navigation.value || []).filter((p) => {
+  if (!navigation.value) {
+    return []
+  }
+  const links = navigation.value.filter((p) => {
     if (['migration-guide', 'releases'].includes(getLastPathSegment(getPathSubSection(route.path)))) {
       return ['migration-guide', 'releases'].includes(getLastPathSegment(p.path))
     }
@@ -63,7 +66,7 @@ const topLinks = computed(() => [
       </ul>
       <USeparator class="mt-0 pt-0" />
       <ContentNavigation
-        as="div" default-open :collapsible="false" :navigation="bottom || []" highlight
+        as="div" default-open :collapsible="false" :navigation="bottom" highlight
         :ui="{ listWithChildren: 'sm:ml-0 mt-2' }"
       >
         <template #link="{ link }">

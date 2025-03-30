@@ -30,7 +30,7 @@ function attachRouteWatcher() {
       <template v-if="ad">
         <div
           v-if="ad.id === 'pro'"
-          class="Carbon border text-xs dark:text-neutral-300 text-neutral-700 border-neutral-200 dark:border-neutral-800 rounded-lg mb-5"
+          class="px-1 Carbon border text-xs dark:text-neutral-300 text-neutral-700 border-neutral-200 dark:border-neutral-800 rounded-lg mb-5"
         >
           <div class="px-1 pt-1 mb-2 flex items-center justify-between ">
             <strong>Nuxt SEO <span class="text-green-500">Pro</span></strong>
@@ -52,7 +52,7 @@ function attachRouteWatcher() {
         </div>
         <div
           v-else-if="ad.id === 'blueprint'"
-          class="Carbon border text-xs dark:text-neutral-300 text-neutral-700 border-neutral-200 dark:border-neutral-800 rounded-lg mb-5"
+          class="px-1 Carbon border text-xs dark:text-neutral-300 text-neutral-700 border-neutral-200 dark:border-neutral-800 rounded-lg mb-5"
         >
           <div class="px-1 pt-1 mb-2 flex items-center justify-between">
             <strong>SEO <span class="text-green-500">Blueprint</span></strong>

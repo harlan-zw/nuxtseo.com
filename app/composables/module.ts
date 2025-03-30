@@ -7,11 +7,10 @@ export const modules = baseModules.map((m) => {
   }
 })
 
-export async function useModule(_slug?: Ref<string> | string) {
-  const route = useRouter().currentRoute
-  const { data: stats } = await useStats()
+export function useModule(_slug?: Ref<string> | string) {
+  const stats = inject('stats')
   return computed(() => {
-    const slug = _slug ? toValue(_slug) : route.value.path.split('/')[2]
+    const slug = _slug ? toValue(_slug) : useRoute().path.split('/')[2]
     const module = modules.find(m => m.slug === slug)
     if (!module) {
       return null
