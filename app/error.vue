@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
-import { queryCollectionNavigation, useAsyncData } from '#imports'
+import { queryCollectionNavigation, useAsyncData, useStats } from '#imports'
 import { modules } from '@nuxtjs/seo/const'
 import Fuse from 'fuse.js'
 import { useModule } from '~/composables/module'
@@ -18,7 +18,15 @@ useSeoMeta({
 
 const recommendedLinks = ref()
 
-const activeModule = await useModule()
+const { data: stats } = await useStats()
+if (!stats.value) {
+  createError({
+    statusText: 'Missing stats.json!',
+    status: 500,
+  })
+}
+provide('stats', stats)
+const activeModule = useModule()
 provide('module', activeModule)
 if (activeModule.value.slug) {
   const { data: navigation } = await useAsyncData(`navigation-${activeModule.value.slug}`, () => queryCollectionNavigation(activeModule.value.contentCollection), {

@@ -39,7 +39,8 @@ export const cachedFetchGitHubRaw = defineCachedFunction(async (e: H3Event, full
     repo,
     path,
   }).catch((err) => {
-    throw new Error(`Failed to fetch file content from GitHub for ${fullPath}`, err)
+    console.error(err)
+    throw new Error(`Failed to fetch file content from GitHub for ${fullPath}`)
   })
 
   // Decode the Base64 content
