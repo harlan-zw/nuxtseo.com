@@ -259,10 +259,12 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
               }"
               class="cursor-pointer transform-gpu"
             >
+              <NuxtLink :to="module.to">
               <UIcon
                 :name="module.icon"
                 class="size-6 sm:size-10 xl:size-25 text-blue-300"
               />
+              </NuxtLink>
             </motion.div>
           </div>
         </div>
