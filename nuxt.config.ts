@@ -243,7 +243,7 @@ export default defineNuxtConfig({
       '/api/github/sponsors.json': { prerender: true },
       '/api/_mdc/highlight': { cache: { group: 'mdc', name: 'highlight', maxAge: 60 * 60 } },
       '/api/_nuxt_icon': { cache: { group: 'icon', name: 'icon', maxAge: 60 * 60 * 24 * 7 } },
-      '/__nuxt_content/**': { cache: { group: 'content', name: 'query', maxAge: 60 * 60 } },
+      // '/__nuxt_content/**': { cache: { group: 'content', name: 'query', maxAge: 60 * 60 } },
     },
     scripts: {
       registry: {
