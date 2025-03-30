@@ -19,7 +19,7 @@ const isComingSoon = computed(() => typeof props.module === 'object')
           </div>
         </template>
         <template v-for="(item, key) in items" :key="key" #[item.slot]>
-          <MDC v-if="item.mdc" :value="item.mdc" unwrap="p" class="text-xs pb-5" />
+          <ContentRenderer v-if="item.body" :value="item.body" unwrap="p" class="text-xs pb-5" />
         </template>
       </UAccordion>
       <div v-else>

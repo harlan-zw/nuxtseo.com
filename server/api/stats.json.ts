@@ -41,12 +41,12 @@ export default defineCachedEventHandler(async (e) => {
       for (const c of nuxtApiStats.contributors) {
         uniqueContributors.add(c.id)
       }
-      allReleases.push(...(releases || []).map(r => ({
+      allReleases.push(...(releases?.releases || []).map(r => ({
         ...r,
         slug: m.slug,
       })))
       // get all major versions from releases, need to map into major version groups then get first child
-      const versionGroups = releases.map(r => r.name).reduce((group, v) => {
+      const versionGroups = (releases?.releases || []).map(r => r.name).reduce((group, v) => {
         const [major] = v.split('.').slice(0, 1)
         group[major] = group[major] || []
         group[major].push(v)
@@ -58,12 +58,17 @@ export default defineCachedEventHandler(async (e) => {
         slug: m.slug,
         createdAt: stats?.createdAt,
         publishedAt: stats?.publishedAt,
-        version: releases[0].name,
+        version: releases?.releases[0].name,
         versions,
         stars: stars.stars || stats?.stars,
         commitCount,
         issuesCloses,
-        ...downloads,
+        downloads: downloads.totalDownloads90,
+        totalDownloads90: downloads.totalDownloads90,
+        totalDownloads30: downloads.totalDownloads30,
+        averageDownloads30: downloads.averageDownloads30,
+        averageDownloads90: downloads.averageDownloads90,
+        percentageChange: downloads.percentageChange,
       })
     }))
   }
@@ -74,7 +79,6 @@ export default defineCachedEventHandler(async (e) => {
     uniqueContributors: [...uniqueContributors],
     totalCommits: moduleStats.reduce((acc, s) => acc + s.commitCount, 0),
     totalIssuesClosed: moduleStats.reduce((acc, s) => acc + s.issuesCloses, 0),
-    allReleases: allReleases.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()).slice(0, 20),
   }
 }, {
   // last for 1 day

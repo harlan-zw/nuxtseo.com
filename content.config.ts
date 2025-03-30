@@ -22,8 +22,8 @@ const schema = z.object({
 
 function getSubModuleCollection(m: NuxtSEOModule) {
   const localDirPaths = new Set([
-    resolve(__dirname, '..', '..', m.npm, 'docs', 'content'),
-    resolve(__dirname, '..', '..', m.repo.replace('harlan-zw/', '').replace('nuxt-modules/', ''), 'docs', 'content'),
+    resolve(__dirname, '..', m.npm, 'docs', 'content'),
+    resolve(__dirname, '..', m.repo.replace('harlan-zw/', '').replace('nuxt-modules/', ''), 'docs', 'content'),
   ])
   for (const localDirPath of localDirPaths) {
     if (existsSync(localDirPath)) {
@@ -52,7 +52,7 @@ function getSubModuleCollection(m: NuxtSEOModule) {
   }))
 }
 
-export default defineContentConfig({
+export const content = defineContentConfig({
   collections: {
     nuxtSeo: defineCollection(asSeoCollection({
       schema,
@@ -117,5 +117,14 @@ export default defineContentConfig({
         readTime: z.string(),
       }),
     })),
+    snippets: defineCollection({
+      type: 'page', // partial
+      source: {
+        include: '**/*.md',
+        cwd: resolve('./content/snippets'),
+      },
+    }),
   },
 })
+
+export default content

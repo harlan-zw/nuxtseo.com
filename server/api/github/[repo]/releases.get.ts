@@ -9,11 +9,15 @@ export default defineCachedEventHandler(async (e) => {
       'X-GitHub-Api-Version': '2022-11-28',
     },
   })
-  return res.map(release => ({
-    name: release.tag_name,
-    publishedAt: release.published_at,
-    body: release.body,
-  }))
+
+  return {
+    fetchedAt: new Date().toISOString(),
+    releases: res.map(release => ({
+      name: release.tag_name,
+      publishedAt: release.published_at,
+      body: release.body,
+    })),
+  }
 }, {
   // last for 1 hour
   maxAge: 60 * 60,

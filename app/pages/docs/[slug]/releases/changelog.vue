@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { formatTimeAgo } from '@vueuse/core'
-import { useStats } from '~/composables/data'
 
 definePageMeta({
   layout: 'docs',
@@ -10,8 +9,26 @@ definePageMeta({
   },
 })
 
-const stats = await useStats()
-const module = useModule([])
+const module = await useModule()
+const { data: releases } = await useAsyncData(`changelog-${module.value.slug}`, () => {
+  return $fetch(`/api/github/${module.value.repo.replace('/', '@')}/releases`)
+})
+
+const page = ref(1)
+watch(page, () => {
+  // scroll top on page change
+  window.scrollTo({
+    top: 100,
+    behavior: 'smooth',
+  })
+})
+const perPage = 10
+
+const paginatedReleases = computed(() => {
+  const start = (page.value - 1) * perPage
+  const end = start + perPage
+  return releases.value.releases.slice(start, end)
+})
 
 // credits https://github.com/antfu/releases.antfu.me/blob/main/app/components/TheItem.vue
 const HighlightedVersion = defineComponent({
@@ -59,19 +76,15 @@ const HighlightedVersion = defineComponent({
     }
   },
 })
-const route = useRoute()
-const releases = computed(() => {
-  return stats.value.allReleases.filter(r => r.slug === route.params.slug)
-})
 </script>
 
 <template>
   <div>
-    <UPageHeader :title="`Nuxt ${module.label} Changelog`" description="See what has been shipping recently." />
+    <UPageHeader title="Changelog" :description="`See the latest updates for ${module.label}`" />
     <div class="text-center flex justify-between my-5">
       <div class="dark:text-neutral-300 text-sm">
         Last fetched:
-        {{ formatTimeAgo(new Date(stats.fetchedAt)) }}.
+        {{ formatTimeAgo(new Date(releases.fetchedAt)) }}.
       </div>
       <div class="mt-1 text-[var(--ui-text-muted)] text-sm">
         See <NuxtLink external href="https://github.com/unjs/unhead/releases" target="_blank">
@@ -85,9 +98,8 @@ const releases = computed(() => {
       class="space-y-6 max-w-3xl mx-auto"
     >
       <li
-        v-for="(release, key) in releases"
+        v-for="(release, key) in paginatedReleases"
         :key="key"
-        class="transform transition-all duration-300 hover:translate-y-[-2px]"
       >
         <div class="flex items-center mb-3">
           <UBadge variant="soft" color="neutral">
@@ -102,7 +114,7 @@ const releases = computed(() => {
           class="overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
         >
           <div class="pb-5 border-b border-[var(--ui-border)] ">
-            <NuxtLink target="_blank" :to="`https://github.com/unjs/unhead/releases/tag/${release.name}`" class="pb-3">
+            <NuxtLink target="_blank" :to="`https://github.com/${module.repo}/releases/tag/${release.name}`" class="pb-3">
               <h3 class="text-xl font-bold flex items-center gap-2">
                 <HighlightedVersion :version="release.name.slice(1)" class="font-mono" />
                 <UBadge v-if="key === 0" icon="i-carbon-star" variant="soft">
@@ -115,23 +127,11 @@ const releases = computed(() => {
           <div class="prose prose-zinc dark:prose-invert prose-sm max-w-none">
             <MDC :value="release.body" />
           </div>
-
-          <div v-if="release.url" class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-end">
-            <UButton
-              to="release.url"
-              target="_blank"
-              variant="ghost"
-              size="sm"
-              color="gray"
-              class="text-xs font-medium"
-              trailing-icon="i-heroicons-arrow-top-right-on-square"
-            >
-              View on GitHub
-            </UButton>
-          </div>
         </UCard>
       </li>
     </TransitionGroup>
+
+    <UPagination v-if="releases.releases" v-model:page="page" :total="releases.releases.length" :show-controls="false" class="mt-10" />
 
     <div class="mt-10 text-center">
       <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">

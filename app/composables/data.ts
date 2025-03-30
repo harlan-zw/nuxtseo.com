@@ -1,44 +1,63 @@
-import type { Collections, NavItem } from '@nuxt/content'
-import { computedAsync, queryCollectionNavigation, useAsyncData, useFetch } from '#imports'
-import { camelCase, titleCase } from 'scule'
+import { useAsyncData } from '#imports'
+import { titleCase } from 'scule'
+import { modifyRelativeDocLinksWithFramework } from '~~/utils/content'
 
 export async function useStats() {
-  const { data: stats } = await useFetch('/api/stats.json', {
-    key: 'stats',
-  })
-  return stats
+  const nuxtApp = useNuxtApp()
+  if (nuxtApp.static.data._nuxtSeoStats) {
+    return nuxtApp.static.data._nuxtSeoStats
+  }
+  const asyncData = useAsyncData('stats', () => $fetch('/api/stats.json'))
+  nuxtApp.static.data._nuxtSeoStats = asyncData
+  return asyncData
 }
 
 export async function useCurrentDocPage() {
-  const route = useRoute()
-  const module = useModule([])
-  const collection = camelCase(module.value.slug) as keyof Collections
-  if (!collection)
-    throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
-
-  const [{ data: page }, { data: surround }] = await Promise.all([
-    useAsyncData(`docs-${route.path}`, async () => {
-      return await queryCollection(collection).path(route.path).first()
-    }),
-    useAsyncData(`docs-${route.path}-surround`, async () => {
-      return await queryCollectionItemSurroundings(collection, route.path, {
-        fields: ['title', 'description', 'path'],
-      })
-    }, {
-      transform(items) {
-        return items.map((m) => {
-          return {
-            ...m,
-            _path: m.path,
-          }
-        })
-      },
-    }),
-  ])
-  return {
-    page,
-    surround,
+  const nuxtApp = useNuxtApp()
+  const route = useRouter().currentRoute.value
+  if (nuxtApp.static.data.docsCurrent?.path === route.path) {
+    return await nuxtApp.static.data.docsCurrent.promise
   }
+  const module = modules.find(m => m.slug === route.path.split('/')[2])
+  if (!module) {
+    throw createError({ statusCode: 404, statusMessage: `Page not found`, fatal: true })
+  }
+
+  const p = new Promise(async (resolve) => {
+    const [{ data: page }, { data: surround }] = await Promise.all([
+      useAsyncData(`docs-${route.path}`, () => queryCollection(module.contentCollection).path(route.path).first(), {
+        transform(item) {
+          modifyRelativeDocLinksWithFramework(item.body.value)
+          return item
+        },
+      }),
+      useAsyncData(`docs-${route.path}-surround`, () => queryCollectionItemSurroundings(module.contentCollection, route.path, {
+        fields: ['title', 'description', 'path'],
+      }), {
+        transform(items) {
+          return items.map((m) => {
+            return {
+              ...m,
+              _path: m.path,
+            }
+          })
+        },
+      }),
+    ])
+    await nuxtApp.runWithContext(async () => {
+      const { data: lastCommit } = await useAsyncData(`docs-${route.path}-last-commit`, () => {
+        return $fetch(`/api/github/${module.repo.replace('/', '@')}/last-file-commit?file=${module.contentPrefix}${page.value.id.split('/').slice(3).join('/')}`)
+      })
+      resolve({
+        page,
+        surround,
+        lastCommit,
+      })
+    })
+  })
+
+  nuxtApp.static.data.docsCurrent = { promise: p, path: toRaw(route.path) }
+  return p
 }
 
 export function movingAverage(data: number[], windowSize: number) {
@@ -53,7 +72,7 @@ export function movingAverage(data: number[], windowSize: number) {
   return result
 }
 
-function mapPath(data, node = 0) {
+export function mapPath(data, node = 0) {
   if (node < 2) {
     return mapPath(data[0].children, node + 1)
   }
@@ -68,101 +87,6 @@ function mapPath(data, node = 0) {
     }
   })
 }
-function transformAsTopNav(tree: NavItem[]) {
-  // we flatten the first children on to the start of the tree
-  const children = tree[0]?.children || []
-  return [
-    ...children.map((child) => {
-      if (child.path.endsWith('installation')) {
-        child.icon = 'i-ph-rocket-launch-duotone'
-      }
-      else if (child.path.endsWith('troubleshooting')) {
-        child.icon = 'i-ph-hammer-duotone'
-      }
-      else if (child.path.endsWith('introduction') || child.path.endsWith('what-is-nuxt-seo')) {
-        child.icon = 'i-ph-text-align-center-duotone'
-      }
-      return child
-    }),
-  ]
-}
-
-export async function useDocsNav(module: any) {
-  if (!module.value) {
-    return ref({ files: [], nav: [] })
-  }
-  const collection = computed(() => camelCase(module.value.slug) as keyof Collections)
-  return computedAsync(async () => {
-    const [{ data: files }, { data: nav }] = await Promise.all([
-      useAsyncData('search', () => queryCollectionSearchSections(collection.value)),
-      useAsyncData(`navigation-${collection.value}`, () => queryCollectionNavigation(collection.value), {
-        default: () => [],
-        async transform(res) {
-          const nav = mapPath(res)
-          return (nav || []).map((m) => {
-            if (m.path.includes('/api')) {
-              m.icon = 'i-logos-nuxt-icon'
-              m.title = 'Nuxt API'
-            }
-            else if (m.path.includes('/nitro-api')) {
-              m.icon = 'i-unjs-nitro'
-              m.title = 'Nitro API'
-            }
-            else if (m.path.includes('/releases')) {
-              m.icon = 'i-noto-sparkles'
-              m.title = 'Releases'
-            }
-            else if (m.path.includes('/migration-guide')) {
-              m.icon = 'i-noto-globe-with-meridians'
-              m.title = 'Migration Guides'
-            }
-            else if (m.path.includes('/guides')) {
-              m.icon = 'i-ph-book-duotone'
-              m.title = 'Guides'
-            }
-            if (m.children?.length) {
-              m.children = m.children.map((c) => {
-                if (c.children?.length === 1) {
-                  c = c.children[0]
-                }
-                return c
-              })
-              m.children = m.children.map((c) => {
-                if (c.path.includes('/api/config')) {
-                  c.icon = 'i-vscode-icons-file-type-typescript-official'
-                  c.title = 'nuxt.config.ts'
-                }
-                else if (c.path.includes('/api/schema')) {
-                  c.icon = 'i-vscode-icons-file-type-typescript-official'
-                  c.title = 'runtime/types.ts'
-                }
-                else if (c.title.endsWith('()')) {
-                  c.html = true
-                  const [fnName] = c.title.split('()')
-                  c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span style="--shiki-light: #6F42C1; --shiki-default: #6F42C1; --shiki-dark: #82AAFF;">${fnName}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #BABED8;">()</span></code>`
-                }
-                else if (c.title.startsWith('<') && c.title.endsWith('>') && !c.title.includes('<code')) {
-                  const inner = c.title.slice(1, -1)
-                  c.html = true
-                  c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span class="line" line="2"><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;">  &lt;</span><span style="--shiki-light: #22863A; --shiki-default: #22863A; --shiki-dark: #F07178;">${inner}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;"> /&gt;
-</span></span></code>`
-                }
-                if (c.children?.length === 1) {
-                  c = c.children[0]
-                }
-                return c
-              })
-            }
-            return m
-          })
-        },
-        watch: [collection],
-      }),
-    ])
-    return { files, nav }
-  })
-}
-
 export const reviews = [
   {
     username: '@nogueiraju',
@@ -213,3 +137,12 @@ amazing work @harlan_zw`,
     body: `Nuxt GraphQL middleware by @dulnan is really, really good. And Nuxt SEO by @harlan_zw is also something I use in almost every project. There are so many more though!`,
   },
 ]
+
+export function isHydratingRef() {
+  const nuxtApp = useNuxtApp()
+  const isHydrating = ref(true)
+  nuxtApp.hooks.hook('page:finish', () => {
+    isHydrating.value = false
+  })
+  return isHydrating
+}

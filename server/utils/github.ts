@@ -18,3 +18,37 @@ export function initOctokitRequestHandler(e: H3Event) {
     }),
   }
 }
+
+export const cachedFetchGitHubRaw = defineCachedFunction(async (e: H3Event, fullPath: string) => {
+  const { githubAccessToken } = useRuntimeConfig(e)
+  if (!githubAccessToken) {
+    throw new Error('Missing githubAccessToken')
+  }
+  fullPath = fullPath.replace('@', '/')
+  // if (!path?.startsWith('nuxt') && !path?.startsWith('harlan-zw/')) {
+  //   throw new Error(`Invalid repo ${path}`)
+  // }
+  const repo = fullPath.split('/')[1]
+  const owner = fullPath.split('/')[0]
+  const path = fullPath.split('/').slice(2).join('/')
+  const octokit = new Octokit({
+    auth: githubAccessToken,
+  })
+  const { data } = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+    owner,
+    repo,
+    path,
+  })
+
+  // GitHub API returns file content as base64
+  if (!data.content) {
+    throw new Error('No content found in response')
+  }
+
+  // Decode the Base64 content
+  return Buffer.from(data.content, 'base64').toString('utf-8')
+}, {
+  maxAge: 0,
+  name: 'ghRawMd',
+  getKey: (event: H3Event, fullPath: string) => fullPath,
+})

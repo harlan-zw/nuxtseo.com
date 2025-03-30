@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { useAsyncData } from '#imports'
 import { useElementHover, useTransition, useWindowScroll } from '@vueuse/core'
-import { endOfMonth, format, subMonths } from 'date-fns'
+import { motion } from 'motion-v'
 import { ref } from 'vue'
 import { reviews, useStats } from '~/composables/data'
 import { humanNumber } from '~/composables/format'
 import { modules } from '~/composables/module'
-import 'motion-v'
 
 definePageMeta({
   breadcrumb: {
@@ -14,8 +14,7 @@ definePageMeta({
   },
 })
 
-const modules = inject('modules')
-const stats = await useStats()
+const { data: stats } = await useStats()
 
 useSeoMeta({
   title: '%siteName %separator All-in-one Technical SEO for Nuxt',
@@ -92,429 +91,72 @@ useServerHead({
   ],
 })
 
-// TODO ssr these
-const robotsItems = [
-  {
-    label: 'Zero config dynamic /robots.txt',
-    slot: 'robots-txt',
-    mdc: [
-      '```robots-txt [robots.txt] meta=meta-value',
-      `# START nuxt-robots (indexable)
-User-agent: *
+const { data: snippets } = await useAsyncData(`home-snippets`, () => queryCollection('snippets').where('path', 'LIKE', '/home/%').all(),
+)
 
-Sitemap: https://nuxtseo.com/sitemap.xml
-# END nuxt-robots`,
-      '```',
-      'Learn about [how it works](/docs/robots/guides/how-it-works).',
-    ].join('\n'),
-  },
-  {
-    label: 'Page level robots control',
-    slot: 'meta',
-    mdc: [
-      '```ts twoslash [/secret.vue]',
-      '// modifies meta robots tag and X-Robots HTTP Header',
-      'useRobotsRule(\'noindex, nofollow\')',
-      '```',
-      'See the [`useRobotsRule()`{lang="ts"}](/docs/robots/api/use-robots-rule) for full usage.',
-    ].join('\n'),
-  },
-  {
-    label: 'Avoid non-production sites getting indexed',
-    slot: 'nonProduction',
-    mdc: [
-      '```dotenv [.env]',
-      '# Disable indexing',
-      'NUXT_PUBLIC_SITE_ENV=staging',
-      '```',
-      'See the [Disabling Site Indexing](/docs/robots/guides/disable-indexing) for further usage.',
-    ].join('\n'),
-  },
-]
-
-const sitemapItems = [
-  {
-    label: 'Zero config /sitemap.xml',
-    slot: 'sitemap',
-    mdc: [
-      '```xml [sitemap.xml]',
-      '<?xml version="1.0" encoding="UTF-8"?>',
-      '<urlset>',
-      ' <url>',
-      '   <loc>https://nuxtseo.com/</loc>',
-      ' </url>',
-      '</urlset>',
-      '```',
-      'The above is a minimal example of what the module produces.',
-      'Learn more about how [data sources](/docs/sitemap/guides/data-sources) work.',
-    ].join('\n'),
-  },
-  {
-    label: 'Simple multi sitemap support',
-    slot: 'meta',
-    mdc: [
-      // nuxt.config sitemaps
-      '```ts twoslash [nuxt.config.js]',
-      'export default defineNuxtConfig({',
-      '  sitemap: {',
-      '    sitemaps: {',
-      '      sitemapOne: { /* ... */ },',
-      '      sitemapTwo: { /* ... */ },',
-      '    }',
-      '  }',
-      '})',
-      '```',
-      'Learn more about [multi sitemaps](/docs/sitemap/guides/multi-sitemaps).',
-    ].join('\n'),
-  },
-  {
-    label: 'I18n and Nuxt Content Integration',
-    slot: 'meta',
-    mdc: [
-      // markdown yaml example
-      '```md',
-      '---',
-      'sitemap:',
-      ' lastmod: 2021-09-01',
-      '---',
-      '```',
-      'Learn more about the [I18n](/docs/sitemap/guides/i18n) and [Nuxt Content](/docs/sitemap/guides/content) integrations.',
-    ].join('\n'),
-  },
-]
-
-const schemaOrgItems = [
-  {
-    label: 'Zero config Schema.org',
-    slot: 'schemaOrg',
-    mdc: [
-      '```json [schema-org.json]',
-      `{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@id": "https://nuxtseo.com/#website",
-      "@type": "WebSite",
-      "description": "Nuxt SEO is a collection of hand-crafted Nuxt Modules to help you rank higher in search engines.",
-      "name": "Nuxt SEO",
-      "url": "https://nuxtseo.com"
-    },
-    {
-      "@id": "https://nuxtseo.com/#webpage",
-      "@type": "WebPage",
-      "description": "content",
-      "url": "https://nuxtseo.com",
-      "isPartOf": {
-        "@id": "https://nuxtseo.com/#website"
-      },
-      "potentialAction": [
-        {
-          "@type": "ReadAction",
-          "target": [
-            "https://nuxtseo.com"
-          ]
-        }
-      ]
+function useContentHomeSnippets(folderName: string) {
+  // Get special slot names based on folder
+  const getSpecialSlot = (index: number): string => {
+    if (index === 0) {
+      // For first item in each category
+      const specialFirstSlots: Record<string, string> = {
+        'robots': 'robots-txt',
+        'sitemap': 'sitemap',
+        'schema-org': 'schemaOrg',
+        'link-checker': 'meta1',
+        'seo-utils-one': 'meta',
+        'seo-utils-two': 'meta1',
+        'og-image': 'meta',
+      }
+      return specialFirstSlots[folderName] || `${folderName}-txt`
     }
-  ]
-}`,
-      '```',
-      'Learn more about the [Default Schema.org](/docs/schema-org/guides/default-schema-org).',
-    ].join('\n'),
-  },
-  {
-    label: 'Easily set a linked identity',
-    slot: 'meta',
-    mdc: [
-      // nuxt.config sitemaps
-      '```ts twoslash [nuxt.config.js]',
-      `export default defineNuxtConfig({
-  schemaOrg: {
-    identity: {
-      type: 'Person',
-      name: 'Harlan Wilton',
-      image: 'https://harlanzw.com/profile.jpg',
-      sameAs: [
-        'https://x.com/harlan_zw',
-        'https://github.com/harlan-zw',
-        'https://harlanzw.com'
-      ]
+
+    // For other items, stick to meta, meta2, meta3 pattern
+    return ['meta', 'meta2', 'meta3'][index - 1] || 'meta'
+  }
+
+  // Map each file to the format needed for ModuleFeaturesCard
+  return snippets.value.filter(n => n.path.includes(folderName)).map((file, index) => {
+    // Get appropriate slot based on index and folder
+    const slot = getSpecialSlot(index)
+
+    return {
+      ...file,
+      label: file.title,
+      slot,
     }
-  }
-})`,
-      '```',
-      'Learn more about [setting up your identity](/docs/schema-org/guides/setup-identity).',
-    ].join('\n'),
-  },
-  {
-    label: '20+ Rich Result nodes out-of-the-box',
-    slot: 'meta2',
-    mdc: [
-      // markdown yaml example
-      '```ts',
-      // show faq example
-      'useSchemaOrg([',
-      '  defineWebPage({ \'@type\': \'FAQPage\' })',
-      ` defineQuestion({
-    name: 'How long is a piece of string?',
-    acceptedAnswer: 'The length of a piece of string is the number of characters in the string.',
-  }),`,
-      '])',
-      '```',
-      'Learn more about the [I18n](/docs/sitemap/guides/i18n) and [Nuxt Content](/docs/sitemap/guides/content) integrations.',
-    ].join('\n'),
-  },
-]
+  })
+}
 
-const seoUtilOneItems = [
-  {
-    label: 'Easy canonical URLs',
-    slot: 'meta',
-    mdc: [
-      // nuxt.config sitemaps
-      '```ts twoslash [nuxt.config.js]',
-      `export default defineNuxtConfig({
-  site: {
-    url: 'https://nuxtseo.com'
-  },
-  seo: {
-    // allow some query params to modify the canonical
-    canonicalQueryWhitelist: ['search'],
-    // redirect when the origin is different
-    redirectToCanonicalSiteUrl: true
-  }
-})`,
-      '```',
-      'Learn more about [canonical URLs](https://nuxtseo.com/docs/seo-utils/guides/canonical-url).',
-    ].join('\n'),
-  },
-  {
-    label: 'Default semantic Open Graph tags',
-    slot: 'meta2',
-    mdc: [
-      // markdown yaml example
-      '```html',
-      '<meta property="og:url" content="https://nuxtseo.com/">',
-      '<meta property="og:site_name" content="Nuxt SEO">',
-      '<meta property="og:type" content="website">',
-      '```',
-      'Learn more about the [Best Practice Default Meta](/docs/seo-utils/guides/default-meta).',
-    ].join('\n'),
-  },
-  {
-    label: 'SEO Route Rules',
-    slot: 'meta3',
-    mdc: [
-      '```ts [nuxt.config.ts]',
-      `export default defineNuxtConfig({
-  routeRules: {
-    '/blog/**': {
-      seoMeta: {
-        ogImage: 'https://example.com'
-      },
-    },
-  }
-})`,
-      '```',
-      'Learn more about the [SEO Route Rules](/docs/seo-utils/guides/route-rules).',
-    ].join('\n'),
-  },
-]
+// Using content/snippets/home/robots/ markdown files
+const robotsItems = useContentHomeSnippets('robots')
 
-const ogImageItems = [
-  {
-    label: 'Dynamic Satori Powered OG Images',
-    slot: 'meta',
-    mdc: [
-      // nuxt.config sitemaps
-      '```ts twoslash',
-      `defineOgImageComponent('MyTemplate')`,
-      '```',
-      'Learn more about the [Satori Renderer](/docs/og-image/guides/satori).',
-    ].join('\n'),
-  },
-  {
-    label: 'Page screenshots with one line',
-    slot: 'meta2',
-    mdc: [
-      // nuxt.config sitemaps
-      '```ts twoslash',
-      `defineOgImageScreenshot()`,
-      '```',
-      'Learn more about the [Chromium Renderer](/docs/og-image/guides/satori).',
-    ].join('\n'),
-  },
-  {
-    label: '10+ Community Templates',
-    slot: 'meta3',
-    mdc: [
-      // nuxt.config sitemaps
-      `<img class="rounded-lg shadow-lg" width="300" height="150" style="aspect-ratio: 2 / 1;" src="/__og-image__/image/og.png?component=NuxtSeo&title=This+is+the+NuxtSeo+template" alt="NuxtSeo Template" />`,
-      'Learn more about the [Community Templates](/docs/og-image/guides/community-templates).',
-    ].join('\n'),
-  },
-]
+// Using content/snippets/home/sitemap/ markdown files
+const sitemapItems = useContentHomeSnippets('sitemap')
 
-const seoUtilsTwoItems = [
-  {
-    label: 'Default share Open Graph tags',
-    slot: 'meta1',
-    mdc: [
-      // markdown yaml example
-      '```ts',
-      'useSeoMeta({',
-      ' title: \'Nuxt SEO\',',
-      ' description: \'All the boring SEO work for Nuxt done\'',
-      '})',
-      '```',
-      '```html',
-      `<title>Learn More</title>
-<meta property="og:title" content="Nuxt SEO">
-<meta name="description" content="All the boring SEO work for Nuxt done">
-<meta property="og:description" content="All the boring SEO work for Nuxt done">`,
-      '```',
-      'Learn more about the [Best Practice Default Meta](/docs/seo-utils/guides/default-meta).',
-    ].join('\n'),
-  },
-  {
-    label: 'Zero config icon tags',
-    slot: 'meta2',
-    mdc: [
-      // markdown yaml example
-      '```dir',
-      'public',
-      '├── favicon.ico',
-      '├── icon.png',
-      '└── apple-touch-icon.png',
-      '```',
-      '```html',
-      '<link rel="icon" href="/favicon.ico" sizes="any" />',
-      '<link rel="icon" href="/icon.png" sizes="32x32" type="image/png" />',
-      '<link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />',
-      '```',
-      'Learn more about using [App Icons](/docs/seo-utils/guides/app-icons).',
-    ].join('\n'),
-  },
-  {
-    label: 'Fallback Titles',
-    slot: 'meta3',
-    mdc: [
-      // markdown yaml example
-      '```dir',
-      'pages',
-      '└── blog',
-      '    └── all-about-titles.vue',
-      '```',
-      '```html',
-      '<title>All About Titles</title>',
-      '<meta property="og:title" content="All About Titles">',
-      '```',
-      'Learn more about [Fallback titles](/docs/seo-utils/guides/fallback-title).',
-    ].join('\n'),
-  },
-]
+// Using content/snippets/home/schema-org/ markdown files
+const schemaOrgItems = useContentHomeSnippets('schema-org')
 
-const linkCheckerItems = [
-  {
-    label: 'Realtime Feedback on Broken Links',
-    slot: 'meta1',
-    mdc: [
-      `<video loading="lazy" src="https://user-images.githubusercontent.com/5326365/257094687-84516191-0e0f-4606-a1c5-36ed85c35734.webm" data-canonical-src="https://user-images.githubusercontent.com/5326365/257094687-84516191-0e0f-4606-a1c5-36ed85c35734.webm" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px"></video>`,
-      'Learn more about the [Live Inspections](/docs/link-checker/guides/live-inspections).',
-    ].join('\n'),
-  },
-  {
-    label: '7 Link Check Inspections',
-    slot: 'meta1',
-    mdc: [
-      // markdown yaml example
-      `
-| Inspection | Description                                            |
-| --- |--------------------------------------------------------|
-| \`missing-hash\` | Checks for missing hashes in internal links.           |
-| \`no-error-response\` | Checks for error responses (4xx, 5xx) on internal links. |
-| \`no-baseless\` | Checks for baseless links.                             |
-| \`no-javascript\` | Checks for javascript links.                           |
-| \`trailing-slash\` | Checks for trailing slashes on internal links.         |
-| \`absolute-site-urls\` | Checks for absolute site URLs.                         |
-| \`redirects\` | Checks for redirects.                                  |
-`,
-      'Learn more about the [Inspections](/docs/link-checker/guides/skip-inspections).',
-    ].join('\n'),
-  },
-  {
-    label: 'Link Audit Reports',
-    slot: 'meta3',
-    mdc: [
-      // markdown yaml example
-      '```json [link-checker-report.json]',
-      `[
-  {
-    "route": "/",
-    "reports": [
-      {
-        "error": [],
-        "warning": [
-          {
-            "name": "trailing-slash",
-            "scope": "warning",
-            "message": "Should not have a trailing slash.",
-            "tip": "Incorrect trailing slashes can cause duplicate pages in search engines and waste crawl budget.",
-            "fix": "/some-prefix",
-            "fixDescription": "Removing trailing slash."
-          }
-        ],
-        "fix": "/some-prefix",
-        "link": "/some-prefix/",
-        "passes": false,
-        "textContent": "Nuxt nuxt-link-checker-playground"
-      },
-    ]
-  }
-]`,
-      '```',
-      'Learn more about the [Inspections](/docs/link-checker/guides/skip-inspections).',
-    ].join('\n'),
-  },
-]
+// Using content/snippets/home/seo-utils-one/ markdown files
+const seoUtilOneItems = useContentHomeSnippets('seo-utils-one')
+
+// Using content/snippets/home/og-image/ markdown files
+const ogImageItems = useContentHomeSnippets('og-image')
+
+// Using content/snippets/home/seo-utils-two/ markdown files
+const seoUtilsTwoItems = useContentHomeSnippets('seo-utils-two')
+
+// Using content/snippets/home/link-checker/ markdown files
+const linkCheckerItems = useContentHomeSnippets('link-checker')
 
 const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
-
-const graphData = computed(() => {
-  // each modules contains a downloads array where each is an object with a date and downloads
-  // we need to merge all of them based on the date and combine the downloads
-  const data = stats.value.modules.reduce((acc, module) => {
-    module.downloads.forEach(({ day, downloads }) => {
-      const existing = acc.find(d => d.day === day)
-      if (existing) {
-        existing.downloads += downloads
-      }
-      else {
-        acc.push({ day, downloads })
-      }
-    })
-    return acc
-  }, [])
-  const periodData = {}
-  const periodFormat = 'MM-yyyy'
-  const until = endOfMonth(subMonths(new Date(), 1))
-  for (const { day: date, downloads } of data) {
-    if (new Date(date) >= until) {
-      continue
-    }
-    const p = format(date, periodFormat)
-    periodData[p] ||= { downloads: 0, day: date }
-    periodData[p].downloads += downloads
-  }
-  return Object.values(periodData)
-})
 </script>
 
 <template>
   <div>
     <DefineSectionTemplate v-slot="{ section, $slots }">
       <section class="mb-8 xl:mb-14">
-        <div class="xl:grid xl:max-w-full max-w-3xl mx-auto px-10 xl:px-0 grid-cols-6">
+        <div class="xl:grid xl:max-w-full max-w-3xl mx-auto px-5 sm:px-10 xl:px-0 grid-cols-6">
           <div class="col-span-1 xl:border-t pt-5 px-5 xl:p-0" :class="[section.bg, section.border]">
             <div class="sticky top-[80px] xl:py-10 flex xl:justify-end mr-5">
               <div class=" text-4xl font-mono flex  items-center gap-3">
@@ -549,39 +191,83 @@ const graphData = computed(() => {
     </DefineSectionTemplate>
 
     <div class="gradient" />
-    <section class="xl:max-w-full max-w-3xl mx-auto py-5 sm:py-12 xl:py-15">
-      <div class="max-w-2xl mx-auto">
-        <div class="mb-2 sm:mb-0">
-          <div class="sm:inline-flex block mb-2 gap-3 inline px-3 py-2 rounded text-sm ">
-            <UButton variant="outline" to="/announcement" size="sm">
-              <UIcon name="i-noto-party-popper" />
-              <span>Nuxt SEO v2 stable</span>
-            </UButton>
-          </div>
-        </div>
-        <div class="xl:flex gap-10">
-          <div class="flex flex-col justify-center">
-            <h1 class="text-neutral-900/90 dark:text-neutral-100 text-4xl md:text-6xl leading-tight font-bold tracking-tight" style="line-height: 1.3;">
-              <span class="extra-italic">Fully equipped</span> <span class="font-cursive dark:text-yellow-200 text-purple-600">Technical SEO</span> for busy <span class="bg-green-500/10 px-2"> Nuxters</span>.
-            </h1>
-            <p class="max-w-xl text-neutral-700 dark:text-neutral-300 mt-4 max-w-3xl text-base md:text-xl">
-              Nuxt SEO is a collection of  <NuxtLink to="https://nuxt.com/modules" class="font-semibold">
-                modules
-              </NuxtLink> that handle all of the technical aspects in growing your sites organic traffic.
-            </p>
-
-            <div class="flex mb-5 items-center gap-4 mt-5 md:mt-10  justify-start">
-              <UButton size="lg" to="/docs/nuxt-seo/getting-started/introduction">
-                Get Started
-              </UButton>
-              <UButton size="lg" icon="i-carbon-download" variant="ghost" to="/docs/nuxt-seo/getting-started/installation">
-                Install Nuxt SEO
+    <UContainer>
+      <section class="xl:max-w-full xl:grid grid-cols-2 max-w-3xl mx-auto py-5 sm:py-12 xl:py-15">
+        <div class="max-w-2xl mx-auto">
+          <div class="mb-2 sm:mb-0">
+            <div class="sm:inline-flex block mb-2 gap-3 inline px-3 py-2 rounded text-sm ">
+              <UButton variant="outline" to="/announcement" size="sm">
+                <UIcon name="i-noto-party-popper" />
+                <span>Nuxt SEO v2 stable</span>
               </UButton>
             </div>
           </div>
+          <div class="xl:flex gap-10">
+            <div class="flex flex-col justify-center">
+              <h1 class="text-neutral-900/90 dark:text-neutral-100 text-4xl md:text-6xl leading-tight font-bold tracking-tight" style="line-height: 1.3;">
+                <span class="extra-italic">Fully equipped</span> <span class="font-cursive dark:text-yellow-200 text-blue-400 px-1">Technical SEO</span> for busy <span class="bg-green-500/10 px-2"> Nuxters</span>.
+              </h1>
+              <p class="max-w-xl text-neutral-700 dark:text-neutral-300 mt-4 max-w-3xl text-base md:text-xl">
+                Nuxt SEO is a collection of  <NuxtLink to="https://nuxt.com/modules" class="font-semibold">
+                  modules
+                </NuxtLink> that handle all of the technical aspects in growing your sites organic traffic.
+              </p>
+
+              <div class="flex mb-5 items-center gap-4 mt-5 md:mt-10  justify-start">
+                <UButton size="lg" to="/docs/nuxt-seo/getting-started/introduction">
+                  Get Started
+                </UButton>
+                <UButton size="lg" icon="i-carbon-download" variant="ghost" to="/docs/nuxt-seo/getting-started/installation">
+                  Install Nuxt SEO
+                </UButton>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+        <div class="flex items-center justify-center h-full xl:mr-50 mt-7 xl:mt-0">
+          <div class="flex flex-wrap xl:max-w-[400px] items-center gap-6 justify-center">
+            <motion.div
+              v-for="(module, i) in modules.filter(m => m.slug !== 'nuxt-seo' && m.slug !== 'site-config')"
+              :key="module.slug"
+              layout
+              :initial="{
+                opacity: 0,
+                y: 40,
+                scale: 0.8,
+                rotateZ: -10,
+              }"
+              :animate="{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                rotateZ: 0,
+                transition: {
+                  type: 'spring',
+                  damping: 12,
+                  stiffness: 100,
+                  delay: i * 0.3,
+                },
+              }"
+              :while-hover="{
+                scale: 1.1,
+                rotateZ: 5,
+                y: -5,
+                transition: {
+                  type: 'spring',
+                  damping: 0.10,
+                },
+              }"
+              class="cursor-pointer transform-gpu"
+            >
+              <UIcon
+                :name="module.icon"
+                class="size-6 sm:size-10 xl:size-25 text-blue-300"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </UContainer>
     <ReuseSectionTemplate
       :section="{
         id: 1,
@@ -858,11 +544,9 @@ const graphData = computed(() => {
             </div>
           </div>
         </div>
-        <UCard class="max-w-full overflow-hidden sm:max-w-[600px] mx-auto p-5">
-          <ClientOnly>
-            <ChartDownloads :value="graphData" />
-          </ClientOnly>
-        </UCard>
+        <ClientOnly>
+          <NuxtSeoDownloads class="rounded mx-auto max-w-[600px]  w-full h-full overflow-hidden" />
+        </ClientOnly>
       </UContainer>
     </section>
     <section class="mb-14">

@@ -90,40 +90,42 @@ html.dark .shiki span {
   text-decoration: var(--shiki-dark-text-decoration);
 }
 
-pre {
-  --scrollbar-thumb: #3b5178;
+
+:root {
+  --scrollbar-track-light: #f1f1f1;
+  --scrollbar-thumb-light: #888;
+  --scrollbar-track-dark: #2c2c2c;
+  --scrollbar-thumb-dark: #555;
 }
 
-.dark pre {
-  --scrollbar-thumb: #acbad2;
+html.light {
+  --scrollbar-track: var(--scrollbar-track-light);
+  --scrollbar-thumb: var(--scrollbar-thumb-light);
+}
+
+html.dark {
+  --scrollbar-track: var(--scrollbar-track-dark);
+  --scrollbar-thumb: var(--scrollbar-thumb-dark);
 }
 
 * {
-  --scrollbar-track: initial;
-  --scrollbar-thumb: initial;
-  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
-  --scrollbar-thumb: #acbad2;
-}
-
-::-webkit-scrollbar-track {
-  background-color: var(--scrollbar-track)
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb);
-  border-radius: .25rem
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px
+  height: 8px;
 }
 
-.dark * {
-  --scrollbar-thumb: #3b5178;
+::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
 }
 
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: .25rem;
+}
 
 .page-enter-active,
 .page-leave-active {

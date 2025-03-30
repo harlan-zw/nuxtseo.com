@@ -1,8 +1,10 @@
 import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
+
 import { defineNuxtConfig } from 'nuxt/config'
 import { resolve } from 'pathe'
 import { gray, logger } from './logger'
+import { modules } from './utils/modules'
 
 export default defineNuxtConfig({
   modules: [
@@ -240,8 +242,8 @@ export default defineNuxtConfig({
       '/api/stats.json': { prerender: true },
       '/api/github/sponsors.json': { prerender: true },
       '/api/_mdc/highlight': { cache: { group: 'mdc', name: 'highlight', maxAge: 60 * 60 } },
-      '/api/_content/query/**': { cache: { group: 'content', name: 'query', maxAge: 60 * 60 } },
       '/api/_nuxt_icon': { cache: { group: 'icon', name: 'icon', maxAge: 60 * 60 * 24 * 7 } },
+      '/__nuxt_content/**': { cache: { group: 'content', name: 'query', maxAge: 60 * 60 } },
     },
     scripts: {
       registry: {
@@ -262,14 +264,6 @@ export default defineNuxtConfig({
     '/site-config': { redirect: { to: '/docs/site-config/getting-started/installation', statusCode: 301 } },
     '/link-checker': { redirect: { to: '/docs/link-checker/getting-started/installation', statusCode: 301 } },
 
-    // defaults
-    // '/site-config/**': SiteConfigModule.routeRules,
-    // '/robots/**': RobotsModule.routeRules,
-    // '/sitemap/**': SitemapModule.routeRules,
-    // '/og-image/**': OgImageModule.routeRules,
-    // '/schema-org/**': SchemaOrgModule.routeRules,
-    // '/experiments/**': SeoExperimentsModule.routeRules,
-    // '/link-checker/**': LinkCheckerModule.routeRules,
     '/nuxt-seo/**': {
       ogImage: {
         component: 'NuxtSeo',
@@ -371,23 +365,21 @@ export default defineNuxtConfig({
     title: 'Nuxt SEO',
     description: 'Nuxt SEO is a collection of hand-crafted Nuxt Modules to help you rank higher in search engines.',
     notes: [
-      'The documentation only includes Nuxt SEO v3 docs.',
+      'The documentation only supports Nuxt v3 and Nuxt v4',
       'The content is automatically generated from the same source as the official documentation.',
     ],
     full: {
       title: 'Complete Documentation',
       description: 'The complete documentation including all content',
     },
-    sections: [
-      {
-        title: 'Documentation',
-        description: 'Technical documentation and guides',
-        contentCollection: 'docsUnhead',
-        contentFilters: [
-          { field: 'extension', operator: '=', value: 'md' },
-        ],
-      },
-    ],
+    sections: modules.map(m => ({
+      title: `${m.label} Module Documentation`,
+      description: m.slug,
+      contentCollection: m.contentCollection,
+      contentFilters: [
+        { field: 'extension', operator: '=', value: 'md' },
+      ],
+    })),
   },
 
   app: {

@@ -34,6 +34,10 @@ export default defineAppConfig({
       minus: 'i-carbon-subtract',
       search: 'i-carbon-search',
     },
+    colors: {
+      primary: 'blue',
+      neutral: 'slate',
+    },
   },
   uiPro: {
     contentNavigation: {
@@ -69,10 +73,10 @@ export default defineAppConfig({
       },
       a: {
         base: [
-          'relative border-none underline underline-offset-6 text-[var(--ui-text)] decoration-transition-all decoration-[0.1rem] decoration-[var(--ui-text-secondary)]',
+          'relative border-none underline underline-offset-4 text-[var(--ui-text)] decoration-transition-all decoration-opacity-70 decoration-[0.1rem] decoration-[var(--ui-text-dimmed)]',
           // set a :after border under the link
           'transition-all',
-          'hover:text-[var(--ui-text-secondary)] hover:underline-offset-4 hover:decoration-[0.25rem]',
+          'hover:text-[var(--ui-text-dimmed)] decoration-opacity-100 hover:underline-offset-1 hover:decoration-[0.1rem]',
         ],
       },
     },

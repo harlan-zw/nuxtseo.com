@@ -7,6 +7,7 @@ import {
   ProWaitlistFeedbackSchema,
 
 } from '~~/types/schemas'
+import { stripHeaderAnchorLinks } from '~~/utils/content'
 import { reviews } from '~/composables/data'
 import { proAd } from '~/utils/ads'
 
@@ -33,78 +34,19 @@ const faq = [
   },
 ]
 
-const magicRedirects = `
-Setting simple redirects in Nuxt is easy. Your choices are either to use \`routeRules\` or server middleware.
-
-::code-group
-
-\`\`\`ts [nuxt.config.ts]
-export default defineNuxtConfig{
-  routeRules: {
-    '/foo': { redirect: { to: 'bar', statusCode: 301 } },
-  },
+const { data: snippets } = await useAsyncData(`snippets`, async () => {
+  return (await queryCollection('snippets').where('path', 'LIKE', '/pro/%').all()).map((snippet) => {
+    if (Array.isArray(snippet.body.value) && snippet.body.type === 'minimal') {
+      stripHeaderAnchorLinks(snippet.body.value)
+    }
+    return snippet
+  })
 })
-\`\`\`
-
-\`\`\`ts [serverMiddleware.ts]
-export default defineEventHandler(e => {
-  if (e.path.startsWith('/foo')) {
-    sendRedirect(e, '/bar', 301)
-  }
-})
-\`\`\`
-
-::
-
-However, redirects get complicated:
-
-- Potential negative SEO when you forget to set them.
-- Limited advanced pattern matching for static environments.
-- Annoying DX with full Nuxt reload when you modify redirects
-- Finding 404s to add redirects for
-
-The Redirects module will solve these problems and more by providing a zero-config solution that feels like magic. It is scheduled for Q1 2025.
-`
-
-const gsc = `
-Google Search Console has valuable data about your site and its organic growth.
-
-While this data is accessible
-through the Google Search Console website, it can be difficult to drill down into what you want.
-
-For example, if you wanted to check the top keywords for a specific page and see how they are trending, you would need
-to manually figure it out by comparing data yourself.
-
-In my work through [Request Indexing](https://requestindexing.com) I have a deep knowledge of the Google Search Console API and how to use it to
-get the most out of your data that can help you inform choices that will grow your organic traffic.
-
-The module will allow you to open the Nuxt DevTools and see exactly which keywords are generating traffic to your pages and how
-they're trending and which pages may be competing on keywords.
-
-You'll own the data and be able to make informed decisions on how to grow your organic traffic.
-`
-
-const linkChecker = `
-Google loves it when you have a good internal linking structure. It helps them understand your site better and can help you rank higher.
-
-However, it can be difficult to always remember to link to the right pages, especially as your site grows.
-
-This add-on is an extension to the Link Checker module that will give you suggestions on internal links to implement right in your DevTools
-and when prerendering.
-`
-
-const seoAnalyze = `
-It's easy to forget to add SEO tags to your pages, or to add them incorrectly. This can lead to poor search engine rankings and less traffic to your site.
-
-The SEO Analyze module will inspect your pages in real-time and build-time to validate that all tags are set up correctly.
-
-It will also provide suggestions on how to improve your SEO tags to help you rank higher in search engines.
-`
 
 const daysUntilQ1 = computed(() => {
   // we want the middle of q1, so probably middle of feb
   const now = new Date()
-  const newYear = new Date(now.getFullYear() + 1, 1, 15)
+  const newYear = new Date(now.getFullYear(), 4, 15)
   return Math.floor((newYear.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
 })
 
@@ -171,7 +113,7 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
             <UAccordion :items="[{ label: 'Learn More', slot: 'mdc' }]" :ui="{ label: 'font-bold' }">
               <template #mdc>
                 <div class="max-w-2xl">
-                  <MDC :value="value" />
+                  <ContentRenderer :value="value" />
                 </div>
               </template>
             </UAccordion>
@@ -233,16 +175,16 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
       </p>
     </section>
     <div class="max-w-2xl lg:max-w-6xl space-y-5 mb-5 px-10 mx-auto lg:grid grid-cols-2">
-      <ReuseSectionTemplate :value="magicRedirects">
+      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('magic-redirects.md'))">
         <ModuleCardMagicRedirects />
       </ReuseSectionTemplate>
-      <ReuseSectionTemplate :value="gsc">
+      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('google-search-console.md'))">
         <ModuleCardGsc />
       </ReuseSectionTemplate>
-      <ReuseSectionTemplate :value="linkChecker">
+      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('link-checker.md'))">
         <ModuleCardInternalLinks />
       </ReuseSectionTemplate>
-      <ReuseSectionTemplate :value="seoAnalyze">
+      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('seo-analyze.md'))">
         <ModuleCardSEOValidate />
       </ReuseSectionTemplate>
     </div>
@@ -357,7 +299,7 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
           <UAvatar text="+60" class="text-white text-xs font-bold" />
         </UAvatarGroup>
         <div class="text-lg text-center max-w-xs">
-          Join the 93 Nuxters who have already signed up.
+          Join the 113 Nuxters who have already signed up.
         </div>
       </div>
       <div class="max-w-lg mx-auto mt-10">

@@ -10,7 +10,7 @@ export default defineCachedEventHandler(async (e) => {
   const endDate = new Date() // Today's date
   endDate.setDate(endDate.getDate() - 2) // 90 days ago
   const startDate = new Date()
-  startDate.setDate(endDate.getDate() - 360) // 90 days ago
+  startDate.setDate(endDate.getDate() - 720) // 1 year ago
   const startDate30 = new Date()
   startDate30.setDate(endDate.getDate() - 30) // 30 days ago
   const formattedStartDate = formatDate(startDate)
@@ -23,17 +23,17 @@ export default defineCachedEventHandler(async (e) => {
     downloads: { downloads: number, day: string }[]
   }>(`https://api.npmjs.org/downloads/range/${formattedStartDate}:${formattedEndDate}/${packageName}`)
 
-  const totalDownloads90 = data.downloads.reduce((sum, day) => sum + day.downloads, 0)
+  const totalDownloads = data.downloads.reduce((sum, day) => sum + day.downloads, 0)
   const totalDownloads30 = data.downloads
     .filter(day => new Date(day.day) >= startDate30)
     .reduce((sum, day) => sum + day.downloads, 0)
-  const averageDownloads90 = Math.round(totalDownloads90 / 90)
+  const averageDownloads90 = Math.round(totalDownloads / 90)
   const averageDownloads30 = Math.round(totalDownloads30 / 30)
 
   const percentageChange = Math.round(((averageDownloads30 - averageDownloads90) / averageDownloads90) * 100)
   return {
     downloads: data.downloads,
-    totalDownloads90,
+    totalDownloads90: totalDownloads,
     totalDownloads30,
     averageDownloads30,
     averageDownloads90,

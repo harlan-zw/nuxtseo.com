@@ -80,6 +80,7 @@ function attachRouteWatcher() {
       serve="CW7DTKJJ"
       placement="nuxtseocom"
       trigger="onNuxtReady"
+      @ready="attachRouteWatcher"
     >
       <AdsFallback />
     </ScriptCarbonAds>
@@ -97,5 +98,6 @@ function attachRouteWatcher() {
 
 #carbon-responsive .carbon-responsive-wrap {
   border-radius: var(--ui-radius);
+  max-width: 100%;
 }
 </style>

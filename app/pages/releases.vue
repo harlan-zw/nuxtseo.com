@@ -9,7 +9,7 @@ definePageMeta({
   },
 })
 
-const stats = await useStats()
+const { data: stats } = await useStats()
 
 // credits https://github.com/antfu/releases.antfu.me/blob/main/app/components/TheItem.vue
 const HighlightedVersion = defineComponent({
