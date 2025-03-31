@@ -1,4 +1,4 @@
-import type { NuxtSEOModule } from '@nuxtjs/seo/const'
+import {NuxtSEO, type NuxtSEOModule} from '@nuxtjs/seo/const'
 import { existsSync } from 'node:fs'
 import { defineCollection, defineContentConfig } from '@nuxt/content'
 import {
@@ -54,15 +54,7 @@ function getSubModuleCollection(m: NuxtSEOModule) {
 
 export const content = defineContentConfig({
   collections: {
-    nuxtSeo: defineCollection(asSeoCollection({
-      schema,
-      type: 'page',
-      source: {
-        include: '**/*.md',
-        cwd: resolve('content/nuxtSeo'),
-        prefix: '/docs/nuxt-seo',
-      },
-    })),
+    nuxtSeo: getSubModuleCollection(NuxtSEO),
     robots: getSubModuleCollection(RobotsModule),
     sitemap: getSubModuleCollection(SitemapModule),
     ogImage: getSubModuleCollection(OgImageModule),
