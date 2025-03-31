@@ -11,7 +11,7 @@ const route = useRoute()
 
 const { page, surround, lastCommit } = await useCurrentDocPage()
 const module = inject('module')
-if (!page.value) {
+if (!page.value?.id) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
@@ -54,10 +54,12 @@ defineOgImageComponent('Module', {
   ...module.value,
 })
 
+prerenderRoutes(`${route.path}.md`)
+
 const repoLinks = computed(() => [
   {
     label: 'Edit this page',
-    to: `https://github.com/${module.value.repo}/edit/main/docs/content/${page.value.id.split('/').slice(3).join('/')}`,
+    to: `https://github.com/${module.value.repo}/edit/main/docs/content/${String(page.value?.id || '').split('/').slice(3).join('/')}`,
     target: '_blank',
   },
   {
