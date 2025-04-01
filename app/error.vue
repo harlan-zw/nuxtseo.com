@@ -26,7 +26,7 @@ if (!stats.value) {
   })
 }
 provide('stats', stats)
-const activeModule = useModule()
+const activeModule = useModule(false, stats)
 provide('module', activeModule)
 if (activeModule.value.slug) {
   const { data: navigation } = await useAsyncData(`navigation-${activeModule.value.slug}`, () => queryCollectionNavigation(activeModule.value.contentCollection), {

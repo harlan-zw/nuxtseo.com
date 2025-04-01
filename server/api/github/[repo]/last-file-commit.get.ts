@@ -65,7 +65,7 @@ export default defineCachedEventHandler(async (e) => {
   }
 }, {
   // last for 1 week
-  name: 'last-commit',
+  name: 'gh-last-commit',
   maxAge: 60 * 60 * 24,
   getKey: (e: H3Event) => getQuery(e)?.file,
 })

@@ -7,9 +7,9 @@ export const modules = baseModules.map((m) => {
   }
 })
 
-export function useModule(_slug?: Ref<string> | string) {
-  const stats = inject('stats')
-  const moduleSlug = ref(toValue(_slug))
+export function useModule(_slug?: Ref<string> | string | false, _stats?: any) {
+  const stats = inject('stats', _stats)
+  const moduleSlug = ref(_slug ? toValue(_slug) : useRoute().path.split('/')[2])
   watch(() => useRoute().path, (s) => {
     moduleSlug.value = useRoute().path.split('/')[2]
   })
