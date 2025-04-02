@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     '@nuxtjs/seo',
     '@nuxt/ui-pro',
     'motion-v/nuxt',
-    'nuxt-content-twoslash',
+    // 'nuxt-content-twoslash',
     '@nuxt/content',
     '@vueuse/nuxt',
     '@nuxthub/core',
