@@ -1,15 +1,7 @@
-import {NuxtSEO, type NuxtSEOModule} from '@nuxtjs/seo/const'
+import type { NuxtSEOModule } from '@nuxtjs/seo/const'
 import { existsSync } from 'node:fs'
 import { defineCollection, defineContentConfig } from '@nuxt/content'
-import {
-  LinkCheckerModule,
-  OgImageModule,
-  RobotsModule,
-  SchemaOrgModule,
-  SeoUtilsModule,
-  SiteConfigModule,
-  SitemapModule,
-} from '@nuxtjs/seo/const'
+import { LinkCheckerModule, NuxtSEO, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule } from '@nuxtjs/seo/const'
 import { asSeoCollection } from '@nuxtjs/seo/content'
 import { relative, resolve } from 'pathe'
 import z from 'zod'
