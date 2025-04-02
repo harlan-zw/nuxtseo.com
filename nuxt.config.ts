@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     'nuxt-llms',
     '@nuxt/scripts',
     '@nuxt/image',
-    'nuxt-rebundle',
+    // 'nuxt-rebundle',
     async (_, nuxt) => {
       nuxt.hooks.hook('nitro:init', (nitro) => {
         // from sponsorkit
