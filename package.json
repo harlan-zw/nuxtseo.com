@@ -35,7 +35,7 @@
     "@nuxt/scripts": "^0.11.5",
     "@nuxt/ui-pro": "^3.0.2",
     "@nuxthub/core": "^0.8.23",
-    "@nuxtjs/seo": "https://pkg.pr.new/harlan-zw/nuxt-seo/@nuxtjs/seo@644a1bf",
+    "@nuxtjs/seo": "^3.0.2",
     "@unovis/vue": "^1.5.1",
     "@vueuse/core": "^13.0.0",
     "@vueuse/nuxt": "^13.0.0",
@@ -49,7 +49,6 @@
     "motion-v": "1.0.0-beta.0",
     "nuxt": "3.16.2",
     "nuxt-build-cache": "^0.1.1",
-    "nuxt-content-twoslash": "^0.1.2",
     "nuxt-llms": "^0.1.2",
     "nuxt-lodash": "^2.5.3",
     "nuxt-rebundle": "^0.0.2",
@@ -73,9 +72,5 @@
       "vue-demi",
       "workerd"
     ]
-  },
-  "resolutions": {
-    "@vue/server-renderer": "3.5.13",
-    "vue": "3.5.13"
   }
 }
