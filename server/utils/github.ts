@@ -10,12 +10,13 @@ export function initOctokitRequestHandler(e: H3Event) {
   if (!repo?.startsWith('nuxt') && !repo?.startsWith('harlan-zw/')) {
     throw new Error(`Invalid repo ${repo}`)
   }
+  const octokit = new Octokit({
+    auth: githubAccessToken,
+  })
   return {
     repo: repo.split('/')[1],
     owner: repo.split('/')[0],
-    octokit: new Octokit({
-      auth: githubAccessToken,
-    }),
+    octokit,
   }
 }
 

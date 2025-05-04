@@ -118,7 +118,6 @@ Many of you purchased Nuxt SEO Pro specifically to save time:
 
 _"I have many other things to do other than SEO, so I thought your package would help me gain time."_
 
-
 ## Conclusion
 
 Thank you again for your support and feedback. This analysis has been incredibly valuable in shaping the future of Nuxt SEO Pro.
