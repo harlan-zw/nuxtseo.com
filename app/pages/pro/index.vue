@@ -46,7 +46,7 @@ const { data: snippets } = await useAsyncData(`snippets`, async () => {
 const daysUntilQ1 = computed(() => {
   // we want the middle of q1, so probably middle of feb
   const now = new Date()
-  const newYear = new Date(now.getFullYear(), 4, 15)
+  const newYear = new Date(now.getFullYear(), 5, 0)
   return Math.floor((newYear.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
 })
 
