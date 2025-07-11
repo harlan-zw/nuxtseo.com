@@ -33,7 +33,7 @@ function normaliseToPath(s: string) {
 <template>
   <ul>
     <li v-for="(node, key) in paths" :key="key">
-      <a :href="`https://unhead.unjs.io/docs/nuxt/schema-org/api/schema${normaliseToPath(node)}`">
+      <a :href="`https://unhead.unjs.io/docs/nuxt/schema-org/api/schema/${normaliseToPath(node)}`">
         {{ node }}
       </a>
     </li>
