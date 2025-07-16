@@ -116,7 +116,7 @@ function useContentHomeSnippets(folderName: string) {
   }
 
   // Map each file to the format needed for ModuleFeaturesCard
-  return snippets.value.filter(n => n.path.includes(folderName)).map((file, index) => {
+  return snippets.value?.filter(n => n.path.includes(folderName)).map((file, index) => {
     // Get appropriate slot based on index and folder
     const slot = getSpecialSlot(index)
 
@@ -125,7 +125,7 @@ function useContentHomeSnippets(folderName: string) {
       label: file.title,
       slot,
     }
-  })
+  }) || []
 }
 
 // Using content/snippets/home/robots/ markdown files
