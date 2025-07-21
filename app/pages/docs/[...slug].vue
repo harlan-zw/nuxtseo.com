@@ -15,7 +15,7 @@ if (!page.value?.id) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const moduleName = computed(() => `Nuxt ${module.value.label}`)
+const moduleName = computed(() => module.value.label === 'Nuxt SEO' ? '' : `Nuxt ${module.value.label}`)
 useSeoMeta({
   title: () => (page.value?.title === moduleName.value ? '' : page.value?.title) || '',
   description: () => page.value?.description,
