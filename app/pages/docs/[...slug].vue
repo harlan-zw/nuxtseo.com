@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { titleCase } from 'scule'
+import { joinURL } from 'ufo'
 import { getLastPathSegment, getPathSegments } from '~~/utils/urls'
 import { useCurrentDocPage } from '~/composables/data'
 
@@ -36,7 +37,7 @@ useHead({
         ? surround.value.map((s, i) => {
             return {
               rel: i === 0 ? 'prev' : 'next',
-              href: `https://unhead.unjs.io/${s.path}`,
+              href: joinURL('https://nuxtseo.com/', s.path),
             }
           })
         : []),
