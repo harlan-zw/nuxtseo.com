@@ -82,15 +82,15 @@ All we need to do is add the dependency to our project. For full install instruc
 
 ::code-group
 
-```
+```ts [yarn]
 yarn add -D @unhead/schema-org
 ```
 
-```
+```ts [npm]
 npm install -D @unhead/schema-org
 ```
 
-```
+```ts [pnpm]
 pnpm add -D @unhead/schema-org
 
 ```
