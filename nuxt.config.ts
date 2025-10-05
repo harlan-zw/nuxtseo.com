@@ -9,7 +9,7 @@ import { modules } from './utils/modules'
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/seo',
-    '@nuxt/ui-pro',
+    '@nuxt/ui',
     'motion-v/nuxt',
     // 'nuxt-content-twoslash',
     '@nuxt/content',
