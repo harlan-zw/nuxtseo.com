@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { queryCollectionNavigation } from '#imports'
 import { motion } from 'motion-v'
-import { modules } from '~~/utils/modules'
+import { modules } from '~~/modules'
 import { isHydratingRef, useCurrentDocPage } from '~/composables/data'
 import { useModule } from '~/composables/module'
 
@@ -85,22 +85,15 @@ watch(activeModule, async () => {
     await Promise.all([refreshNavigation(), refreshSearch()])
   }
 })
-// const activeModule = provide('module')
-// const search = provide('search')
-// const navigation = provide('navigation')
-const currentPage = await useCurrentDocPage()
+const { data: currentPage } = await useAsyncData(() => `current-page-${route.path}`, () => useCurrentDocPage(), {
+  watch: [() => route.path],
+})
 provide('currentPage', currentPage)
-watch(() => route.path, async () => {
+watch(() => route.path, () => {
   navOpen.value = false
-  if (route.path.startsWith('/docs')) {
-    const newData = await useCurrentDocPage()
-    currentPage.page.value = newData.page.value
-    currentPage.surround.value = newData.surround.value
-    currentPage.lastCommit.value = newData.lastCommit.value
-  }
 })
 
-const page = computed(() => currentPage.page?.value)
+const page = computed(() => currentPage.value?.page?.value)
 
 const searchTerm = ref('')
 

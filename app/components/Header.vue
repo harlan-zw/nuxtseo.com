@@ -3,14 +3,11 @@ import { useStats } from '../composables/data'
 import { menu } from '../composables/nav'
 
 const { data: stats } = await useStats()
-const route = useRoute()
 
 const nuxtSeoStars = computed(() => {
   const stars = stats.value?.modules.find(m => m.slug === 'nuxt-seo')?.stars || 0
   return Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'short' }).format(stars)
 })
-
-const activeModule = inject('module', null)
 
 const navigation = computed(() => {
   return menu.value.map((item) => {
@@ -45,16 +42,7 @@ const navigation = computed(() => {
     </template>
 
     <template #body>
-      <UContentNavigation :navigation="navigation">
-        <template #link="{ link }">
-          <div class="flex items-center gap-2">
-            <UIcon v-if="link.icon" :name="link.icon" class="w-4 h-4 text-(--ui-text-muted) dark:text-sky-200" />
-            <div :class="link.children?.length ? 'text-sm font-bold' : ''">
-              {{ link.title }}
-            </div>
-          </div>
-        </template>
-      </UContentNavigation>
+      <UContentNavigation :navigation="navigation" />
     </template>
 
     <template #right>

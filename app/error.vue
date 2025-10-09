@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
 import { queryCollectionNavigation, useAsyncData, useStats } from '#imports'
-import { modules } from '@nuxtjs/seo/const'
 import Fuse from 'fuse.js'
 import { useModule } from '~/composables/module'
+import { modules } from '../modules'
 
 const props = defineProps<{
   error: NuxtError
@@ -28,7 +28,7 @@ if (!stats.value) {
 provide('stats', stats)
 const activeModule = useModule(false, stats)
 provide('module', activeModule)
-if (activeModule.value.slug) {
+if (activeModule.value?.slug) {
   const { data: navigation } = await useAsyncData(`navigation-${activeModule.value.slug}`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
     default: () => [],
     async transform(res) {

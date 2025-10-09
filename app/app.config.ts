@@ -34,12 +34,24 @@ export default defineAppConfig({
       minus: 'i-carbon-subtract',
       search: 'i-carbon-search',
     },
+    navigationMenu: {
+      slots: {
+        item: '!py-0',
+        link: 'flex flex-col items-center justify-start w-full gap-0.5 w-[90px]',
+        linkLabel: 'text-xs',
+        linkTrailing: 'absolute right-2 top-2',
+        linkTrailingIcon: 'size-4 text-[var(--ui-text-dimmed)]',
+        // inner menu
+        childList: '!grid-cols-5',
+        childLink: 'flex flex-col items-center justify-start w-full gap-0.5s',
+        childLinkLabel: 'text-[10px] text-center text-[var(--ui-text-muted)]',
+        childLinkIcon: 'size-6 !text-blue-300',
+      },
+    },
     colors: {
       primary: 'blue',
       neutral: 'slate',
     },
-  },
-  uiPro: {
     contentNavigation: {
       slots: {
         list: 'space-y-2',

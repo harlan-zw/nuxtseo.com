@@ -2,7 +2,7 @@
 import ProseCode from '@nuxtjs/mdc/runtime/components/prose/ProseCode.vue'
 
 const codeOne
-= `export default defineNuxtConfig({
+  = `export default defineNuxtConfig({
   site: {
     url: 'https://example.com',
     name: 'My Awesome Website'

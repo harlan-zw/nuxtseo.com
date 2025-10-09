@@ -31,15 +31,15 @@ const iconAttrs = computed(() => {
 })
 
 const windowSize = ref(8)
-const smoothCurveDownloads = computed(() => {
-  // we want to show the curve when it's above the 80% of the average
-  const threshold = module.value?.averageDownloads90 - (module.value?.averageDownloads90 / 100 * (windowSize.value * 3.5))
-  // we need to smooth the curve
-  return movingAverage(
-    module.value?.downloads?.map(m => m.downloads).filter(d => windowSize.value > 1 ? d >= threshold : true) || [],
-    windowSize.value,
-  )
-})
+// const smoothCurveDownloads = computed(() => {
+//   // we want to show the curve when it's above the 80% of the average
+//   const threshold = module.value?.averageDownloads90 - (module.value?.averageDownloads90 / 100 * (windowSize.value * 3.5))
+//   // we need to smooth the curve
+//   return movingAverage(
+//     module.value?.downloads?.map(m => m.downloads).filter(d => windowSize.value > 1 ? d >= threshold : true) || [],
+//     windowSize.value,
+//   )
+// })
 const chartWidth = ref(250)
 const container = useTemplateRef('container')
 onMounted(() => {

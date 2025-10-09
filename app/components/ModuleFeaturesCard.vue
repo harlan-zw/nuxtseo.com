@@ -23,9 +23,14 @@ const isComingSoon = computed(() => typeof props.module === 'object')
         </template>
       </UAccordion>
       <div v-else>
-        <ul class="space-y-3 ">
-          <li v-for="(item, key) in items" :key="key" class="dark:text-neutral-300 text-neutral-600 text-sm">
-            {{ item.label }}
+        <ul class="space-y-4">
+          <li v-for="(item, key) in items" :key="key">
+            <div class="font-semibold text-[var(--ui-text)] text-sm mb-1">
+              {{ item.emoji }} {{ item.label }}
+            </div>
+            <div class="text-[var(--ui-text-muted)] text-sm leading-relaxed prose-a:underline">
+              <MDC :value="item.description" unwrap="p" />
+            </div>
           </li>
         </ul>
       </div>

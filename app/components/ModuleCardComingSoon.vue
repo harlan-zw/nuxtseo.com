@@ -31,13 +31,8 @@ const as = computed(() => route.path.startsWith('/pro') ? 'div' : 'NuxtLink')
     <div class="z-1 flex flex-col justify-between h-full">
       <div>
         <div class="flex items-center justify-between mb-1">
-          <div class="flex flex-col gap-1" v-bind="textAttrs">
-            <div class="flex items-center gap-2">
-              <UIcon v-if="module.icon" dynamic :name="module.icon" class="text-blue-500 dark:text-blue-300" v-bind="iconAttrs" />{{ module.label }}
-            </div>
-            <div class="text-balance text-xs text-(--ui-text-muted) font-normal">
-              {{ module.description }}
-            </div>
+          <div class="flex items-center gap-2" v-bind="textAttrs">
+            <UIcon v-if="module.icon" dynamic :name="module.icon" class="text-blue-500 dark:text-blue-300" v-bind="iconAttrs" />{{ module.label }}
           </div>
           <div class="flex flex-col items-end gap-2">
             <div>

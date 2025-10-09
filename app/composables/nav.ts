@@ -1,4 +1,4 @@
-import { modules } from '@nuxtjs/seo/const'
+import { modules } from '../../modules'
 
 // const ecosystemLinks = [
 //   {
@@ -39,8 +39,9 @@ export const menu = computed(() => {
       children: modules.map(m => ({
         label: m.label,
         icon: m.icon,
-        description: m.description,
         to: `/docs/${m.slug}/getting-started/introduction`,
+        disabled: m.soon,
+        class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
       })),
     },
     {
@@ -49,25 +50,21 @@ export const menu = computed(() => {
       children: [
         {
           label: 'Mastering Meta Management',
-          description: 'Learn title templates, dynamic meta tags, and social sharing in Vue. A complete guide to useHead() and meta patterns."',
           icon: 'i-heroicons-h1-solid',
           to: '/learn/mastering-meta',
         },
         {
           label: 'Controlling Web Crawlers',
-          description: 'Being able to tell crawlers what to do can help with your SEO strategy, learn how to do it in Vue and Nuxt.',
           icon: 'i-ph-robot-duotone',
           to: '/learn/controlling-crawlers',
         },
         {
           label: 'Launch & Listen',
-          description: 'Deploy your Vue app for SEO success. Complete guide to production URLs, indexing, monitoring, and performance tracking.',
           icon: 'i-tabler-slashes',
           to: '/learn/launch-and-listen',
         },
         {
           label: 'Routes & Rendering',
-          description: 'Optimize Vue Router and content rendering for search engines. From dynamic routes to rendering strategies.',
           icon: 'i-carbon-recording',
           to: '/learn/routes-and-rendering',
         },
@@ -95,10 +92,6 @@ export const menu = computed(() => {
       label: 'Pro',
       icon: 'i-ph-sparkle-duotone',
       to: '/pro',
-      badge: {
-        label: 'Waitlist',
-        color: 'info',
-      },
     },
     // {
     //   label: 'Ecosystem',

@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxthub/core',
     'nuxt-llms',
+    'nuxt-skew-protection',
     '@nuxt/scripts',
     '@nuxt/image',
     // 'nuxt-rebundle',
@@ -34,7 +35,7 @@ export default defineNuxtConfig({
               if (path.startsWith('/docs') || path.startsWith('/learn')) {
                 return false
               }
-              if (path.startsWith('/nuxt-seo') || path.startsWith('/experiments') || path.startsWith('/og-image') || path.startsWith('/schema-org') || path.startsWith('/sitemap') || path.startsWith('/robots') || path.startsWith('/site-config') || path.startsWith('/link-checker')) {
+              if (path.startsWith('/skew-protection') || path.startsWith('/nuxt-seo') || path.startsWith('/experiments') || path.startsWith('/og-image') || path.startsWith('/schema-org') || path.startsWith('/sitemap') || path.startsWith('/robots') || path.startsWith('/site-config') || path.startsWith('/link-checker')) {
                 return false
               }
               return true
@@ -65,7 +66,7 @@ export default defineNuxtConfig({
     ],
   },
 
-  uiPro: {
+  ui: {
     mdc: true,
     content: true,
   },
@@ -131,6 +132,7 @@ export default defineNuxtConfig({
             '/schema-org/*',
             '/sitemap/*',
             '/robots/*',
+            '/skew-protection/*',
             '/site-config/*',
             '/experiments/*',
             '/llms.txt',
@@ -264,6 +266,7 @@ export default defineNuxtConfig({
     '/experiments': { redirect: { to: '/docs/seo-utils/getting-started/installation', statusCode: 301 } },
     '/site-config': { redirect: { to: '/docs/site-config/getting-started/installation', statusCode: 301 } },
     '/link-checker': { redirect: { to: '/docs/link-checker/getting-started/installation', statusCode: 301 } },
+    '/skew-protection': { redirect: { to: '/docs/skew-protection/getting-started/installation', statusCode: 301 } },
 
     '/nuxt-seo/**': {
       ogImage: {

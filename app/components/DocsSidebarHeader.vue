@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { NuxtSEOModule } from '@nuxtjs/seo/const'
 import { getLastPathSegment, getPathSubSection } from '~~/utils/urls'
 
 const route = useRoute()
 const navigation = inject('navigation')
-const activeModule = inject('module')
+const activeModule = inject<Ref<NuxtSEOModule>>('module')
 
 const bottom = computed(() => {
   if (!navigation.value) {
@@ -65,8 +66,10 @@ const topLinks = computed(() => [
         </li>
       </ul>
       <USeparator class="mt-0 pt-0" />
-      <ContentNavigation
-        as="div" default-open :collapsible="false" :navigation="bottom" highlight
+      <UContentNavigation
+        as="div"
+        :navigation="bottom"
+        highlight
         :ui="{ listWithChildren: 'sm:ml-0 mt-2' }"
       >
         <template #link="{ link }">
@@ -100,7 +103,7 @@ const topLinks = computed(() => [
             </UBadge>
           </div>
         </template>
-      </ContentNavigation>
+      </UContentNavigation>
     </nav>
   </div>
 </template>

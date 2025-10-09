@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { NuxtSEOModule } from '@nuxtjs/seo/const'
 import { titleCase } from 'scule'
 import { joinURL } from 'ufo'
 import { getLastPathSegment, getPathSegments } from '~~/utils/urls'
-import { useCurrentDocPage } from '~/composables/data'
 
 definePageMeta({
   layout: 'docs',
@@ -10,8 +10,9 @@ definePageMeta({
 
 const route = useRoute()
 
-const { page, surround, lastCommit } = await useCurrentDocPage()
-const module = inject('module')
+const currentPage = inject('currentPage')
+const { page, surround, lastCommit } = currentPage.value || {}
+const module = inject<Ref<NuxtSEOModule>>('module')
 if (!page.value?.id) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }

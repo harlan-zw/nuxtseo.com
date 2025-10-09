@@ -1,11 +1,6 @@
-import { modules as baseModules } from '../../utils/modules'
+import { modules as baseModules } from '../../modules'
 
-export const modules = baseModules.map((m) => {
-  return {
-    ...m,
-    to: `/docs/${m.slug}/getting-started/introduction`,
-  }
-})
+export const modules = baseModules
 
 export function useModule(_slug?: Ref<string> | string | false, _stats?: any) {
   const stats = inject('stats', _stats)

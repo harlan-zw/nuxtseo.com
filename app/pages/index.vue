@@ -334,15 +334,14 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
       <template #a>
         <div class="space-y-6">
           <ModuleFeaturesCard module="link-checker" :items="linkCheckerItems" />
-          <ModuleCardInternalLinks />
-          <ModuleCardSEOValidate />
+          <ModuleCardSkewProtection />
         </div>
       </template>
       <template #b>
         <div class="mb-8">
           <ModuleCardMagicRedirects />
+          <ModuleCardAIIndex />
         </div>
-        <ModuleCardGsc />
       </template>
     </ReuseSectionTemplate>
     <section class="pb-10 xl:pb-20">

@@ -1,5 +1,5 @@
-import { modules } from '@nuxtjs/seo/const'
 import { $fetch } from 'ofetch'
+import { modules } from '../../modules'
 
 function customSortSemver(a, b) {
   const aParts = String(a).split('.')
@@ -17,7 +17,7 @@ export default defineCachedEventHandler(async (e) => {
   const promises = []
   const uniqueContributors = new Set<string>()
   const allReleases = []
-  for (const m of modules) {
+  for (const m of modules.filter(m => !m.soon)) {
     // eslint-disable-next-line no-async-promise-executor
     promises.push(new Promise(async (resolve) => {
       const [nuxtApiStats, stars, commitCount, issuesCloses, releases, downloads] = await Promise.all([

@@ -1,11 +1,11 @@
-import type { NuxtSEOModule } from '@nuxtjs/seo/const'
+import type { NuxtSEOModule } from './modules'
 import { existsSync } from 'node:fs'
 import { defineCollection, defineContentConfig } from '@nuxt/content'
-import { LinkCheckerModule, NuxtSEO, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule } from '@nuxtjs/seo/const'
 import { asSeoCollection } from '@nuxtjs/seo/content'
 import { relative, resolve } from 'pathe'
 import z from 'zod'
 import { logger } from './logger'
+import { LinkCheckerModule, NuxtSEO, NuxtSkewProtectionModule, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule } from './modules'
 
 const schema = z.object({
   new: z.boolean().optional(),
@@ -16,6 +16,8 @@ function getSubModuleCollection(m: NuxtSEOModule) {
   const localDirPaths = new Set([
     resolve(__dirname, '..', m.npm, 'docs', 'content'),
     resolve(__dirname, '..', m.repo.replace('harlan-zw/', '').replace('nuxt-modules/', ''), 'docs', 'content'),
+    // check <homeDir>/<pkg>/<m.npm> -> /home/harlan/pkg/nuxt-skew-protection
+    resolve(process.env.HOME || '', 'pkg', m.npm, 'docs', 'content'),
   ])
   for (const localDirPath of localDirPaths) {
     if (existsSync(localDirPath)) {
@@ -54,6 +56,7 @@ export const content = defineContentConfig({
     linkChecker: getSubModuleCollection(LinkCheckerModule),
     seoUtils: getSubModuleCollection(SeoUtilsModule),
     siteConfig: getSubModuleCollection(SiteConfigModule),
+    skewProtection: getSubModuleCollection(NuxtSkewProtectionModule),
     learn: defineCollection(asSeoCollection({
       type: 'page',
       source: {

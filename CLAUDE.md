@@ -21,18 +21,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture
 
 ### Framework Stack
-- **Nuxt**: v3.16.2 with compatibility version 4
-- **Content**: @nuxt/content v3 (latest PR build) with D1 database
-- **UI**: @nuxt/ui-pro v3.0.2 with Tailwind CSS v4
+- **Nuxt**: v4.1.2 with compatibility version 4
+- **Content**: @nuxt/content v3.7.1 with D1 database (Cloudflare D1 binding)
+- **UI**: @nuxt/ui v4.0.0 with Tailwind CSS v4
 - **TypeScript**: Full type safety throughout
-- **SEO**: @nuxtjs/seo module (the main focus of this documentation site)
+- **SEO**: @nuxtjs/seo v3.2.2 (the main focus of this documentation site)
+- **Package Manager**: pnpm@10.18.0
+- **Node**: >= 22.0.0
 
 ### Content Organization
-The site documents multiple SEO-related modules. Content is organized by:
-- `/docs/[module]/[section]/[page]` - Module documentation
-- `/learn/` - Educational content about SEO concepts
-- `/recipes/` - Implementation guides
-- `/snippets/` - Code examples
+Documentation content lives in `/content/` and is fetched via @nuxt/content from a D1 database:
+- `/content/learn/` - Educational content about SEO concepts (articles, guides)
+- `/content/recipes/` - Implementation guides
+- `/content/snippets/` - Code examples and snippets
+- `/content/root/` - Special pages (announcements, pro pages)
+- Module documentation is dynamically pulled from @nuxtjs/seo package based on `modules` configuration
+
+Module data is sourced from `@nuxtjs/seo/const` and configured in `utils/modules.ts`. Each module has:
+- Dynamic routes: `/docs/[slug]/getting-started/introduction`
+- Content prefix and collection defined per module
 
 ### Key Modules Documented
 - `nuxt-seo` - Main SEO module
@@ -51,10 +58,12 @@ The site documents multiple SEO-related modules. Content is organized by:
 - OG Images: Zero runtime with custom fonts (Hubot Sans)
 
 ### API Integrations
-- GitHub API: Stars, sponsors, commit data
-- npm API: Download statistics
-- Twitter/X API: Tweet embeds
-- LLMs: nuxt-llms for AI features
+- **GitHub API**: Stars, sponsors, commit data, releases, issue counts, file commits (via Octokit)
+- **npm API**: Download statistics for packages
+- **Twitter/X API**: Tweet embeds
+- **LLMs**: nuxt-llms for AI-powered features with llms.txt support
+- **NuxtHub**: Cache, KV storage, and D1 database integration
+- **Email Octopus**: Newsletter/waitlist management
 
 ### Styling
 
@@ -90,3 +99,36 @@ Border classes:
 - `border-[var(--ui-border-muted)]`: Muted border color
 - `border-[var(--ui-border-accented)]`: Accented border color
 - `border-[var(--ui-border-inverted)]`: Inverted border color
+
+## Project Structure
+
+### Key Directories
+- `/app` - Nuxt application code
+  - `/components` - Vue components (auto-imported)
+  - `/composables` - Composable functions for data fetching, navigation, module info, formatting
+  - `/layouts` - Page layouts (default, docs, learn, article-simple)
+  - `/pages` - File-based routing pages
+  - `/utils` - Utility functions
+  - `/assets` - Static assets including custom icons
+  - `/css` - Global CSS styles
+- `/content` - Markdown content for docs, learn, recipes, snippets
+- `/server` - Server-side code
+  - `/api` - API endpoints (GitHub, npm, stats, feedback, etc.)
+  - `/middleware` - Server middleware (redirects, markdown processing)
+  - `/plugins` - Server plugins (llms configuration)
+  - `/utils` - Server utilities
+- `/utils` - Shared utilities (modules configuration)
+
+### Important Configuration Files
+- `nuxt.config.ts` - Main Nuxt configuration with extensive route rules, module configs, and custom hooks
+- `app.config.ts` - App-level configuration for UI components and theming
+- `mdc.config.ts` - Markdown component configuration
+- `router.options.ts` - Custom router options
+- `package.json` - Dependencies and scripts
+
+### Special Features
+- **Custom Nitro Hook**: Optimizes Cloudflare `_routes.json` for prerendered pages (in nuxt.config.ts)
+- **Route Rules**: Extensive redirect rules for documentation versioning and restructuring
+- **Link Checker**: Configured to generate HTML, Markdown, and JSON reports
+- **OG Images**: Zero-runtime generation with custom Hubot Sans fonts
+- **Content Database**: Uses Cloudflare D1 binding for content storage

@@ -14,11 +14,11 @@ import { proAd } from '~/utils/ads'
 const faq = [
   {
     label: 'When will Nuxt SEO Pro be available?',
-    content: 'Nuxt SEO Pro will be available in 2025 in Q1 and will likely be introduced with the Redirects and Google Search Console modules. Other modules are scheduled to be available in 2025 Q2.',
+    content: 'Nuxt SEO Pro will be available on October 12th, 2025 with three modules: Magic Redirects, Nuxt Skew Protection, and Nuxt AI Index. LLMWise is scheduled to be available in Q2 2025.',
   },
   {
     label: 'Can I get a refund if I change my mind?',
-    content: 'You can request a refund at any point up to a month after the Nuxt SEO Pro official release scheduled for Q1 2025.',
+    content: 'You can request a refund at any point up to a month after the Nuxt SEO Pro official release scheduled for October 12th, 2025.',
   },
   {
     label: 'What is a project?',
@@ -43,11 +43,10 @@ const { data: snippets } = await useAsyncData(`snippets`, async () => {
   })
 })
 
-const daysUntilQ1 = computed(() => {
-  // we want the middle of q1, so probably middle of feb
+const daysUntilRelease = computed(() => {
   const now = new Date()
-  const newYear = new Date(now.getFullYear(), 5, 0)
-  return Math.floor((newYear.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+  const releaseDate = new Date(2025, 9, 15) // October 12th, 2025 (month is 0-indexed)
+  return Math.floor((releaseDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
 })
 
 const waitlistFeedbackStatus = ref<'loading' | 'submitted'>()
@@ -79,8 +78,6 @@ async function onSubmit(event: FormSubmitEvent<ProEmailSchemaOutput>) {
     })
 }
 
-const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
-
 function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackSchemaOutput>) {
   waitlistFeedbackStatus.value = 'loading'
   $fetch('/api/pro-waitlist-feedback', {
@@ -101,26 +98,6 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
 
 <template>
   <div>
-    <DefineSectionTemplate v-slot="{ $slots, value }">
-      <section class="px-10 max-w-6xl mx-auto">
-        <div class="flex flex-col">
-          <div class="max-w-xl mx-auto">
-            <div class="sticky top-[100px] pt-5">
-              <component :is="$slots.default" />
-            </div>
-          </div>
-          <div class="px-5">
-            <UAccordion :items="[{ label: 'Learn More', slot: 'mdc' }]" :ui="{ label: 'font-bold' }">
-              <template #mdc>
-                <div class="max-w-2xl">
-                  <ContentRenderer :value="value" />
-                </div>
-              </template>
-            </UAccordion>
-          </div>
-        </div>
-      </section>
-    </DefineSectionTemplate>
     <div class="gradient" />
     <div class="px-10 max-w-4xl mx-auto mb-10">
       <div class="my-10 max-w-xl text-balance">
@@ -166,27 +143,109 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
         </div>
       </div>
     </div>
-    <section class="px-10 max-w-4xl mx-auto mb-5">
+    <section class="px-10 max-w-4xl mx-auto mb-10">
       <h2 class="font-semibold text-2xl mb-2 flex items-center gap-2">
-        <UIcon name="i-carbon-3rd-party-connected" class="text-blue-300" /> New Modules
+        <UIcon name="i-carbon-3rd-party-connected" class="text-blue-300" /> 3 New Modules
       </h2>
       <p class="dark:text-neutral-300">
-        Four new modules to help you nurture your organic SEO growth.
+        Three new modules to help you nurture your organic SEO growth.
       </p>
     </section>
-    <div class="max-w-2xl lg:max-w-6xl space-y-5 mb-5 px-10 mx-auto lg:grid grid-cols-2">
-      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('magic-redirects.md'))">
-        <ModuleCardMagicRedirects />
-      </ReuseSectionTemplate>
-      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('google-search-console.md'))">
-        <ModuleCardGsc />
-      </ReuseSectionTemplate>
-      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('link-checker.md'))">
-        <ModuleCardInternalLinks />
-      </ReuseSectionTemplate>
-      <ReuseSectionTemplate :value="snippets.find(s => s.id.endsWith('seo-analyze.md'))">
-        <ModuleCardSEOValidate />
-      </ReuseSectionTemplate>
+
+    <div class="px-10 max-w-6xl mx-auto space-y-10 mb-10">
+      <!-- Nuxt Skew Protection -->
+      <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
+        <div class="space-y-5">
+          <ModuleCardSkewProtection />
+          <div class="prose dark:prose-invert max-w-none">
+            <h3 class="text-xl font-semibold mb-3">
+              Why Nuxt Skew Protection?
+            </h3>
+            <ContentRenderer :value="snippets.find(s => s.id.endsWith('nuxt-skew-protection.md'))" />
+          </div>
+        </div>
+        <div class="flex items-start justify-center">
+          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 space-y-6 min-h-[300px]">
+            <div class="space-y-3">
+              <div class="text-sm font-medium text-[var(--ui-text)]">
+                Interactive Demo
+              </div>
+              <div class="text-sm text-[var(--ui-text-muted)]">
+                Simulate a new deployment to see the update notification in action.
+              </div>
+            </div>
+            <SkewProtectionDemo />
+          </div>
+        </div>
+      </div>
+
+      <!-- Nuxt AI Index -->
+      <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
+        <div class="space-y-5">
+          <ModuleCardAIIndex />
+          <div class="prose dark:prose-invert max-w-none">
+            <h3 class="text-xl font-semibold mb-3">
+              Why Nuxt AI Index?
+            </h3>
+            <ContentRenderer :value="snippets.find(s => s.id.endsWith('nuxt-ai-index.md'))" />
+          </div>
+        </div>
+        <div class="flex items-start justify-center">
+          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 flex items-center justify-center min-h-[300px]">
+            <div class="text-[var(--ui-text-muted)] text-sm">
+              Live example coming soon
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Magic Redirects -->
+      <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
+        <div class="space-y-5">
+          <ModuleCardMagicRedirects />
+          <div class="prose dark:prose-invert max-w-none">
+            <h3 class="text-xl font-semibold mb-3">
+              Why Magic Redirects?
+            </h3>
+            <ContentRenderer :value="snippets.find(s => s.id.endsWith('magic-redirects.md'))" />
+          </div>
+        </div>
+        <div class="flex items-start justify-center">
+          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 flex items-center justify-center min-h-[300px]">
+            <div class="text-[var(--ui-text-muted)] text-sm">
+              Live example coming soon
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LLMWise Section -->
+    <section class="px-10 max-w-4xl mx-auto mb-10">
+      <h2 class="font-semibold text-2xl mb-2 flex items-center gap-2">
+        LLMWise: A New Site Audit Tool
+        <UBadge color="warning">
+          In Development
+        </UBadge>
+      </h2>
+      <div class="mt-6">
+        Three new modules to help you nurture your organic SEO growth.
+      </div>
+    </section>
+    <div class="px-10 max-w-6xl mx-auto space-y-10 mb-10">
+      <!-- Magic Redirects -->
+      <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
+        <div class="space-y-5">
+          <ModuleCardLLMWise />
+        </div>
+        <div class="flex items-start justify-center">
+          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 flex items-center justify-center min-h-[300px]">
+            <div class="text-[var(--ui-text-muted)] text-sm">
+              Live example coming soon
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <section class="px-10 max-w-4xl mx-auto mb-12">
       <div class="mb-7 max-w-xl">
@@ -197,13 +256,13 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
       <div class="lg:flex gap-10 w-full">
         <div>
           <p class="mb-5 max-w-xl text-lg text-[--ui-text-muted]">
-            Keep up-to-date with the development of Nuxt SEO Pro by joining the waitlist and receive an exlusive discount on launch in Q1 2025.
+            Keep up-to-date with the development of Nuxt SEO Pro by joining the waitlist and receive an exlusive discount on launch on October 12th, 2025.
           </p>
         </div>
         <div class="mb-5 ">
           Release estimated in<br>
           <UIcon name="i-carbon-calendar" class="-mt-2 text-blue-300" />
-          ~{{ daysUntilQ1 }} days
+          ~{{ daysUntilRelease }} days
         </div>
       </div>
 

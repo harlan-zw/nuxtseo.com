@@ -1,4 +1,4 @@
-import { modules } from '~~/utils/modules'
+import { modules } from '~~/modules'
 
 export default defineNitroPlugin((nitroApp) => {
   // Method 1: Using the hooks directly

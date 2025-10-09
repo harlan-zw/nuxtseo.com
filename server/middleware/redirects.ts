@@ -1,5 +1,5 @@
-import { modules } from '@nuxtjs/seo/const'
 import { sendRedirect } from 'h3'
+import { modules } from '../../modules'
 
 export default defineEventHandler(async (e) => {
   // we want to redirect any requests for /docs/experiments/* to /docs/seo-utils/*

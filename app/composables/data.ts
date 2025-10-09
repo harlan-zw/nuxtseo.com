@@ -23,36 +23,30 @@ export async function useCurrentDocPage() {
     throw createError({ statusCode: 404, statusMessage: `Page not found`, fatal: true })
   }
 
+  // eslint-disable-next-line no-async-promise-executor
   const p = new Promise(async (resolve) => {
-    const [{ data: page }, { data: surround }] = await Promise.all([
-      useAsyncData(`docs-${route.path}`, () => queryCollection(module.contentCollection).path(route.path).first(), {
-        transform(item) {
-          modifyRelativeDocLinksWithFramework(item.body.value)
-          return item
-        },
-      }),
-      useAsyncData(`docs-${route.path}-surround`, () => queryCollectionItemSurroundings(module.contentCollection, route.path, {
+    const [pageData, surroundData] = await Promise.all([
+      queryCollection(module.contentCollection).path(route.path).first(),
+      queryCollectionItemSurroundings(module.contentCollection, route.path, {
         fields: ['title', 'description', 'path'],
-      }), {
-        transform(items) {
-          return items.map((m) => {
-            return {
-              ...m,
-              _path: m.path,
-            }
-          })
-        },
       }),
     ])
-    await nuxtApp.runWithContext(async () => {
-      const { data: lastCommit } = await useAsyncData(`docs-${route.path}-last-commit`, () => {
-        return $fetch(`/api/github/${module.repo.replace('/', '@')}/last-file-commit?file=${module.contentPrefix}${page.value.id.split('/').slice(3).join('/')}`)
-      })
-      resolve({
-        page,
-        surround,
-        lastCommit,
-      })
+
+    modifyRelativeDocLinksWithFramework(pageData.body.value)
+
+    const page = ref(pageData)
+    const surround = ref(surroundData.filter(m => m).map(m => ({
+      ...m,
+      _path: m.path,
+    })))
+
+    const lastCommitData = await $fetch(`/api/github/${module.repo.replace('/', '@')}/last-file-commit?file=${module.contentPrefix}${pageData.id.split('/').slice(3).join('/')}`)
+    const lastCommit = ref(lastCommitData)
+
+    resolve({
+      page,
+      surround,
+      lastCommit,
     })
   })
 
