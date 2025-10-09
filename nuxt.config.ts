@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxthub/core',
     'nuxt-llms',
-    'nuxt-skew-protection',
+    // 'nuxt-skew-protection',
     '@nuxt/scripts',
     '@nuxt/image',
     // 'nuxt-rebundle',
