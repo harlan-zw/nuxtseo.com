@@ -56,6 +56,10 @@ export default defineNuxtConfig({
     },
   ],
 
+  skewProtection: {
+    debug: true,
+  },
+
   sitemap: {
     exclude: [
       '**/.navigation',

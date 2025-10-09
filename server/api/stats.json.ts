@@ -58,7 +58,7 @@ export default defineCachedEventHandler(async (e) => {
         slug: m.slug,
         createdAt: stats?.createdAt,
         publishedAt: stats?.publishedAt,
-        version: releases?.releases[0].name,
+        version: releases?.releases?.[0]?.name,
         versions,
         stars: stars.stars || stats?.stars,
         commitCount,
