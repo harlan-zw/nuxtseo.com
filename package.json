@@ -65,6 +65,9 @@
     "wrangler": "^4.42.2"
   },
   "pnpm": {
+    "overrides": {
+      "vite": "npm:rolldown-vite@latest"
+    },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
       "@tailwindcss/oxide",

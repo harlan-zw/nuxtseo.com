@@ -96,9 +96,9 @@ const { data: md } = await useAsyncData(() => parseMarkdown(`
     <div label="Live Example">
       <div class="not-prose mt-3">
         <div class="inline-block">
-          <SkewNotification v-slot="{ isCurrentChunksOutdated, dismiss, reload, timeAgo }" force-open>
+          <div>
             <Transition name="slide-up">
-              <div v-if="isCurrentChunksOutdated" class="skew-notification">
+              <div class="skew-notification">
                 <div class="skew-notification-content">
                   <div class="skew-notification-message">
                     <span class="skew-notification-icon">✨</span>
@@ -106,23 +106,20 @@ const { data: md } = await useAsyncData(() => parseMarkdown(`
                       <div class="skew-notification-title">
                         New update available!
                       </div>
-                      <div v-if="timeAgo" class="skew-notification-subtitle">
-                        Released {{ timeAgo }}
-                      </div>
                     </div>
                   </div>
                   <div class="skew-notification-actions">
-                    <button class="skew-button skew-button-secondary" @click="dismiss">
+                    <button class="skew-button skew-button-secondary">
                       Dismiss
                     </button>
-                    <button class="skew-button skew-button-primary" @click="reload">
+                    <button class="skew-button skew-button-primary">
                       Refresh
                     </button>
                   </div>
                 </div>
               </div>
             </Transition>
-          </SkewNotification>
+          </div>
         </div>
       </div>
     </div>
