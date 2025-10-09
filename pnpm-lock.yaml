@@ -122,12 +122,9 @@ importers:
       nuxt-lodash:
         specifier: ^2.5.3
         version: 2.5.3(magicast@0.3.5)
-      nuxt-rebundle:
-        specifier: ^0.0.2
-        version: 0.0.2(magicast@0.3.5)(nuxt@4.1.3(@parcel/watcher@2.5.1)(@types/node@24.7.0)(@vue/compiler-sfc@3.5.22)(better-sqlite3@12.4.1)(db0@0.3.4(better-sqlite3@12.4.1))(eslint@9.37.0(jiti@2.6.1))(ioredis@5.8.1)(magicast@0.3.5)(optionator@0.9.4)(rolldown@1.0.0-beta.42)(rollup@4.52.4)(terser@5.44.0)(typescript@5.9.3)(vite@7.1.9(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(yaml@2.8.1))
       nuxt-skew-protection:
-        specifier: 0.1.7
-        version: 0.1.7(h3@1.15.4)(magicast@0.3.5)(vue@3.5.22(typescript@5.9.3))
+        specifier: 0.2.0
+        version: 0.2.0(h3@1.15.4)(magicast@0.3.5)(vue@3.5.22(typescript@5.9.3))
       octokit:
         specifier: ^5.0.3
         version: 5.0.3
@@ -5562,11 +5559,6 @@ packages:
       '@unhead/vue': ^2.0.5
       unstorage: ^1.15.0
 
-  nuxt-rebundle@0.0.2:
-    resolution: {integrity: sha512-laHs4TSMtOeWuLLLy66t2LIaf1016KST/mkEXfX99NezVX9uYS8i3T8sj6TSeuO9ZYWOtx1EN48dMcZkKqPnhw==}
-    peerDependencies:
-      nuxt: '>=3.12.0'
-
   nuxt-schema-org@5.0.9:
     resolution: {integrity: sha512-k0i3h9WJYz0ikLtxLky0Ip0Cbr+P98I2tV7zWu7kZNUSi47PagM/Qd7/RA2jf0sq4VC9JwQUDtjDp7r3u4S8kw==}
     peerDependencies:
@@ -5589,8 +5581,8 @@ packages:
     peerDependencies:
       h3: ^1
 
-  nuxt-skew-protection@0.1.7:
-    resolution: {integrity: sha512-s35lhCXaHEAAYSiai7eGvS2i9E1xqsD6LwUSowVCnYfKV2qBvlOJEzjj7K4eo7kBzVQ9aC7U+LCnZIITqkBf/g==}
+  nuxt-skew-protection@0.2.0:
+    resolution: {integrity: sha512-EcDJBCE2uOQrVVZgbXmek56Hc3ZiGbE5Av1jmZtUm0A1bXZLqNq/8HFU9CmGqNPU4e7famiWNABzAwXdEDJrAA==}
 
   nuxt@4.1.3:
     resolution: {integrity: sha512-FPl+4HNIOTRYWQXtsZe5KJAr/eddFesuXABvcSTnFLYckIfnxcistwmbtPlkJhkW6vr/Jdhef5QqqYYkBsowGg==}
@@ -13711,18 +13703,6 @@ snapshots:
       - vite
       - vue
 
-  nuxt-rebundle@0.0.2(magicast@0.3.5)(nuxt@4.1.3(@parcel/watcher@2.5.1)(@types/node@24.7.0)(@vue/compiler-sfc@3.5.22)(better-sqlite3@12.4.1)(db0@0.3.4(better-sqlite3@12.4.1))(eslint@9.37.0(jiti@2.6.1))(ioredis@5.8.1)(magicast@0.3.5)(optionator@0.9.4)(rolldown@1.0.0-beta.42)(rollup@4.52.4)(terser@5.44.0)(typescript@5.9.3)(vite@7.1.9(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(yaml@2.8.1)):
-    dependencies:
-      '@nuxt/kit': 3.19.3(magicast@0.3.5)
-      acorn: 8.15.0
-      estree-walker: 3.0.3
-      magic-string: 0.30.19
-      mlly: 1.8.0
-      nuxt: 4.1.3(@parcel/watcher@2.5.1)(@types/node@24.7.0)(@vue/compiler-sfc@3.5.22)(better-sqlite3@12.4.1)(db0@0.3.4(better-sqlite3@12.4.1))(eslint@9.37.0(jiti@2.6.1))(ioredis@5.8.1)(magicast@0.3.5)(optionator@0.9.4)(rolldown@1.0.0-beta.42)(rollup@4.52.4)(terser@5.44.0)(typescript@5.9.3)(vite@7.1.9(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(yaml@2.8.1)
-      pathe: 1.1.2
-    transitivePeerDependencies:
-      - magicast
-
   nuxt-schema-org@5.0.9(@unhead/vue@2.0.19(vue@3.5.22(typescript@5.9.3)))(h3@1.15.4)(magicast@0.3.5)(unhead@2.0.19)(vue@3.5.22(typescript@5.9.3)):
     dependencies:
       '@nuxt/kit': 4.1.3(magicast@0.3.5)
@@ -13788,10 +13768,11 @@ snapshots:
       - magicast
       - vue
 
-  nuxt-skew-protection@0.1.7(h3@1.15.4)(magicast@0.3.5)(vue@3.5.22(typescript@5.9.3)):
+  nuxt-skew-protection@0.2.0(h3@1.15.4)(magicast@0.3.5)(vue@3.5.22(typescript@5.9.3)):
     dependencies:
       '@nuxt/kit': 4.1.3(magicast@0.3.5)
       '@nuxtjs/robots': 5.5.5(h3@1.15.4)(magicast@0.3.5)(vue@3.5.22(typescript@5.9.3))
+      '@vueuse/core': 13.9.0(vue@3.5.22(typescript@5.9.3))
       consola: 3.4.2
       cookie-es: 2.0.0
       defu: 6.1.4
