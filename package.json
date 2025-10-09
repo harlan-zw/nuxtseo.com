@@ -47,6 +47,7 @@
     "eslint": "^9.37.0",
     "markdownlint-cli": "^0.45.0",
     "motion-v": "^1.7.2",
+    "nitro-cloudflare-dev": "^0.2.2",
     "nuxt": "^4.1.2",
     "nuxt-build-cache": "^0.1.1",
     "nuxt-llms": "^0.1.3",
