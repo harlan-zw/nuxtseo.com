@@ -224,7 +224,7 @@ const isHydrating = isHydratingRef()
                         On this page
                       </div>
                     </div>
-                    <TableOfContents :links="page.body?.toc?.links" />
+                    <TableOfContents :links="page?.body?.toc?.links" />
                   </div>
                 </template>
                 <Ads />

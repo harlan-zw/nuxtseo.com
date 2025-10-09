@@ -31,8 +31,11 @@ export async function useCurrentDocPage() {
         fields: ['title', 'description', 'path'],
       }),
     ])
+    if (pageData?.body?.value) {
+      throw createError({ statusCode: 404, statusMessage: `Page not found: ${route.path}`, fatal: true })
+    }
 
-    modifyRelativeDocLinksWithFramework(pageData.body.value)
+    modifyRelativeDocLinksWithFramework(pageData.body?.value)
 
     const page = ref(pageData)
     const surround = ref(surroundData.filter(m => m).map(m => ({

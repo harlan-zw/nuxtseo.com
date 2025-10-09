@@ -84,7 +84,7 @@ useSchemaOrg([
           </div>
         </div>
       </div>
-      <ContentRenderer v-if="page.body" :value="page" />
+      <ContentRenderer v-if="page?.body" :value="page" />
     </UPageBody>
   </div>
 </template>
