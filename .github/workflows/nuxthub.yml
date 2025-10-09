@@ -10,36 +10,19 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Build application
-        run: pnpm build
-        env:
-          NODE_OPTIONS: --max-old-space-size=14000
-          NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
-          NUXT_HUB_PROJECT_KEY: ${{ secrets.NUXT_HUB_PROJECT_KEY }}
-          NUXT_HUB_ENV: ${{ secrets.NUXT_HUB_ENV }}
-          NUXT_GITHUB_AUTH_TOKEN: ${{ secrets.NUXT_GITHUB_AUTH_TOKEN }}
-          NUXT_GITHUB_ACCESS_TOKEN: ${{ secrets.NUXT_GITHUB_ACCESS_TOKEN }}
-          NUXT_EMAIL_OCTOPUS_TOKEN: ${{ secrets.NUXT_EMAIL_OCTOPUS_TOKEN }}
-
-      - name: Deploy to NuxtHub
-        uses: nuxt-hub/action@v1
-        id: deploy
-        with:
-          project-key: nuxtseo-com-rtoh
 
       - name: Build & Deploy to NuxtHub
         uses: nuxt-hub/action@v2
