@@ -28,3 +28,5 @@ jobs:
         uses: nuxt-hub/action@v2
         with:
           project-key: nuxtseo-com-rtoh
+        env:
+          NODE_OPTIONS: "--max-old-space-size=12288"
