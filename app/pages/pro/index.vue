@@ -30,7 +30,7 @@ const faq = [
   },
   {
     label: 'Do you offer technical support?',
-    content: 'Yes, anyone purchasing a license will have Discord support, you are also free to email me at harlan@harlanzw.com.',
+    content: 'Yes! Purchasing a license provides you with Discord support, alternatively you are also free to email me at harlan@harlanzw.com.',
   },
 ]
 

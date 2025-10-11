@@ -18,9 +18,8 @@ export default defineCachedEventHandler(async (e) => {
   const uniqueContributors = new Set<string>()
   const allReleases = []
   for (const m of modules.filter(m => !m.soon)) {
-    // eslint-disable-next-line no-async-promise-executor
-    promises.push(new Promise(async (resolve) => {
-      const [nuxtApiStats, stars, commitCount, issuesCloses, releases, downloads] = await Promise.all([
+    promises.push(
+      Promise.all([
         $fetch(`https://api.nuxt.com/modules/${m.slug === 'nuxt-seo' ? 'seo' : m.slug}`, {
           timeout: 3000,
         })
@@ -37,40 +36,42 @@ export default defineCachedEventHandler(async (e) => {
         e.$fetch(`/api/github/${m.repo.replace('/', '@')}/releases`),
         e.$fetch(`/api/npm/${m.npm.replace('/', '_')}/downloads`),
       ])
-      const { stats } = nuxtApiStats
-      for (const c of nuxtApiStats.contributors) {
-        uniqueContributors.add(c.id)
-      }
-      allReleases.push(...(releases?.releases || []).map(r => ({
-        ...r,
-        slug: m.slug,
-      })))
-      // get all major versions from releases, need to map into major version groups then get first child
-      const versionGroups = (releases?.releases || []).map(r => r.name).reduce((group, v) => {
-        const [major] = v.split('.').slice(0, 1)
-        group[major] = group[major] || []
-        group[major].push(v)
-        return group
-      }, [])
-      // first of each group make an object, sort so we get the oldest version
-      const versions = Object.values(versionGroups).sort(customSortSemver).map(v => v[0]).map(v => v.startsWith('v') ? v : `v${v}`).sort((a, b) => b.localeCompare(a))
-      resolve({
-        slug: m.slug,
-        createdAt: stats?.createdAt,
-        publishedAt: stats?.publishedAt,
-        version: releases?.releases?.[0]?.name,
-        versions,
-        stars: stars.stars || stats?.stars,
-        commitCount,
-        issuesCloses,
-        downloads: downloads.totalDownloads90,
-        totalDownloads90: downloads.totalDownloads90,
-        totalDownloads30: downloads.totalDownloads30,
-        averageDownloads30: downloads.averageDownloads30,
-        averageDownloads90: downloads.averageDownloads90,
-        percentageChange: downloads.percentageChange,
-      })
-    }))
+        .then(([nuxtApiStats, stars, commitCount, issuesCloses, releases, downloads]) => {
+          const { stats } = nuxtApiStats
+          for (const c of nuxtApiStats.contributors) {
+            uniqueContributors.add(c.id)
+          }
+          allReleases.push(...(releases?.releases || []).map(r => ({
+            ...r,
+            slug: m.slug,
+          })))
+          // get all major versions from releases, need to map into major version groups then get first child
+          const versionGroups = (releases?.releases || []).map(r => r.name).reduce((group, v) => {
+            const [major] = v.split('.').slice(0, 1)
+            group[major] = group[major] || []
+            group[major].push(v)
+            return group
+          }, [])
+          // first of each group make an object, sort so we get the oldest version
+          const versions = Object.values(versionGroups).sort(customSortSemver).map(v => v[0]).map(v => v.startsWith('v') ? v : `v${v}`).sort((a, b) => b.localeCompare(a))
+          return {
+            slug: m.slug,
+            createdAt: stats?.createdAt,
+            publishedAt: stats?.publishedAt,
+            version: releases?.releases?.[0]?.name,
+            versions,
+            stars: stars.stars || stats?.stars,
+            commitCount,
+            issuesCloses,
+            downloads: downloads.totalDownloads90,
+            totalDownloads90: downloads.totalDownloads90,
+            totalDownloads30: downloads.totalDownloads30,
+            averageDownloads30: downloads.averageDownloads30,
+            averageDownloads90: downloads.averageDownloads90,
+            percentageChange: downloads.percentageChange,
+          }
+        }),
+    )
   }
   const moduleStats = await Promise.all(promises)
   return {

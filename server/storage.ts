@@ -1,8 +1,4 @@
-export function appStorage() {
-  // if we have the binding
-  if (process.env.KV || globalThis.__env__?.KV || globalThis.KV) {
-    return hubKV()
-  }
-  // stub for unstorage if needed
-  return useStorage()
-}
+export const appStorage = defineEventHandler((event) => {
+  const cloudflare = event?.context?.cloudfare
+  return cloudflare?.env?.KV || useStorage()
+})

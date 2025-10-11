@@ -15,7 +15,7 @@ export function useModule(_slug?: Ref<string> | string | false, _stats?: any) {
       return null
     }
     return {
-      ...(stats.value.modules.find(m => m.slug === slug) || {}),
+      ...(stats.value?.modules?.find(m => m.slug === slug) || {}),
       ...(modules.find(m => m.slug === slug) || {}),
     }
   })

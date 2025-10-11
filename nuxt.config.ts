@@ -13,8 +13,8 @@ export default defineNuxtConfig({
     'motion-v/nuxt',
     // 'nuxt-content-twoslash',
     '@nuxt/content',
+    'nitro-cloudflare-dev',
     '@vueuse/nuxt',
-    '@nuxthub/core',
     'nuxt-llms',
     'nuxt-skew-protection',
     '@nuxt/scripts',
@@ -74,27 +74,12 @@ export default defineNuxtConfig({
     content: true,
   },
 
-  hub: {
-    database: true,
-    cache: true,
-    kv: true,
-  },
-
-  future: {
-    compatibilityVersion: 4,
-  },
-
   runtimeConfig: {
     emailOctopusToken: '', // NUXT_EMAIL_OCTOPUS_TOKEN
     githubAccessToken: '', // NUXT_GITHUB_ACCESS_TOKEN
     githubAuthToken: '', // NUXT_GITHUB_AUTH_TOKEN
     githubAuthClientId: 'cabace556bd9519d9299', // NUXT_GITHUB_AUTH_CLIENT_ID
     githubAuthClientSecret: '', // NUXT_GITHUB_AUTH_SECRET_ID
-
-    public: {
-      // moduleDeps: pkgJson.dependencies,
-      // version: pkgJson.version,
-    },
   },
 
   twoslash: {
@@ -117,35 +102,62 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    // preset: 'cloudflare-durable',
-    // experimental: {
-    //   websocket: true,
-    // },
+    preset: 'cloudflare-durable',
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
+      wrangler: {
+        vars: {
+          NUXT_GITHUB_ACCESS_TOKEN: process.env.NUXT_GITHUB_ACCESS_TOKEN || '',
+          NUXT_EMAIL_OCTOPUS_TOKEN: process.env.NUXT_EMAIL_OCTOPUS_TOKEN || '',
+          NUXT_GITHUB_AUTH_CLIENT_SECRET: process.env.NUXT_GITHUB_AUTH_CLIENT_SECRET || '',
+          NUXT_GITHUB_AUTH_TOKEN: process.env.NUXT_GITHUB_AUTH_TOKEN || '',
+        },
+        d1_databases: [
+          {
+            binding: 'DB',
+            database_id: '2c8aeceb-8c00-4f9e-b734-ca4bf9174464', // nuxtseo-com
+          },
+        ],
+        kv_namespaces: [
+          {
+            binding: 'KV',
+            id: '24f53b632fbe477188aa0bd4ad81d9db', // nuxtseo-com
+          },
+          {
+            binding: 'CACHE',
+            id: '11998f815de7425fa0d524e819bece2c', // nuxtseo-com_cache for nitro cache
+          },
+        ],
+        durable_objects: {
+          bindings: [
+            {
+              name: '$DurableObject',
+              class_name: '$DurableObject',
+            },
+          ],
+        },
+        migrations: [
+          {
+            tag: 'v1',
+            new_classes: ['$DurableObject'],
+          },
+        ],
+      },
+    },
+    storage: {
+      cache: {
+        driver: 'cloudflare-kv-binding',
+        binding: 'CACHE',
+      },
+    },
+    experimental: {
+      websocket: true,
+    },
     prerender: {
       failOnError: false,
       crawlLinks: true,
       routes: ['/', '/404.html'],
-    },
-    cloudflare: {
-      pages: {
-        routes: {
-          exclude: [
-            '/docs/*',
-            '/learn/*',
-            '/__nuxt_content/*',
-            // old links still get added for some reason
-            '/nuxt-seo/*',
-            '/og-image/*',
-            '/schema-org/*',
-            '/sitemap/*',
-            '/robots/*',
-            '/skew-protection/*',
-            '/site-config/*',
-            '/experiments/*',
-            '/llms.txt',
-          ],
-        },
-      },
     },
   },
 
@@ -176,7 +188,6 @@ export default defineNuxtConfig({
   },
 
   content: {
-    database: { type: 'd1', binding: 'DB' },
     build: {
       markdown: {
         highlight: {

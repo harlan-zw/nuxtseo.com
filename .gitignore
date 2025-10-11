@@ -18,3 +18,5 @@ sw.*
 
 .data
 .wrangler
+
+.dev.vars

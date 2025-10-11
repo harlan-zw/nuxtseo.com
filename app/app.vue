@@ -35,8 +35,6 @@ useHead({
       <NuxtPage />
     </NuxtLayout>
 
-    <ClientOnly />
-
     <Footer />
     <SkewNotification v-slot="{ isCurrentChunksOutdated, dismiss, reload }">
       <Transition
