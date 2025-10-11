@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     'nuxt-skew-protection',
     '@nuxt/scripts',
     '@nuxt/image',
-    // 'nuxt-rebundle',
     async (_, nuxt) => {
       nuxt.hooks.hook('nitro:init', (nitro) => {
         // from sponsorkit
@@ -109,15 +108,19 @@ export default defineNuxtConfig({
   },
 
   fonts: {
-    experimental: {
-      processCSSVariables: true,
-    },
+    // experimental: {
+    //   processCSSVariables: true,
+    // },
     families: [
       { name: 'Hubot Sans', provider: 'local', weight: [200, 900], stretch: '75% 125%' },
     ],
   },
 
   nitro: {
+    // preset: 'cloudflare-durable',
+    // experimental: {
+    //   websocket: true,
+    // },
     prerender: {
       failOnError: false,
       crawlLinks: true,
@@ -405,5 +408,5 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2025-03-14',
+  compatibilityDate: '2025-10-10',
 })
