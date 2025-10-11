@@ -41,6 +41,12 @@ Module data is sourced from `@nuxtjs/seo/const` and configured in `utils/modules
 - Dynamic routes: `/docs/[slug]/getting-started/introduction`
 - Content prefix and collection defined per module
 
+**Content Sources** (`content.config.ts`):
+- Module docs use smart sourcing: checks local filesystem first (for development), then falls back to GitHub
+- Local paths checked: `../<npm-name>/docs/content`, `../<repo-name>/docs/content`, `~/pkg/<npm-name>/docs/content`
+- GitHub fallback: Pulls from `https://github.com/<repo>/docs/content/**/*.md`
+- Collections: `nuxtSeo`, `robots`, `sitemap`, `ogImage`, `schemaOrg`, `linkChecker`, `seoUtils`, `siteConfig`, `skewProtection`, `learn`, `recipes`, `snippets`, `root`
+
 ### Key Modules Documented
 - `nuxt-seo` - Main SEO module
 - `robots` - Robots.txt management
@@ -105,25 +111,35 @@ Border classes:
 ### Key Directories
 - `/app` - Nuxt application code
   - `/components` - Vue components (auto-imported)
-  - `/composables` - Composable functions for data fetching, navigation, module info, formatting
+  - `/composables` - Composable functions:
+    - `data.ts` - GitHub/npm data fetching (stars, downloads, releases, sponsors)
+    - `nav.ts` - Navigation utilities for docs/learn sections
+    - `format.ts` - Formatting helpers (dates, numbers, etc.)
+    - `module.ts` - Module-specific info and utilities
   - `/layouts` - Page layouts (default, docs, learn, article-simple)
   - `/pages` - File-based routing pages
   - `/utils` - Utility functions
-  - `/assets` - Static assets including custom icons
+  - `/assets/icons` - Custom icon collection (used with `custom:` prefix)
   - `/css` - Global CSS styles
 - `/content` - Markdown content for docs, learn, recipes, snippets
 - `/server` - Server-side code
-  - `/api` - API endpoints (GitHub, npm, stats, feedback, etc.)
-  - `/middleware` - Server middleware (redirects, markdown processing)
-  - `/plugins` - Server plugins (llms configuration)
+  - `/api` - API endpoints:
+    - `/github/[repo]/*` - GitHub data (stars, releases, commits, issues)
+    - `/npm/[pkgName]/*` - npm download stats
+    - `stats.json` - Aggregated stats (prerendered in production)
+    - `feedback*.post.ts` - Feedback and thumbs up/down
+    - `pro-waitlist*.post.ts` - Pro waitlist with Email Octopus integration
+    - `get-tweet/[tweetId].get.ts` - Twitter/X embed data
+  - `/middleware` - Server middleware:
+    - `redirects.ts` - Handles URL redirects
+    - `markdown.ts` - Markdown processing
+  - `/plugins/llms.ts` - LLM configuration for AI features
   - `/utils` - Server utilities
-- `/utils` - Shared utilities (modules configuration)
+- `/utils/modules.ts` - Shared module configuration (maps @nuxtjs/seo/const to routes and content)
 
 ### Important Configuration Files
 - `nuxt.config.ts` - Main Nuxt configuration with extensive route rules, module configs, and custom hooks
-- `app.config.ts` - App-level configuration for UI components and theming
-- `mdc.config.ts` - Markdown component configuration
-- `router.options.ts` - Custom router options
+- `content.config.ts` - Defines content collections and sources (local fs vs GitHub)
 - `package.json` - Dependencies and scripts
 
 ### Special Features
