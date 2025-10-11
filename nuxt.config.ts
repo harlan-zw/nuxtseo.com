@@ -155,6 +155,7 @@ export default defineNuxtConfig({
       websocket: true,
     },
     prerender: {
+      autoSubfolderIndex: false,
       failOnError: false,
       crawlLinks: true,
       routes: ['/', '/404.html'],
