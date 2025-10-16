@@ -1,12 +1,11 @@
-import { modules as baseModules } from '../../modules'
-
-export const modules = baseModules
+import { modules } from '../../modules'
 
 export function useModule(_slug?: Ref<string> | string | false, _stats?: any) {
   const stats = inject('stats', _stats)
   const moduleSlug = ref(_slug ? toValue(_slug) : useRoute().path.split('/')[2])
-  watch(() => useRoute().path, (s) => {
-    moduleSlug.value = useRoute().path.split('/')[2]
+  const route = useRoute()
+  watch(() => route.path, () => {
+    moduleSlug.value = route.path.split('/')[2]
   })
   return computed(() => {
     const slug = moduleSlug.value

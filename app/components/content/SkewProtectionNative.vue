@@ -96,29 +96,25 @@ const { data: md } = await useAsyncData(() => parseMarkdown(`
     <div label="Live Example">
       <div class="not-prose mt-3">
         <div class="inline-block">
-          <div>
-            <Transition name="slide-up">
-              <div class="skew-notification">
-                <div class="skew-notification-content">
-                  <div class="skew-notification-message">
-                    <span class="skew-notification-icon">✨</span>
-                    <div>
-                      <div class="skew-notification-title">
-                        New update available!
-                      </div>
-                    </div>
-                  </div>
-                  <div class="skew-notification-actions">
-                    <button class="skew-button skew-button-secondary">
-                      Dismiss
-                    </button>
-                    <button class="skew-button skew-button-primary">
-                      Refresh
-                    </button>
+          <div class="skew-notification">
+            <div class="skew-notification-content">
+              <div class="skew-notification-message">
+                <span class="skew-notification-icon">✨</span>
+                <div>
+                  <div class="skew-notification-title">
+                    New update available!
                   </div>
                 </div>
               </div>
-            </Transition>
+              <div class="skew-notification-actions">
+                <button class="skew-button skew-button-secondary">
+                  Dismiss
+                </button>
+                <button class="skew-button skew-button-primary">
+                  Refresh
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

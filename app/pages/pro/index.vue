@@ -13,24 +13,20 @@ import { proAd } from '~/utils/ads'
 
 const faq = [
   {
-    label: 'When will Nuxt SEO Pro be available?',
-    content: 'Nuxt SEO Pro will be available on October 12th, 2025 with three modules: Magic Redirects, Nuxt Skew Protection, and Nuxt AI Index. LLMWise is scheduled to be available in Q2 2025.',
+    label: 'Can I get a refund if I change my mind?',
+    content: 'You can request a refund at any point up to a month after purchase.',
   },
   {
-    label: 'Can I get a refund if I change my mind?',
-    content: 'You can request a refund at any point up to a month after the Nuxt SEO Pro official release scheduled for October 12th, 2025.',
+    label: 'Do you offer technical support?',
+    content: 'Yes! Purchasing a license provides you with Discord support, alternatively you are also free to email me at harlan@harlanzw.com.',
   },
   {
     label: 'What is a project?',
     content: 'A project is considered to be one Git repository or a single production site. Staging and tests sites don\'t count towards being a project.',
   },
   {
-    label: 'What if the modules are delayed or change in scope?',
-    content: 'Updates will be given over email, you are free to request a refund at any time.',
-  },
-  {
-    label: 'Do you offer technical support?',
-    content: 'Yes! Purchasing a license provides you with Discord support, alternatively you are also free to email me at harlan@harlanzw.com.',
+    label: 'Wasn\'t this meant to be released a year ago?',
+    content: 'Yes! Turns out building stuff takes a long time... Sorry about that. All my time and effort went into building LLMwise which will become available to pro users when its available.',
   },
 ]
 
@@ -41,12 +37,6 @@ const { data: snippets } = await useAsyncData(`snippets`, async () => {
     }
     return snippet
   })
-})
-
-const daysUntilRelease = computed(() => {
-  const now = new Date()
-  const releaseDate = new Date(2025, 9, 15) // October 12th, 2025 (month is 0-indexed)
-  return Math.floor((releaseDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
 })
 
 const waitlistFeedbackStatus = ref<'loading' | 'submitted'>()
@@ -250,19 +240,14 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
     <section class="px-10 max-w-4xl mx-auto mb-12">
       <div class="mb-7 max-w-xl">
         <h2 class="text-3xl font-bold mb-2">
-          Join the waitlist
+          Get Early Access
         </h2>
       </div>
       <div class="lg:flex gap-10 w-full">
         <div>
           <p class="mb-5 max-w-xl text-lg text-[--ui-text-muted]">
-            Keep up-to-date with the development of Nuxt SEO Pro by joining the waitlist and receive an exlusive discount on launch on October 12th, 2025.
+            Purchase early access at the current price and get lifetime access to all modules and updates.
           </p>
-        </div>
-        <div class="mb-5 ">
-          Release estimated in<br>
-          <UIcon name="i-carbon-calendar" class="-mt-2 text-blue-300" />
-          ~{{ daysUntilRelease }} days
         </div>
       </div>
 
@@ -274,7 +259,7 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
               50% off!
             </UBadge>
             <h3 class="font-bold text-2xl">
-              Waitlist Plan.
+              Early Access
             </h3>
             <ul class="text-sm space-y-2 list-disc ml-5">
               <li>Up to 5 projects, $39 for each extra project.</li>
@@ -301,20 +286,27 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
             <div class="font-bold">
               Save $130
             </div>
-            <div class="italic text-sm text-(--ui-text-muted)">
-              First release scheduled for Q1 2025.
-            </div>
+            <UButton
+              to="https://buy.stripe.com/8wMeXhd4v3cR0lG5kk"
+              external
+              target="_blank"
+              size="xl"
+              color="primary"
+              class="w-full"
+            >
+              Purchase Now
+            </UButton>
           </div>
         </div>
         <div class="max-w-lg mx-auto bg-neutral-200/30 dark:bg-neutral-900 dark:text-neutral-200 p-10 rounded-2xl py-[70px] flex flex-col items-center justify-center">
           <template v-if="waitlistStatus !== 'submitted'">
             <div class="mb-7">
               <div class="text-xl mb-2 font-semibold">
-                Connect your email
+                Sign up for updates
               </div>
               <div>
                 <p class="text-sm">
-                  Receive development updates and an exclusive launch discount of 50% off, saving $130.
+                  Stay informed about new features, module releases, and important updates.
                 </p>
               </div>
             </div>
@@ -355,10 +347,10 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
           <UAvatar src="https://cdn.discordapp.com/avatars/212548363529355264/a23dd75d7ffadac117115cb745edb25a.webp?size=240" />
           <UAvatar src="https://pbs.twimg.com/profile_images/1374040164180299791/ACw4G3nZ_400x400.jpg" />
           <UAvatar src="https://pbs.twimg.com/profile_images/1832800489580224512/uqwwtRlK_400x400.jpg" />
-          <UAvatar text="+60" class="text-white text-xs font-bold" />
+          <UAvatar text="+251" class="text-white text-xs font-bold" />
         </UAvatarGroup>
         <div class="text-lg text-center max-w-xs">
-          Join the 113 Nuxters who have already signed up.
+          Join the 254 Nuxters who have already signed up.
         </div>
       </div>
       <div class="max-w-lg mx-auto mt-10">

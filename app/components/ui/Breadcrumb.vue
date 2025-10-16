@@ -1,4 +1,3 @@
-/* eslint-disable */
 <script lang="ts">
 import type { AvatarProps, LinkProps } from '#ui/types'
 import type { DynamicSlots, PartialString } from '#ui/types/utils'
@@ -6,10 +5,17 @@ import type { AppConfig } from '@nuxt/schema'
 import _appConfig from '#build/app.config'
 import theme from '#build/ui/breadcrumb'
 import { tv } from 'tailwind-variants'
+
+export interface BreadcrumbItem extends Omit<LinkProps, 'raw' | 'custom'> {
+  label?: string
+  icon?: string
+  avatar?: AvatarProps
+  slot?: string
+}
 </script>
 
 <script setup lang="ts" generic="T extends BreadcrumbItem">
-import { useAppConfig } from '#imports'
+/* eslint-disable */
 import UAvatar from '#ui/components/Avatar.vue'
 import UIcon from '#ui/components/Icon.vue'
 import ULink from '#ui/components/Link.vue'
@@ -25,12 +31,6 @@ const appConfig = _appConfig as AppConfig & { ui: { breadcrumb: Partial<typeof t
 
 const breadcrumb = tv({ extend: tv(theme), ...(appConfig.ui?.breadcrumb || {}) })
 
-export interface BreadcrumbItem extends Omit<LinkProps, 'raw' | 'custom'> {
-  label?: string
-  icon?: string
-  avatar?: AvatarProps
-  slot?: string
-}
 
 export interface BreadcrumbProps<T> {
   /**
@@ -55,10 +55,8 @@ export type BreadcrumbSlots<T extends { slot?: string }> = {
   'item-leading': SlotProps<T>
   'item-label': SlotProps<T>
   'item-trailing': SlotProps<T>
-  'separator': (props?: {}) => any
+  'separator': (props?: Record<string, any>) => any
 } & DynamicSlots<T, SlotProps<T>>
-
-const appConfig = useAppConfig()
 
 const ui = breadcrumb()
 </script>

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { toRefs } from 'vue'
-import { movingAverage } from '~/composables/data'
 import { humanNumber } from '~/composables/format'
 import { useModule } from '~/composables/module'
 
