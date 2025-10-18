@@ -1,5 +1,7 @@
 import { modules } from '../../modules'
 
+export { modules }
+
 export function useModule(_slug?: Ref<string> | string | false, _stats?: any) {
   const stats = inject('stats', _stats)
   const moduleSlug = ref(_slug ? toValue(_slug) : useRoute().path.split('/')[2])
