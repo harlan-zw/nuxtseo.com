@@ -287,7 +287,7 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
               Save $130
             </div>
             <UButton
-              to="https://buy.stripe.com/8wMeXhd4v3cR0lG5kk"
+              to="https://buy.stripe.com/aFaaEXfcU6Os4gjfsJcs801"
               external
               target="_blank"
               size="xl"
