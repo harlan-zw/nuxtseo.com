@@ -10,7 +10,7 @@ export const NuxtSkewProtectionModule: NuxtSEOModule = {
   slug: 'skew-protection',
   npm: 'nuxt-skew-protection',
   repo: 'harlan-zw/nuxt-skew-protection',
-  description: 'Zero downtime deployments for Nuxt 3 applications.',
+  description: 'Instantly adopted Nuxt releases and long-lived build assets.',
   title: 'Skew Protection',
   label: 'Skew Protection',
   icon: 'i-carbon-version',
