@@ -88,11 +88,11 @@ export const menu = computed(() => {
     //     // },
     //   ],
     // },
-    {
-      label: 'Pro',
-      icon: 'i-ph-sparkle-duotone',
-      to: '/pro',
-    },
+    // {
+    //   label: 'Pro',
+    //   icon: 'i-ph-sparkle-duotone',
+    //   to: '/pro',
+    // },
     // {
     //   label: 'Ecosystem',
     //   icon: 'i-ph-heart-straight-duotone',

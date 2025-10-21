@@ -2,16 +2,20 @@
 import { blueprintAd, proAd } from '~/utils/ads'
 
 const possibleAds = computed(() => {
-  return [{ id: 'pro', enabled: proAd.value }, { id: 'blueprint', enabled: blueprintAd.value }].filter(v => v.enabled)
+  return [
+    { id: 'pro', enabled: proAd.value },
+    { id: 'blueprint', enabled: blueprintAd.value }
+  ].filter(v => v.enabled)
 })
 // shuffle
 const ad = computed(() => {
-  if (possibleAds.value.length === 0)
-    return null
-  // if we're on mobile, show nothing
-  if (import.meta.client && window.innerWidth < 640)
-    return null
-  return possibleAds.value[Math.floor(Math.random() * possibleAds.value.length)]
+  return null
+  // if (possibleAds.value.length === 0)
+  //   return null
+  // // if we're on mobile, show nothing
+  // if (import.meta.client && window.innerWidth < 640)
+  //   return null
+  // return possibleAds.value[Math.floor(Math.random() * possibleAds.value.length)]
 })
 
 const route = useRoute()
