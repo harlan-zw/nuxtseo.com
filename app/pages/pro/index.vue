@@ -160,9 +160,6 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
               <div class="text-sm font-medium text-[var(--ui-text)]">
                 Interactive Demo
               </div>
-              <div class="text-sm text-[var(--ui-text-muted)]">
-                Simulate a new deployment to see the update notification in action.
-              </div>
             </div>
             <SkewProtectionDemo />
           </div>
