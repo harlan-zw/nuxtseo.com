@@ -5,6 +5,7 @@ export default defineAppConfig({
     duration: 5000,
   },
   ui: {
+
     icons: {
       caution: 'i-carbon-warning-alt',
       copy: 'i-carbon-copy',
@@ -49,8 +50,9 @@ export default defineAppConfig({
       },
     },
     colors: {
-      primary: 'blue',
+      primary: 'violet',
       neutral: 'slate',
+      pro: 'violet',
     },
     contentNavigation: {
       slots: {

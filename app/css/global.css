@@ -5,17 +5,17 @@
   --font-sans: 'Hubot Sans', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
-  --color-green-50: #effdf5;
-  --color-green-100: #d9fbe8;
-  --color-green-200: #b3f5d1;
-  --color-green-300: #75edae;
-  --color-green-400: #00dc82;
-  --color-green-500: #00c16a;
-  --color-green-600: #00a155;
-  --color-green-700: #007f45;
-  --color-green-800: #016538;
-  --color-green-900: #0a5331;
-  --color-green-950: #052e16;
+  --color-neutral-50: oklch(98.4% 0.003 285);
+  --color-neutral-100: oklch(96.8% 0.007 285);
+  --color-neutral-200: oklch(92.9% 0.013 285);
+  --color-neutral-300: oklch(86.9% 0.022 285);
+  --color-neutral-400: oklch(70.4% 0.04 285);
+  --color-neutral-500: oklch(55.4% 0.046 285);
+  --color-neutral-600: oklch(44.6% 0.043 285);
+  --color-neutral-700: oklch(37.2% 0.044 285);
+  --color-neutral-800: oklch(27.9% 0.041 285);
+  --color-neutral-900: oklch(20.8% 0.042 285);
+  --color-neutral-950: oklch(12.9% 0.042 285);
 }
 
 :root {

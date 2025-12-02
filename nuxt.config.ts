@@ -72,6 +72,18 @@ export default defineNuxtConfig({
   ui: {
     mdc: true,
     content: true,
+    theme: {
+      colors: [
+        'primary',
+        'secondary',
+        'tertiary',
+        'info',
+        'success',
+        'warning',
+        'error',
+        'pro',
+      ],
+    },
   },
 
   runtimeConfig: {
