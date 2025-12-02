@@ -4,7 +4,7 @@ import { blueprintAd, proAd } from '~/utils/ads'
 const possibleAds = computed(() => {
   return [
     { id: 'pro', enabled: proAd.value },
-    { id: 'blueprint', enabled: blueprintAd.value }
+    { id: 'blueprint', enabled: blueprintAd.value },
   ].filter(v => v.enabled)
 })
 // shuffle
