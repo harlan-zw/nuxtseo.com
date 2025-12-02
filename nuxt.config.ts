@@ -15,7 +15,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nitro-cloudflare-dev',
     '@vueuse/nuxt',
-    'nuxt-llms',
     'nuxt-ai-ready',
     'nuxt-skew-protection',
     '@nuxt/scripts',
@@ -55,10 +54,6 @@ export default defineNuxtConfig({
       })
     },
   ],
-
-  skewProtection: {
-    debug: true,
-  },
 
   sitemap: {
     exclude: [
