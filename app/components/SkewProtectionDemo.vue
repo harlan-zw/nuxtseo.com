@@ -24,34 +24,6 @@ if (deployments.value.length === 0) {
   })
 }
 
-const deploymentFiles = computed(() => {
-  // Collect all unique chunks across all deployments
-  const allChunks = new Map<string, Set<number>>()
-
-  deployments.value.forEach((deployment) => {
-    Object.entries(deployment.chunks).forEach(([name, hash]) => {
-      const key = `${name}.${hash}.js`
-      if (!allChunks.has(key)) {
-        allChunks.set(key, new Set())
-      }
-      allChunks.get(key)!.add(deployment.version)
-    })
-  })
-
-  // Build tree with all chunks under single /_nuxt
-  const children = Array.from(allChunks.entries()).map(([filename, versions]) => ({
-    label: filename,
-    icon: 'i-heroicons-document-text',
-    releases: Array.from(versions).sort((a, b) => a - b),
-  }))
-
-  return [{
-    label: '/_nuxt',
-    defaultExpanded: true,
-    children,
-  }]
-})
-
 function triggerRelease() {
   // Reset after 5 releases
   if (deployments.value.length >= 5) {
@@ -104,44 +76,7 @@ function handleReload() {
 
 <template>
   <div class="space-y-4">
-    <div class="flex flex-col gap-3">
-      <UButton
-
-        color="primary"
-        size="md"
-        @click="triggerRelease"
-      >
-        Send Release
-      </UButton>
-      <div class="text-xs text-[var(--ui-text-muted)]">
-        {{ showNotification ? 'Release sent! Notification is showing below.' : 'Click to simulate a new deployment.' }}
-      </div>
-    </div>
-
-    <div class="space-y-3">
-      <div class="text-xs font-medium text-[var(--ui-text-muted)]">
-        Deployment history ({{ deployments.length }} releases):
-      </div>
-      <div class="bg-[var(--ui-bg)] rounded-lg border border-[var(--ui-border)] p-3 max-h-[300px] overflow-y-auto">
-        <UTree :items="deploymentFiles">
-          <template #item-trailing="{ item }">
-            <template v-if="'releases' in item">
-              <div class="flex gap-1">
-                <UBadge v-for="version in (item as any).releases" :key="version" size="xs" color="primary" variant="subtle">
-                  v{{ version }}
-                </UBadge>
-              </div>
-            </template>
-          </template>
-        </UTree>
-      </div>
-    </div>
-
     <div class="relative min-h-[120px] flex items-center justify-center bg-[var(--ui-bg)] rounded-lg border border-[var(--ui-border)] p-4">
-      <div v-if="!showNotification" class="text-sm text-[var(--ui-text-muted)]">
-        Notification will appear here
-      </div>
-
       <Transition
         enter-active-class="transition duration-300 ease-out"
         enter-from-class="opacity-0 translate-y-2"
@@ -160,6 +95,14 @@ function handleReload() {
             <UButton color="neutral" variant="ghost" size="xs" icon="i-heroicons-x-mark-20-solid" @click="handleDismiss" />
           </div>
         </div>
+        <UButton
+          v-else
+          color="primary"
+          size="md"
+          @click="triggerRelease"
+        >
+          Show Example
+        </UButton>
       </Transition>
     </div>
   </div>

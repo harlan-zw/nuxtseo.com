@@ -7,9 +7,9 @@ const module = {
 }
 
 const items = [
-  { slot: 'one', emoji: '⚡', label: 'Instantly Adopted Releases', description: 'Zero-config real-time notifications to users when a new version is deployed.' },
-  { slot: 'two', emoji: '🎯', label: 'Intelligent User Notifications', description: 'Avoid spamming users by only sending update notifications when their chunks are outdated.' },
-  { slot: 'three', emoji: '📦', label: 'Long-lived Build Assets', description: 'No more 500 errors from Google. Previous build assets remain accessible for crawlers and old sessions.' },
+  { slot: 'one', emoji: '🕷️', label: 'Persistent Build Assets', description: 'Previous build artifacts stay accessible across deploys. No more 500s from crawlers or broken sessions.' },
+  { slot: 'two', emoji: '⚡', label: 'Instant Update Prompts', description: 'Zero-config real-time notifications when a new version is deployed.' },
+  { slot: 'three', emoji: '🎯', label: 'Chunk-Aware Targeting', description: 'Only prompt users when their loaded chunks are invalidated. No noise for unrelated updates.' },
 ]
 </script>
 
