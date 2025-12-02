@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { getQuery } from 'h3'
+import { getQuery, getRouterParam } from 'h3'
 import { logger } from '~~/logger'
 import { initOctokitRequestHandler } from '~~/server/utils/github'
 
@@ -13,6 +13,9 @@ export default defineCachedEventHandler(async (e) => {
   })
 
   const lastCommit = data[0]
+  if (!lastCommit) {
+    return null
+  }
 
   // Get committer info, handling web-flow case (PRs)
   let committerName = lastCommit.commit.author.name
@@ -67,5 +70,5 @@ export default defineCachedEventHandler(async (e) => {
   // last for 1 week
   name: 'gh-last-commit',
   maxAge: 60 * 60 * 24,
-  getKey: (e: H3Event) => getQuery(e)?.file,
+  getKey: (e: H3Event) => getRouterParam(e, 'repo') + getQuery(e)?.file,
 })
