@@ -9,8 +9,8 @@ export const NuxtSkewProtectionModule: NuxtSEOModule = {
   // @ts-expect-error untyped
   slug: 'skew-protection',
   npm: 'nuxt-skew-protection',
-  repo: 'harlan-zw/nuxt-skew-protection',
-  description: 'Instantly adopted Nuxt releases and long-lived build assets.',
+  repo: 'nuxt-seo-pro/nuxt-skew-protection',
+  description: 'Solve Nuxt version skews with persistent assets and instant updates.',
   title: 'Skew Protection',
   label: 'Skew Protection',
   icon: 'i-carbon-version',
@@ -31,14 +31,27 @@ export const NuxtMagicRedirectsModule: NuxtSEOModule = {
   pro: true,
 }
 
-export const NuxtAiIndexModule: NuxtSEOModule = {
+export const NuxtAiReadyModule: NuxtSEOModule = {
+  // @ts-expect-error untyped
+  slug: 'ai-ready',
+  npm: 'nuxt-ai-ready',
+  repo: 'nuxt-seo-pro/nuxt-ai-ready',
+  description: 'Best practice AI & LLM discoverability for Nuxt sites.',
+  title: 'AI Ready',
+  label: 'AI Ready',
+  icon: 'i-carbon-ai-label',
+  soon: true,
+  pro: true,
+}
+
+export const NuxtAiSearchModule: NuxtSEOModule = {
   // @ts-expect-error untyped
   slug: 'ai-index',
   npm: 'nuxt-ai-index',
-  repo: 'harlan-zw/nuxt-ai-index',
+  repo: 'nuxt-seo-pro/nuxt-ai-search',
   description: 'AI-powered search and content generation for your Nuxt 3 application.',
-  title: 'AI Index',
-  label: 'AI Index',
+  title: 'AI Search',
+  label: 'AI Search',
   icon: 'i-carbon-ai-label',
   soon: true,
   pro: true,
@@ -48,7 +61,7 @@ export const modules = [
   ...baseModules,
 ]
   .slice(0, -1)
-  .concat([NuxtSkewProtectionModule/* , NuxtAiIndexModule, NuxtMagicRedirectsModule */], baseModules.slice(-1))
+  .concat([NuxtSkewProtectionModule, NuxtAiReadyModule, /*NuxtAiSearchModule, NuxtMagicRedirectsModule */], baseModules.slice(-1))
   .map((m) => {
     return {
       ...m,

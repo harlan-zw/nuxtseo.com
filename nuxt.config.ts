@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     'nitro-cloudflare-dev',
     '@vueuse/nuxt',
     'nuxt-llms',
+    'nuxt-ai-ready',
     'nuxt-skew-protection',
     '@nuxt/scripts',
     '@nuxt/image',

@@ -5,7 +5,7 @@ import { asSeoCollection } from '@nuxtjs/seo/content'
 import { relative, resolve } from 'pathe'
 import z from 'zod'
 import { logger } from './logger'
-import { LinkCheckerModule, NuxtSEO, NuxtSkewProtectionModule, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule } from './modules'
+import { LinkCheckerModule, NuxtSEO, NuxtSkewProtectionModule, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule, NuxtAiReadyModule } from './modules'
 
 const schema = z.object({
   new: z.boolean().optional(),
@@ -57,6 +57,7 @@ export const content = defineContentConfig({
     seoUtils: getSubModuleCollection(SeoUtilsModule),
     siteConfig: getSubModuleCollection(SiteConfigModule),
     skewProtection: getSubModuleCollection(NuxtSkewProtectionModule),
+    aiReady: getSubModuleCollection(NuxtAiReadyModule),
     learn: defineCollection(asSeoCollection({
       type: 'page',
       source: {
