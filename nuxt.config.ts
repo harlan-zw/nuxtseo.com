@@ -4,7 +4,6 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { defineNuxtConfig } from 'nuxt/config'
 import { resolve } from 'pathe'
 import { gray, logger } from './logger'
-import { modules } from './utils/modules'
 
 export default defineNuxtConfig({
   modules: [
@@ -16,6 +15,7 @@ export default defineNuxtConfig({
     'nitro-cloudflare-dev',
     '@vueuse/nuxt',
     'nuxt-ai-ready',
+    // 'nuxt-ai-search',
     'nuxt-skew-protection',
     '@nuxt/scripts',
     '@nuxt/image',
@@ -149,6 +149,17 @@ export default defineNuxtConfig({
           {
             tag: 'v1',
             new_classes: ['$DurableObject'],
+          },
+        ],
+        ai: {
+          binding: 'AI',
+          experimental_remote: true,
+        },
+        vectorize: [
+          {
+            binding: 'VECTORIZE',
+            index_name: 'nuxtseo-ai-search',
+            experimental_remote: true,
           },
         ],
       },
@@ -358,6 +369,10 @@ export default defineNuxtConfig({
 
     '/docs/link-checker/guides/skip-inspections': { redirect: { to: '/docs/link-checker/guides/rules', statusCode: 301 } },
     '/docs/schema-org/guides/quick-setup': { redirect: { to: '/docs/schema-org/guides/setup-identity', statusCode: 301 } },
+
+    '/docs/robots/guides/i18n': { redirect: { to: '/docs/robots/advanced/i18n', statusCode: 301 } },
+    '/docs/robots/guides/content': { redirect: { to: '/docs/robots/advanced/content', statusCode: 301 } },
+    '/docs/robots/guides/yandex': { redirect: { to: '/docs/robots/advanced/yandex', statusCode: 301 } },
   },
 
   css: [
@@ -393,26 +408,22 @@ export default defineNuxtConfig({
     },
   },
 
-  llms: {
-    domain: 'https://nuxtseo.com/',
-    title: 'Nuxt SEO',
-    description: 'Nuxt SEO is a collection of hand-crafted Nuxt Modules to help you rank higher in search engines.',
-    notes: [
-      'The documentation only supports Nuxt v3 and Nuxt v4',
-      'The content is automatically generated from the same source as the official documentation.',
-    ],
-    full: {
-      title: 'Complete Documentation',
-      description: 'The complete documentation including all content',
+  aiSearch: {
+    embeddings: {
+      vectorDatabase: {
+        name: 'nuxtseo',
+      },
+      runtimeProvider: {
+        preset: 'workers-ai',
+        gateway: { id: 'main' },
+      },
     },
-    sections: modules.map(m => ({
-      title: `${m.label} Module Documentation`,
-      description: m.slug,
-      contentCollection: m.contentCollection,
-      contentFilters: [
-        { field: 'extension', operator: '=', value: 'md' },
-      ],
-    })),
+
+    llm: {
+      provider: 'workers-ai',
+      model: '@cf/meta/llama-3.1-8b-instruct',
+      gateway: { id: 'main' },
+    },
   },
 
   app: {
@@ -431,4 +442,8 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2025-10-10',
+
+  alias: {
+    '@vercel/oidc': resolve('./app/utils/vercel-oidc-mock'),
+  },
 })

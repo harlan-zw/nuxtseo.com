@@ -41,8 +41,16 @@ import { menu } from '~/composables/nav'
         <div class="py-10 grid xl:grid-cols-3 lg:gap-20 gap-10">
           <div v-for="(category, cKey) in menu.filter(c => c.children?.length)" :key="cKey">
             <h3 class="font-bold mb-5 flex items-center gap-1">
-              <UIcon dynamic :name="category.icon" class="w-5 h-5" />
-              {{ category.label }}
+              <NuxtLink v-if="category.label === 'Modules'" to="/" title="Home" class="flex items-end gap-1.5 font-bold text-xl text-neutral-900 dark:text-white font-title">
+                <Logo />
+              </NuxtLink>
+              <NuxtLink v-else-if="category.label === 'Pro'" to="/" title="Home" class="flex items-end gap-1.5 font-bold text-xl text-neutral-900 dark:text-white font-title">
+                <LogoPro />
+              </NuxtLink>
+              <template v-else>
+                <UIcon dynamic :name="category.icon" class="w-5 h-5" />
+                {{ category.label }}
+              </template>
             </h3>
             <nav>
               <ul class="grid grid-cols-2 gap-6">
@@ -56,11 +64,7 @@ import { menu } from '~/composables/nav'
             </nav>
           </div>
         </div>
-        <div class="sm:flex items-center gap-10 mb-6">
-          <NuxtLink to="/" title="Home" class="flex items-end gap-1.5 font-bold text-xl text-neutral-900 dark:text-white font-title">
-            <Logo />
-          </NuxtLink>
-        </div>
+        <div class="sm:flex items-center gap-10 mb-6" />
       </UContainer>
     </div>
     <div class="border-t border-neutral-200 dark:border-neutral-800">

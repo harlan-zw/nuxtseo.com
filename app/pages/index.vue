@@ -51,6 +51,13 @@ const confetti = useScript<JSConfettiApi>({
   },
 })
 
+const animatedIn = ref(false)
+onMounted(() => {
+  setTimeout(() => {
+    animatedIn.value = true
+  }, modules.filter(m => m.slug !== 'nuxt-seo' && m.slug !== 'site-config' && !m.pro).length * 300 + 1000)
+})
+
 const scoreEl = ref()
 const score = ref<number>(0)
 const output = useTransition(score)
@@ -189,19 +196,10 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
         </div>
       </section>
     </DefineSectionTemplate>
-
     <div class="gradient" />
     <UContainer>
       <section class="xl:max-w-full xl:grid grid-cols-2 max-w-3xl mx-auto py-5 sm:py-12 xl:py-15">
         <div class="max-w-2xl mx-auto">
-          <div class="mb-2 sm:mb-0">
-            <div class="sm:inline-flex block mb-2 gap-3 inline px-3 py-2 rounded text-sm ">
-              <UButton variant="outline" to="/announcement" size="sm">
-                <UIcon name="i-noto-party-popper" />
-                <span>Nuxt SEO v2 stable</span>
-              </UButton>
-            </div>
-          </div>
           <div class="xl:flex gap-10">
             <div class="flex flex-col justify-center">
               <h1 class="text-neutral-900/90 dark:text-neutral-100 text-4xl md:text-6xl leading-tight font-bold tracking-tight" style="line-height: 1.3;">
@@ -224,10 +222,10 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
             </div>
           </div>
         </div>
-        <div class="flex items-center justify-center h-full xl:mr-50 mt-7 xl:mt-0">
+        <div class="flex items-center justify-center h-full xl:mr-50 mt-7 xl:mt-0 relative">
           <div class="flex flex-wrap xl:max-w-[400px] items-center gap-6 justify-center">
             <motion.div
-              v-for="(module, i) in modules.filter(m => m.slug !== 'nuxt-seo' && m.slug !== 'site-config')"
+              v-for="(module, i) in modules.filter(m => m.slug !== 'nuxt-seo' && m.slug !== 'site-config' && !m.pro)"
               :key="module.slug"
               layout
               :initial="{
@@ -241,7 +239,7 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
                 y: 0,
                 scale: 1,
                 rotateZ: 0,
-                transition: {
+                transition: animatedIn ? { duration: 0.2 } : {
                   type: 'spring',
                   damping: 12,
                   stiffness: 100,
@@ -252,10 +250,6 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
                 scale: 1.1,
                 rotateZ: 5,
                 y: -5,
-                transition: {
-                  type: 'spring',
-                  damping: 0.10,
-                },
               }"
               class="cursor-pointer transform-gpu"
             >
@@ -334,13 +328,6 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
       <template #a>
         <div class="space-y-6">
           <ModuleFeaturesCard module="link-checker" :items="linkCheckerItems" />
-          <ModuleCardSkewProtection />
-        </div>
-      </template>
-      <template #b>
-        <div class="mb-8">
-          <ModuleCardMagicRedirects />
-          <ModuleCardAIIndex />
         </div>
       </template>
     </ReuseSectionTemplate>
@@ -465,7 +452,6 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
         </div>
       </UContainer>
     </section>
-
     <section class="pb-10 xl:pb-20">
       <div class="mb-10">
         <div class="text-center mb-10 mx-auto max-w-[35rem] flex flex-col justify-center">

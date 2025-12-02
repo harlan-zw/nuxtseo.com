@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import type { NuxtSEOModule } from '@nuxtjs/seo/const'
+import contentNavTheme from '#build/ui/content/content-navigation'
+import { useAppConfig } from '#imports'
+import UBadge from '#ui/components/Badge.vue'
+import UIcon from '#ui/components/Icon.vue'
+import ULink from '#ui/components/Link.vue'
+import ULinkBase from '#ui/components/LinkBase.vue'
+import { mapContentNavigationItem } from '#ui/utils/content'
+import { pickLinkProps } from '#ui/utils/link'
+import { tv } from '#ui/utils/tv'
+import { computed } from 'vue'
 import { getLastPathSegment, getPathSubSection } from '~~/utils/urls'
 
 const route = useRoute()
@@ -45,6 +55,9 @@ const topLinks = computed(() => [
     },
   },
 ].filter(l => !!l.link.to))
+
+const appConfig = useAppConfig()
+const ui = computed(() => tv({ extend: tv(contentNavTheme), ...appConfig.ui?.contentNavigation || {} })())
 </script>
 
 <template>
@@ -66,44 +79,48 @@ const topLinks = computed(() => [
         </li>
       </ul>
       <USeparator class="mt-0 pt-0" />
-      <UContentNavigation
-        as="div"
-        :navigation="bottom"
-        highlight
-        :ui="{ listWithChildren: 'sm:ml-0 mt-2' }"
-      >
-        <template #link="{ link }">
-          <div
-            v-if="!link.html" class="flex items-center justify-between gap-2 w-full"
-            :class="link.deprecated ? 'opacity-50' : ''"
-          >
-            <div class="flex items-center gap-2">
-              <UIcon
-                v-if="link.icon" :name="link.icon"
-                class="w-4 h-4 transition-all hover:brightness-50 brightness-120"
-              />
-              <div :class="link.children?.length ? 'text-sm font-bold' : ''">
-                {{ link.title }}
-              </div>
-            </div>
-            <UIcon v-if="link.tag" :name="`i-logos-${link.tag}`" dynamclic ass="w-4 h-4" />
-          </div>
-          <div v-else :class="link.deprecated ? 'opacity-50' : ''">
-            <UIcon v-if="link.icon" :name="link.icon" class="w-4 h-4 text-(--ui-primary)-400 dark:text-sky-200" />
-            <div v-html="link.title" />
-          </div>
-          <div v-if="link.new">
-            <UBadge size="sm" variant="subtle" color="success">
-              New
-            </UBadge>
-          </div>
-          <div v-else-if="link.deprecated" class="opacity-50">
-            <UBadge size="sm" variant="subtle" color="neutral">
-              Deprecated
-            </UBadge>
-          </div>
-        </template>
-      </UContentNavigation>
+      <nav v-for="group in bottom" :key="group.title" aria-title="Documentation Section" class="space-y-3">
+        <h3 class="text-sm font-bold mb-3">
+          {{ group.title }}
+        </h3>
+        <ul>
+          <li v-for="(link, key) in group.children" :key="key" data-slot="item" :class="ui.item({ class: [link.ui?.item], level: true })">
+            <ULink v-slot="{ active, ...slotProps }" v-bind="pickLinkProps(mapContentNavigationItem(link))" custom>
+              <ULinkBase v-bind="slotProps" data-slot="link" :class="ui.link({ class: [link.ui?.link, link.class], active, disabled: !!link.disabled, level: true })">
+                <div
+                  v-if="!link.html" class="flex items-center justify-between gap-2 w-full"
+                  :class="link.deprecated ? 'opacity-50' : ''"
+                >
+                  <div class="flex items-center gap-2">
+                    <UIcon
+                      v-if="link.icon" :name="link.icon"
+                      class="w-4 h-4 transition-all hover:brightness-50 brightness-120"
+                    />
+                    <div :class="link.children?.length ? 'text-sm font-bold' : ''">
+                      {{ link.title }}
+                    </div>
+                  </div>
+                  <UIcon v-if="link.tag" :name="`i-logos-${link.tag}`" dynamclic ass="w-4 h-4" />
+                </div>
+                <div v-else :class="link.deprecated ? 'opacity-50' : ''">
+                  <UIcon v-if="link.icon" :name="link.icon" class="w-4 h-4 text-(--ui-primary)-400 dark:text-sky-200" />
+                  <div v-html="link.title" />
+                </div>
+                <div v-if="link.new">
+                  <UBadge size="sm" variant="subtle" color="success">
+                    New
+                  </UBadge>
+                </div>
+                <div v-else-if="link.deprecated" class="opacity-50">
+                  <UBadge size="sm" variant="subtle" color="neutral">
+                    Deprecated
+                  </UBadge>
+                </div>
+              </ULinkBase>
+            </ULink>
+          </li>
+        </ul>
+      </nav>
     </nav>
   </div>
 </template>

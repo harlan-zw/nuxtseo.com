@@ -1,32 +1,32 @@
 <template>
   <svg viewBox="0 0 64 64" class="pop-quick w-7 h-7">
     <defs>
-      <linearGradient id="wmLine1" x1="0%" y1="100%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#22c55e" />
-        <stop offset="100%" stop-color="#86efac" />
+      <linearGradient id="wmLine2" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#7c3aed" />
+        <stop offset="100%" stop-color="#c4b5fd" />
       </linearGradient>
-      <linearGradient id="wmFill1" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.6" />
-        <stop offset="100%" stop-color="#22c55e" stop-opacity="0" />
+      <linearGradient id="wmFill2" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.6" />
+        <stop offset="100%" stop-color="#7c3aed" stop-opacity="0" />
       </linearGradient>
     </defs>
     <path
       class="fill"
       d="M8 52 Q20 48 24 36 T40 20 T56 12 L56 56 L8 56 Z"
-      fill="url(#wmFill1)"
+      fill="url(#wmFill2)"
     />
     <path
       class="line"
       d="M8 52 Q20 48 24 36 T40 20 T56 12"
       fill="none"
-      stroke="url(#wmLine1)"
+      stroke="url(#wmLine2)"
       stroke-width="4"
       stroke-linecap="round"
     />
-    <circle class="node" cx="56" cy="12" r="6" fill="url(#wmLine1)" />
+    <circle class="node" cx="56" cy="12" r="6" fill="url(#wmLine2)" />
   </svg>
   <span class="-ml-1 dark:text-white text-black text-lg font-bold tracking-tight slide-right">
-    Nuxt<span class="ml-1 text-green-400 ">SEO</span>
+    Nuxt<span class="ml-1 text-pro-400 ">SEO Pro</span>
   </span>
 </template>
 
@@ -60,3 +60,5 @@
   animation: popNode 0.6s ease-out forwards;
 }
 </style>
+<script setup lang="ts">
+</script>

@@ -76,9 +76,7 @@ const repoLinks = computed(() => [
   <div v-if="page">
     <div class="max-w-[66ch] ml-auto md:ml-0 md:mr-auto">
       <UPageHeader
-        :title="page.title" :headline="headline" class="text-balance pt-4" :links="!['overview', 'intro-to-unhead'].includes(route.path.split('/').pop()) ? [
-          { label: 'Copy for LLMs', to: repoLinks[1].to, icon: 'i-catppuccin-markdown', target: '_blank' },
-        ] : []"
+        :title="page.title" :headline="headline" class="text-balance pt-4"
         :ui="{ title: 'leading-normal' }"
       >
         <div v-if="lastCommit" class="mt-3 text-sm">
@@ -95,6 +93,9 @@ const repoLinks = computed(() => [
               </NuxtLink>
             </UBadge>.
           </div>
+        </div>
+        <div v-if="!['overview', 'intro-to-unhead'].includes(route.path.split('/').pop())" class="mt-3">
+          <UButton label="Copy for LLMs" :to="repoLinks[1].to" icon="i-catppuccin-markdown" target="_blank" variant="outline" size="sm" class="md:inline-flex hidden" />
         </div>
       </UPageHeader>
 

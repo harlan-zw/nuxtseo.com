@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import UIcon from '#ui/components/Icon.vue'
 import { useStats } from '../composables/data'
 import { menu } from '../composables/nav'
 
@@ -27,7 +28,7 @@ const navigation = computed(() => {
 </script>
 
 <template>
-  <UHeader :ui="{ root: 'border-none bg-transparent pt-2 mb-3 px-5 h-auto', container: 'max-w-[1452px] lg:bg-gray-600/3 lg:border border-[var(--ui-border)] lg:dark:bg-gray-900/10 mx-auto py-0 px-0 lg:px-5 sm:px-0 rounded-lg' }">
+  <UHeader :ui="{ root: 'border-none bg-transparent pt-2 mb-3 px-5 h-auto', container: 'max-w-[1452px] lg:bg-white/3 lg:border border-[var(--ui-border)] lg:dark:bg-gray-900/10 mx-auto py-0 px-0 lg:px-5 sm:px-0 rounded-lg' }">
     <template #left>
       <NuxtLink
         to="/"
@@ -36,8 +37,41 @@ const navigation = computed(() => {
       >
         <Logo />
       </NuxtLink>
-      <div class="hidden lg:block">
-        <UNavigationMenu :ui="{ viewport: 'min-w-[600px]' }" :items="menu.slice(0, 3)" class="justify-center" />
+      <div class="hidden lg:flex items-center">
+        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[0]]" class="justify-center" />
+        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[1], menu[2]]" class="justify-center">
+          <template #item-content="{ item }">
+          <div v-if="item.to === '/pro'">
+            <div class="text-xs px-2 pt-2">
+              <UButton variant="ghost" to="/pro" class="w-full">
+                <LogoPro />
+              </UButton>
+            </div>
+            <div class="text-xs px-2 pt-2">
+              <span class="font-semibold text-toned">Pro Modules</span>
+            </div>
+          </div>
+            <ul class="grid grid-cols-3 p-2 gap-2">
+              <li v-for="module in item.children" :key="module.to" class="text-center">
+                <UButton variant="ghost" :to="module.to" class="w-full">
+                  <div class="w-full">
+                    <div class="flex items-center justify-center gap-1 w-full">
+                      <UIcon :name="module.icon" class="block w-6 h-6 mb-0.5 align-text-top" />
+                      <div v-if="module.ui?.pro">
+                        <UBadge color="pro" variant="outline" size="xs">
+                          Pro
+                        </UBadge>
+                      </div>
+                    </div>
+                    <div class="text-xs text-muted">
+                      {{ module.label }}
+                    </div>
+                  </div>
+                </UButton>
+              </li>
+            </ul>
+          </template>
+        </UNavigationMenu>
       </div>
     </template>
 

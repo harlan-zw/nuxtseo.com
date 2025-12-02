@@ -34,14 +34,43 @@ import { modules } from '../../modules'
 export const menu = computed(() => {
   return [
     {
-      label: 'Docs',
+      label: 'Get Started',
       icon: 'i-ph-book-open-duotone',
-      children: modules.map(m => ({
+      to: `/docs/nuxt-seo/getting-started/introduction`,
+      children: [],
+    },
+    {
+      label: 'Modules',
+      icon: 'i-carbon-3rd-party-connected',
+      children: modules.filter(m => m.slug !== 'nuxt-seo' && !m.pro).map(m => ({
         label: m.label,
         icon: m.icon,
         to: `/docs/${m.slug}/getting-started/introduction`,
         disabled: m.soon,
         class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
+        // need to pass custom module details as ui props so we can modify slot markup
+        ui: {
+          soon: m.soon,
+          pro: m.pro,
+        },
+      })),
+    },
+
+    {
+      label: 'Pro',
+      icon: 'i-ph-sparkle-duotone',
+      to: '/pro',
+      children: modules.filter(m => m.pro).map(m => ({
+        label: m.label,
+        icon: m.icon,
+        to: `/docs/${m.slug}/getting-started/introduction`,
+        disabled: m.soon,
+        class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
+        // need to pass custom module details as ui props so we can modify slot markup
+        ui: {
+          soon: m.soon,
+          pro: m.pro,
+        },
       })),
     },
     {
@@ -87,11 +116,6 @@ export const menu = computed(() => {
     //     //   to: '/learn/trailing-slashes',
     //     // },
     //   ],
-    // },
-    // {
-    //   label: 'Pro',
-    //   icon: 'i-ph-sparkle-duotone',
-    //   to: '/pro',
     // },
     // {
     //   label: 'Ecosystem',

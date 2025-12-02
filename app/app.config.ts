@@ -39,14 +39,21 @@ export default defineAppConfig({
       slots: {
         item: '!py-0',
         link: 'flex flex-col items-center justify-start w-full gap-0.5 w-[90px]',
-        linkLabel: 'text-xs',
+        linkLabel: 'text-xs text-toned',
         linkTrailing: 'absolute right-2 top-2',
-        linkTrailingIcon: 'size-4 text-[var(--ui-text-dimmed)]',
+        linkTrailingIcon: 'size-4 text-dimmed',
         // inner menu
         childList: '!grid-cols-5',
         childLink: 'flex flex-col items-center justify-start w-full gap-0.5s',
         childLinkLabel: 'text-[10px] text-center text-[var(--ui-text-muted)]',
         childLinkIcon: 'size-6 !text-blue-300',
+      },
+      variants: {
+        active: {
+          false: {
+            linkLeadingIcon: 'text-toned',
+          },
+        },
       },
     },
     colors: {

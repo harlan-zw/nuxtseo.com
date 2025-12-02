@@ -91,8 +91,36 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
     <div class="gradient" />
     <div class="px-10 max-w-4xl mx-auto mb-10">
       <div class="my-10 max-w-xl text-balance">
-        <h1 class="mb-3 text-5xl font-bold">
-          Nuxt SEO <span class="text-green-500">Pro</span>
+        <h1 class="mb-3 text-5xl font-bold flex items-center">
+          <svg viewBox="0 0 64 64" class="w-15 h-15">
+            <defs>
+              <linearGradient id="wmLine2" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#7c3aed" />
+                <stop offset="100%" stop-color="#c4b5fd" />
+              </linearGradient>
+              <linearGradient id="wmFill2" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.6" />
+                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <path
+              class="fill"
+              d="M8 52 Q20 48 24 36 T40 20 T56 12 L56 56 L8 56 Z"
+              fill="url(#wmFill2)"
+            />
+            <path
+              class="line"
+              d="M8 52 Q20 48 24 36 T40 20 T56 12"
+              fill="none"
+              stroke="url(#wmLine2)"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <circle class="node" cx="56" cy="12" r="6" fill="url(#wmLine2)" />
+          </svg>
+          <span class="ml-3 dark:text-white text-black font-bold tracking-tight">
+            Nuxt<span class="ml-1 text-pro-400 "> SEO Pro</span>
+          </span>
         </h1>
         <p class="leading-relaxed text-lg">
           You've mastered your core technical SEO, now it's time to nurture your content and let your site grow using Nuxt SEO Pro.
@@ -155,24 +183,19 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
           </div>
         </div>
         <div class="flex items-start justify-center">
-          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 space-y-6 min-h-[300px]">
-            <div class="space-y-3">
-              <div class="text-sm font-medium text-[var(--ui-text)]">
-                Interactive Demo
-              </div>
-            </div>
-            <SkewProtectionDemo />
+          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 space-y-6">
+            <SkewProtectionDemoAuto />
           </div>
         </div>
       </div>
 
-      <!-- Nuxt AI Index -->
+      <!-- Nuxt AI Ready -->
       <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
         <div class="space-y-5">
           <ModuleCardAIIndex />
           <div class="prose dark:prose-invert max-w-none">
             <h3 class="text-xl font-semibold mb-3">
-              Why Nuxt AI Index?
+              Why Nuxt AI Ready?
             </h3>
             <ContentRenderer :value="snippets.find(s => s.id.endsWith('nuxt-ai-index.md'))" />
           </div>

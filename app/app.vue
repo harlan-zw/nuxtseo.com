@@ -16,12 +16,9 @@ useHead({
   style: [
     { innerHTML: `:root { --ui-primary: #1d293d; } .dark { --ui-primary: oklch(0.809 0.105 251.813); }`, id: 'nuxt-ui-black-as-primary', tagPriority: -2 },
   ],
-  htmlAttrs: {
-    lang: 'en',
-  },
   meta: [
-    { name: 'theme-color', content: '#0000FF', media: '(prefers-color-scheme: light)' },
-    { name: 'theme-color', content: '#000000', media: '(prefers-color-scheme: dark)' },
+    { name: 'theme-color', content: '#a684ff', media: '(prefers-color-scheme: light)' },
+    { name: 'theme-color', content: '#5d0ec0', media: '(prefers-color-scheme: dark)' },
     { name: 'color-scheme', content: 'light dark' },
   ],
 })

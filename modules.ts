@@ -46,13 +46,13 @@ export const NuxtAiReadyModule: NuxtSEOModule = {
 
 export const NuxtAiSearchModule: NuxtSEOModule = {
   // @ts-expect-error untyped
-  slug: 'ai-index',
-  npm: 'nuxt-ai-index',
+  slug: 'ai-search',
+  npm: 'nuxt-ai-search',
   repo: 'nuxt-seo-pro/nuxt-ai-search',
   description: 'AI-powered search and content generation for your Nuxt 3 application.',
   title: 'AI Search',
   label: 'AI Search',
-  icon: 'i-carbon-ai-label',
+  icon: 'i-carbon-chat-bot',
   soon: true,
   pro: true,
 }
@@ -61,7 +61,7 @@ export const modules = [
   ...baseModules,
 ]
   .slice(0, -1)
-  .concat([NuxtSkewProtectionModule, NuxtAiReadyModule, /*NuxtAiSearchModule, NuxtMagicRedirectsModule */], baseModules.slice(-1))
+  .concat([NuxtSkewProtectionModule, NuxtAiReadyModule, NuxtAiSearchModule], baseModules.slice(-1))
   .map((m) => {
     return {
       ...m,
