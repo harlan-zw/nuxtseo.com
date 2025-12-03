@@ -65,10 +65,6 @@ export default defineNuxtConfig({
     ],
   },
 
-  linkChecker: {
-    enabled: false,
-  },
-
   aiReady: {
     bulkRoute: false,
   },
@@ -190,6 +186,7 @@ export default defineNuxtConfig({
   },
 
   linkChecker: {
+    runOnBuild: false,
     report: {
       // generate both a html and markdown report
       html: true,

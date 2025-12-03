@@ -117,8 +117,8 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(@parcel/watcher@2.5.1)(@types/node@24.10.1)(@vue/compiler-sfc@3.5.25)(better-sqlite3@12.5.0)(db0@0.3.4(better-sqlite3@12.5.0))(eslint@9.39.1(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.53.3)(terser@5.44.1)(typescript@5.9.3)(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(yaml@2.8.2)
       nuxt-ai-ready:
-        specifier: ^0.1.0
-        version: 0.1.0(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
+        specifier: ^0.1.2
+        version: 0.1.2(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
       nuxt-ai-search:
         specifier: ^0.1.0
         version: 0.1.0(@nuxt/kit@4.2.1(magicast@0.5.1))(better-sqlite3@12.5.0)(h3@1.15.4)(magicast@0.5.1)(nuxt-site-config@3.2.11(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))(zod@3.25.76)
@@ -129,8 +129,8 @@ importers:
         specifier: ^2.5.3
         version: 2.5.3(magicast@0.5.1)
       nuxt-skew-protection:
-        specifier: 0.3.3
-        version: 0.3.3(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
+        specifier: 0.3.5
+        version: 0.3.5(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
       octokit:
         specifier: ^5.0.5
         version: 5.0.5
@@ -5279,6 +5279,10 @@ packages:
     resolution: {integrity: sha512-WXbAa4X7GUqZgkRLXgZL5pmM2CoESExNLL64qRI/8oxq10VFpd/eFwRpzB5Yo5GZ3aCb4X7vhWo/vEC8xjMs+g==}
     hasBin: true
 
+  mdream@0.15.0:
+    resolution: {integrity: sha512-L4cgCcxYyPkwWeWfOaIDD9UXYd7+a6ahvqgo844eKZUJr9vN3QM+bcyoh6+Okl3n9Ocp58atFQ/EyzXmbhQW5g==}
+    hasBin: true
+
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
 
@@ -5591,8 +5595,8 @@ packages:
   nuxt-ai-ready@0.0.3:
     resolution: {integrity: sha512-zmKdn8PUboEDjtViotJhjbRkJUZw+Gx4M0xw6G8o5x+nzaznGjK4p5He7qz2ua6LnIv9pxY7TFBlGToVcStzlg==}
 
-  nuxt-ai-ready@0.1.0:
-    resolution: {integrity: sha512-OUgjHYFFlh568OeO55pBI5MR45blqbrlAudXnP7MOBTTR1lFvGWidIYFspDEMvB3mkvI7Ebi/RD7zvahHqag1g==}
+  nuxt-ai-ready@0.1.2:
+    resolution: {integrity: sha512-eFyx1IDhpnr1yu0d1apw+0euG/miUurNfLtgHvC+MYZ/vpifK8PCDcl0Kq+JNREQr/ik4byxNppiHz8O9on7Uw==}
 
   nuxt-ai-search@0.1.0:
     resolution: {integrity: sha512-N0JzzhCcAtCuM5AT4R5jUnORgav55UZ/Gb9XXTVHWfd7v7/CIDSmxLGbPXYcwLto3VDr7GfL1T8R8oKf+oA3yw==}
@@ -5681,8 +5685,8 @@ packages:
     peerDependencies:
       h3: ^1
 
-  nuxt-skew-protection@0.3.3:
-    resolution: {integrity: sha512-jf6KWWhSI33P1ufJHYY9u0ddjYtDLkAr0XaAGllUZbeAUiBlHJ9wB01sswPPuMSu2WyzrMlgH89pbxcUZRa82Q==}
+  nuxt-skew-protection@0.3.5:
+    resolution: {integrity: sha512-NKVcGIroElEoE/Q12yPPASy/tLgz9TuEfwWVQGYqaB8q6zNYW7QmvxJQVT/Ufac2Ux8vA5xWHRRg4aLQSfIGsQ==}
 
   nuxt@4.2.1:
     resolution: {integrity: sha512-OE5ONizgwkKhjTGlUYB3ksE+2q2/I30QIYFl3N1yYz1r2rwhunGA3puUvqkzXwgLQ3AdsNcigPDmyQsqjbSdoQ==}
@@ -13587,6 +13591,12 @@ snapshots:
       pathe: 2.0.3
       tinyglobby: 0.2.15
 
+  mdream@0.15.0:
+    dependencies:
+      cac: 6.7.14
+      pathe: 2.0.3
+      tinyglobby: 0.2.15
+
   mdurl@2.0.0: {}
 
   merge-stream@2.0.0: {}
@@ -14115,12 +14125,12 @@ snapshots:
       - magicast
       - vue
 
-  nuxt-ai-ready@0.1.0(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
+  nuxt-ai-ready@0.1.2(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
     dependencies:
       '@nuxt/kit': 4.2.1(magicast@0.5.1)
       consola: 3.4.2
       defu: 6.1.4
-      mdream: 0.14.0
+      mdream: 0.15.0
       minimatch: 10.1.1
       nuxt-site-config: 3.2.11(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
       pathe: 2.0.3
@@ -14343,7 +14353,7 @@ snapshots:
       - magicast
       - vue
 
-  nuxt-skew-protection@0.3.3(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
+  nuxt-skew-protection@0.3.5(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
     dependencies:
       '@nuxt/kit': 4.2.1(magicast@0.5.1)
       '@nuxtjs/robots': 5.6.0(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
