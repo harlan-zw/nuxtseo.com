@@ -42,6 +42,7 @@ function getSubModuleCollection(m: NuxtSEOModule) {
       repository: `https://github.com/${m.repo}`,
       include: 'docs/content/**/*.md',
       prefix: `/docs/${m.slug}`,
+      authToken: process.env.NUXT_GITHUB_ACCESS_TOKEN,
     },
   }))
 }
