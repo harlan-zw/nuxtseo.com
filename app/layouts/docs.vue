@@ -276,6 +276,7 @@ const toolbarQuery = ref(null)
             />
           </ClientOnly>
         </div>
+        <AiSearchDrawer v-if="isAiSearchReady" :show-drawer="!!toolbarQuery" />
       </div>
       <AiSearchToolbar v-if="isAiSearchReady && !toolbarQuery" @submit="e => { console.log('toolbar submit received', e); toolbarQuery = e }" />
       <UDrawer v-model:open="navOpen">
