@@ -61,7 +61,7 @@ export const modules = [
   ...baseModules,
 ]
   .slice(0, -1)
-  .concat([NuxtSkewProtectionModule, NuxtAiReadyModule, NuxtAiSearchModule], baseModules.slice(-1))
+  .concat([NuxtSkewProtectionModule, NuxtAiReadyModule/* , NuxtAiSearchModule */], baseModules.slice(-1))
   .map((m) => {
     return {
       ...m,

@@ -65,6 +65,10 @@ export default defineNuxtConfig({
     ],
   },
 
+  linkChecker: {
+    enabled: false,
+  },
+
   ui: {
     mdc: true,
     content: true,

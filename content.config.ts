@@ -59,7 +59,7 @@ export const content = defineContentConfig({
     siteConfig: getSubModuleCollection(SiteConfigModule),
     skewProtection: getSubModuleCollection(NuxtSkewProtectionModule),
     aiReady: getSubModuleCollection(NuxtAiReadyModule),
-    aiSearch: getSubModuleCollection(NuxtAiSearchModule),
+    // aiSearch: getSubModuleCollection(NuxtAiSearchModule),
     learn: defineCollection(asSeoCollection({
       type: 'page',
       source: {
