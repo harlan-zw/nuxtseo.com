@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nitro-cloudflare-dev',
     '@vueuse/nuxt',
-    'nuxt-ai-ready',
+    // 'nuxt-ai-ready',
     // 'nuxt-ai-search',
     'nuxt-skew-protection',
     '@nuxt/scripts',
