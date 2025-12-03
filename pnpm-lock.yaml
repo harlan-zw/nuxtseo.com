@@ -129,8 +129,8 @@ importers:
         specifier: ^2.5.3
         version: 2.5.3(magicast@0.5.1)
       nuxt-skew-protection:
-        specifier: 0.3.2
-        version: 0.3.2(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
+        specifier: 0.3.3
+        version: 0.3.3(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
       octokit:
         specifier: ^5.0.5
         version: 5.0.5
@@ -5681,8 +5681,8 @@ packages:
     peerDependencies:
       h3: ^1
 
-  nuxt-skew-protection@0.3.2:
-    resolution: {integrity: sha512-fJRMn43u/pRuhTVDwTeDaXXOdk0uiWu8rfQjlN7D6k66sQ9urnJJSWQpSH/VyW7Vv5BLsLAq4o6w/xI7Zt5UNA==}
+  nuxt-skew-protection@0.3.3:
+    resolution: {integrity: sha512-jf6KWWhSI33P1ufJHYY9u0ddjYtDLkAr0XaAGllUZbeAUiBlHJ9wB01sswPPuMSu2WyzrMlgH89pbxcUZRa82Q==}
 
   nuxt@4.2.1:
     resolution: {integrity: sha512-OE5ONizgwkKhjTGlUYB3ksE+2q2/I30QIYFl3N1yYz1r2rwhunGA3puUvqkzXwgLQ3AdsNcigPDmyQsqjbSdoQ==}
@@ -14343,7 +14343,7 @@ snapshots:
       - magicast
       - vue
 
-  nuxt-skew-protection@0.3.2(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
+  nuxt-skew-protection@0.3.3(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
     dependencies:
       '@nuxt/kit': 4.2.1(magicast@0.5.1)
       '@nuxtjs/robots': 5.6.0(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
