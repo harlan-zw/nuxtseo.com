@@ -69,6 +69,10 @@ export default defineNuxtConfig({
     enabled: false,
   },
 
+  aiReady: {
+    bulkRoute: false,
+  },
+
   ui: {
     mdc: true,
     content: true,
