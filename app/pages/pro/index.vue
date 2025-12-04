@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '#ui/types'
 import type { ProEmailSchemaOutput, ProWaitlistFeedbackSchemaOutput } from '~~/types/schemas'
+import { modules } from '~~/modules'
 import {
   ProEmailSchema,
 
@@ -89,44 +90,72 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
 <template>
   <div>
     <div class="gradient" />
-    <div class="px-10 max-w-4xl mx-auto mb-10">
-      <div class="my-10 max-w-xl text-balance">
-        <h1 class="mb-3 text-5xl font-bold flex items-center">
-          <svg viewBox="0 0 64 64" class="w-15 h-15">
-            <defs>
-              <linearGradient id="wmLine2" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#7c3aed" />
-                <stop offset="100%" stop-color="#c4b5fd" />
-              </linearGradient>
-              <linearGradient id="wmFill2" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.6" />
-                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0" />
-              </linearGradient>
-            </defs>
-            <path
-              class="fill"
-              d="M8 52 Q20 48 24 36 T40 20 T56 12 L56 56 L8 56 Z"
-              fill="url(#wmFill2)"
-            />
-            <path
-              class="line"
-              d="M8 52 Q20 48 24 36 T40 20 T56 12"
-              fill="none"
-              stroke="url(#wmLine2)"
-              stroke-width="4"
-              stroke-linecap="round"
-            />
-            <circle class="node" cx="56" cy="12" r="6" fill="url(#wmLine2)" />
-          </svg>
-          <span class="ml-3 dark:text-white text-black font-bold tracking-tight">
-            Nuxt<span class="ml-1 text-pro-400 "> SEO Pro</span>
-          </span>
-        </h1>
-        <p class="leading-relaxed text-lg">
-          You've mastered your core technical SEO, now it's time to nurture your content and let your site grow using Nuxt SEO Pro.
-        </p>
-      </div>
-    </div>
+    <UContainer>
+      <section class="xl:max-w-full xl:grid grid-cols-2 max-w-3xl mx-auto py-5 sm:py-12 xl:py-15">
+        <div class="max-w-2xl mx-auto">
+          <div class="xl:flex gap-10">
+            <div class="flex flex-col justify-center">
+              <h1 class="text-neutral-900/90 dark:text-neutral-100 text-4xl md:text-6xl leading-tight font-bold tracking-tight" style="line-height: 1.3;">
+                <span class="extra-italic">Build for </span><br><span class="font-cursive dark:text-pro-200 text-blue-400 px-1">what's next</span>.
+              </h1>
+              <p class="max-w-xl text-neutral-700 dark:text-neutral-300 mt-4 max-w-3xl text-base md:text-xl">
+                Build out your technical SEO using modern LLM tooling. Get discovered and cited by AI models.
+                Be ready for the future of search.
+              </p>
+
+              <div class="flex mb-5 items-center gap-4 mt-5 md:mt-10  justify-start">
+                <UButton size="lg" to="/docs/nuxt-seo/getting-started/introduction">
+                  Get Started
+                </UButton>
+                <UButton size="lg" icon="i-carbon-download" variant="ghost" to="/docs/nuxt-seo/getting-started/installation">
+                  Install Nuxt SEO
+                </UButton>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center h-full xl:mr-50 mt-7 xl:mt-0 relative">
+          <div class="flex flex-wrap xl:max-w-[400px] items-center gap-6 justify-center">
+            <motion.div
+              v-for="(module, i) in modules.filter(m => m.pro)"
+              :key="module.slug"
+              layout
+              :initial="{
+                opacity: 0,
+                y: 40,
+                scale: 0.8,
+                rotateZ: -10,
+              }"
+              :animate="{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                rotateZ: 0,
+                transition: animatedIn ? { duration: 0.2 } : {
+                  type: 'spring',
+                  damping: 12,
+                  stiffness: 100,
+                  delay: i * 0.3,
+                },
+              }"
+              :while-hover="{
+                scale: 1.1,
+                rotateZ: 5,
+                y: -5,
+              }"
+              class="cursor-pointer transform-gpu"
+            >
+              <NuxtLink :to="module.to">
+                <UIcon
+                  :name="module.icon"
+                  class="size-6 sm:size-10 xl:size-25 text-blue-300"
+                />
+              </NuxtLink>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </UContainer>
     <div class="bg-green-100/50 dark:bg-black/50 py-10 mb-10">
       <div class="px-10 max-w-4xl mx-auto">
         <div class="max-w-xl prose prose-gray relative">

@@ -4,10 +4,17 @@ import { useStats } from '../composables/data'
 import { menu } from '../composables/nav'
 
 const { data: stats } = await useStats()
+const route = useRoute()
 
 const nuxtSeoStars = computed(() => {
   const stars = stats.value?.modules.find(m => m.slug === 'nuxt-seo')?.stars || 0
   return Intl.NumberFormat('en', { notation: 'compact', compactDisplay: 'short' }).format(stars)
+})
+
+const isPro = computed(() => {
+  return route.path.startsWith('/pro')
+    || route.path.startsWith('/docs/skew-protection')
+    || route.path.startsWith('/docs/ai-ready')
 })
 
 const navigation = computed(() => {
@@ -35,22 +42,23 @@ const navigation = computed(() => {
         title="Home" aria-label="Title"
         class="flex mr-4 items-end gap-1.5 font-bold text-base text-(--ui-text-highlighted) font-title"
       >
-        <Logo />
+        <LogoPro v-if="isPro" />
+        <Logo v-else />
       </NuxtLink>
       <div class="hidden lg:flex items-center">
         <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[0]]" class="justify-center" />
         <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[1], menu[2]]" class="justify-center">
           <template #item-content="{ item }">
-          <div v-if="item.to === '/pro'">
-            <div class="text-xs px-2 pt-2">
-              <UButton variant="ghost" to="/pro" class="w-full">
-                <LogoPro />
-              </UButton>
+            <div v-if="item.to === '/pro'">
+              <div class="text-xs px-2 pt-2">
+                <UButton variant="ghost" to="/pro" class="w-full">
+                  <LogoPro />
+                </UButton>
+              </div>
+              <div class="text-xs px-2 pt-2">
+                <span class="font-semibold text-toned">Pro Modules</span>
+              </div>
             </div>
-            <div class="text-xs px-2 pt-2">
-              <span class="font-semibold text-toned">Pro Modules</span>
-            </div>
-          </div>
             <ul class="grid grid-cols-3 p-2 gap-2">
               <li v-for="module in item.children" :key="module.to" class="text-center">
                 <UButton variant="ghost" :to="module.to" class="w-full">
