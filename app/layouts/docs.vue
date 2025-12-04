@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { queryCollectionNavigation } from '#imports'
-import { motion } from 'motion-v'
+import { animate, motion } from 'motion-v'
 import { modules } from '~~/modules'
 import { isHydratingRef } from '~/composables/data'
 import { useModule } from '~/composables/module'
@@ -123,9 +123,18 @@ onKeyStroke('Divide', () => {
 
 const isHydrating = isHydratingRef()
 
-const motionEnabled = ref(false)
-onMounted(() => motionEnabled.value = true)
-onBeforeUnmount(() => motionEnabled.value = false)
+const contentRef = ref(null)
+
+onMounted(() => {
+  if (!contentRef.value || !motion || isHydrating.value)
+    return
+
+  animate(contentRef.value, {
+    opacity: [0, 1],
+    transform: ['translateY(16px)', 'translateY(0px)'],
+    filter: ['blur(0.2rem)', 'blur(0)'],
+  }, { duration: 0.2 })
+})
 
 const isAiSearchReady = ref(false)
 const toolbarQuery = ref(null)
@@ -167,7 +176,7 @@ const toolbarQuery = ref(null)
                       </UBadge>
                     </UTooltip>
                   </div>
-                  <ul v-if="motion && motionEnabled && activeModule" class="z-10 gap-1 text-blue-200 flex group-hover:text-blue-500 transition-all relative">
+                  <ul v-if="activeModule" class="z-10 gap-1 text-blue-200 flex group-hover:text-blue-500 transition-all relative">
                     <motion.li
                       v-for="module in [activeModule, ...modules.filter(m => m.slug !== activeModule.slug && m.pro === activeModule.pro)]"
                       :key="module.slug"
@@ -226,21 +235,9 @@ const toolbarQuery = ref(null)
                     <DocsSidebarHeader :key="`${activeModule?.slug || ''}-${navigation?.length || 0}`" />
                   </UPageAside>
                 </template>
-                <AnimatePresence v-if="motion && motionEnabled" mode="wait">
-                  <motion.div
-                    :key="route.path"
-                    :initial="isHydrating ? {} : { opacity: 0, y: 16, filter: 'blur(0.2rem)' }"
-                    :animate="{ opacity: 1, y: 0, filter: 'blur(0)' }"
-                    :exit="{ opacity: 0, y: 16, filter: 'blur(0.2rem)' }"
-                    :transition="{
-                      duration: 0.2,
-                    }"
-                  >
-                    <div class="mx-auto pt-7">
-                      <slot />
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
+                <div ref="contentRef" class="mx-auto pt-7">
+                  <slot />
+                </div>
               </UPage>
             </div>
           </UMain>
@@ -262,7 +259,7 @@ const toolbarQuery = ref(null)
         <template #content>
           <div class="px-5">
             <div class="space-y-2 mb-3 mt-5 px-5">
-              <ul v-if="motion && motionEnabled && activeModule" class="z-10 gap-1 text-blue-200 group-hover:text-blue-500 items-center justify-center flex transition-all relative">
+              <ul v-if="activeModule" class="z-10 gap-1 text-blue-200 group-hover:text-blue-500 items-center justify-center flex transition-all relative">
                 <motion.li
                   v-for="module in [activeModule, ...modules.filter(m => m.slug !== activeModule.slug)]"
                   :key="module.slug"
