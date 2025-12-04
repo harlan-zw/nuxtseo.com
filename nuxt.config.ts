@@ -113,6 +113,10 @@ export default defineNuxtConfig({
     ],
   },
 
+  skewProtection: {
+    debug: true,
+  },
+
   nitro: {
     preset: 'cloudflare-durable',
     cloudflare: {
