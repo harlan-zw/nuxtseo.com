@@ -2,23 +2,27 @@
 import { queryCollectionNavigation } from '#imports'
 import { motion } from 'motion-v'
 import { modules } from '~~/modules'
-import { isHydratingRef, useCurrentDocPage } from '~/composables/data'
+import { isHydratingRef } from '~/composables/data'
 import { useModule } from '~/composables/module'
 
-const route = useRoute()
 const navOpen = ref(false)
 
-const activeModule = useModule(useRouter().currentRoute.value.params.slug[0])
+const route = useRoute()
+const activeModule = useModule(computed(() => route.params.slug[0] as string))
 provide('module', activeModule)
+
+const navCollection = computed(() => activeModule.value?.contentCollection)
+
 const {
   data: search,
-  refresh: refreshSearch,
-} = await useLazyAsyncData(`search-${activeModule.value.slug}`, () => queryCollectionSearchSections(activeModule.value.contentCollection))
+} = await useLazyAsyncData(() => `search-${navCollection.value}`, () => queryCollectionSearchSections(navCollection.value!), {
+  watch: [navCollection],
+})
 const {
   data: navigation,
-  refresh: refreshNavigation,
-} = await useLazyAsyncData(`navigation-${activeModule.value.slug}`, () => queryCollectionNavigation(activeModule.value.contentCollection), {
+} = await useLazyAsyncData(() => `navigation-${navCollection.value}`, () => queryCollectionNavigation(navCollection.value!), {
   default: () => [],
+  watch: [navCollection],
   async transform(res) {
     const nav = mapPath(res)
     return (nav || []).map((m) => {
@@ -80,20 +84,9 @@ const {
 })
 provide('search', search)
 provide('navigation', navigation)
-watch(activeModule, async () => {
-  if (activeModule.value) {
-    await Promise.all([refreshNavigation(), refreshSearch()])
-  }
-})
-const { data: currentPage } = await useAsyncData(() => `current-page-${route.path}`, () => useCurrentDocPage(), {
-  watch: [() => route.path],
-})
-provide('currentPage', currentPage)
 watch(() => route.path, () => {
   navOpen.value = false
 })
-
-const page = computed(() => currentPage.value?.page?.value)
 
 const searchTerm = ref('')
 
@@ -223,25 +216,7 @@ const toolbarQuery = ref(null)
           <UMain class="relative mb-20 px-5">
             <svg viewBox="0 0 1440 181" fill="none" xmlns="http://www.w3.org/2000/svg" class="left-0  text-primary-300/30 dark:text-primary-900/30 pointer-events-none absolute w-full top-[1px] transition-all text-primary flex-shrink-0 opacity-100 duration-[400ms] z-20"><mask id="path-1-inside-1_414_5526" fill="white"><path d="M0 0H1440V181H0V0Z" /></mask><path d="M0 0H1440V181H0V0Z" fill="url(#paint0_linear_414_5526)" fill-opacity="0.22" /><path d="M0 2H1440V-2H0V2Z" fill="url(#paint1_linear_414_5526)" mask="url(#path-1-inside-1_414_5526)" /><defs><linearGradient id="paint0_linear_414_5526" x1="720" y1="0" x2="720" y2="181" gradientUnits="userSpaceOnUse"><stop stop-color="currentColor" /><stop offset="1" stop-color="currentColor" stop-opacity="0" /></linearGradient><linearGradient id="paint1_linear_414_5526" x1="0" y1="90.5" x2="1440" y2="90.5" gradientUnits="userSpaceOnUse"><stop stop-color="currentColor" stop-opacity="0" /><stop offset="0.395" stop-color="currentColor" /><stop offset="1" stop-color="currentColor" stop-opacity="0" /></linearGradient></defs></svg>
             <div class="max-w-[1400px] mx-auto lg:pt-5">
-              <UPage :ui="{ left: 'lg:col-span-3 xl:col-span-2', right: 'lg:col-span-2 hidden xl:block', center: 'col-span-5 xl:col-span-6' }">
-                <template #right>
-                  <div class="">
-                    <div class="pt-11 pl-10 gap-5 flex flex-col">
-                      <template v-if="page?.body?.toc?.links?.length > 1">
-                        <div>
-                          <div class="mb-5 flex items-center gap-2  text-[var(--ui-text-accented)]">
-                            <UIcon name="i-tabler-align-left-2" class="size-4 " />
-                            <div class="text-xs  font-medium">
-                              On this page
-                            </div>
-                          </div>
-                          <TableOfContents :links="page?.body?.toc?.links" />
-                        </div>
-                      </template>
-                      <Ads />
-                    </div>
-                  </div>
-                </template>
+              <UPage :ui="{ left: 'lg:col-span-3 xl:col-span-2', center: 'col-span-5 lg:col-span-7 xl:col-span-8' }">
                 <template #left>
                   <UPageAside class="max-w-[300px] pt-8">
                     <DocsSidebarHeader :key="`${activeModule?.slug || ''}-${navigation?.length || 0}`" />
@@ -257,7 +232,7 @@ const toolbarQuery = ref(null)
                       duration: 0.2,
                     }"
                   >
-                    <div class="max-w-[66ch] mx-auto pt-7">
+                    <div class="mx-auto pt-7">
                       <slot />
                     </div>
                   </motion.div>

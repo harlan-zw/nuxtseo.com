@@ -9,19 +9,18 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/seo',
     '@nuxt/ui',
-    'motion-v/nuxt',
-    // 'nuxt-content-twoslash',
+    'motion-v/nuxt', // 'nuxt-content-twoslash',
     '@nuxt/content',
     'nitro-cloudflare-dev',
     '@vueuse/nuxt',
-    // 'nuxt-ai-ready',
+    'nuxt-ai-ready',
     // 'nuxt-ai-search',
     'nuxt-skew-protection',
     '@nuxt/scripts',
     '@nuxt/image',
     async (_, nuxt) => {
       nuxt.hooks.hook('nitro:init', (nitro) => {
-        // from sponsorkit
+      // from sponsorkit
         nitro.options.alias.sharp = 'unenv/mock/empty'
         nitro.options.alias.pnpapi = 'unenv/mock/empty' // ?
         nitro.hooks.hook('compiled', async (_nitro) => {
@@ -53,6 +52,7 @@ export default defineNuxtConfig({
         })
       })
     },
+    '@nuxtjs/mcp-toolkit',
   ],
 
   sitemap: {
@@ -119,6 +119,19 @@ export default defineNuxtConfig({
       deployConfig: true,
       nodeCompat: true,
       wrangler: {
+        preview_urls: true,
+        routes: [
+          {
+            pattern: 'nuxtseo.com',
+            zone_name: 'nuxtseo.com',
+            custom_domain: true,
+          },
+          {
+            pattern: 'www.nuxtseo.com',
+            zone_name: 'nuxtseo.com',
+            custom_domain: true,
+          },
+        ],
         vars: {
           NUXT_GITHUB_ACCESS_TOKEN: process.env.NUXT_GITHUB_ACCESS_TOKEN || '',
           NUXT_EMAIL_OCTOPUS_TOKEN: process.env.NUXT_EMAIL_OCTOPUS_TOKEN || '',
@@ -162,8 +175,7 @@ export default defineNuxtConfig({
         vectorize: [
           {
             binding: 'VECTORIZE',
-            index_name: 'nuxtseo-ai-search',
-            experimental_remote: true,
+            index_name: 'nuxtseo',
           },
         ],
       },
@@ -186,7 +198,6 @@ export default defineNuxtConfig({
   },
 
   linkChecker: {
-    runOnBuild: false,
     report: {
       // generate both a html and markdown report
       html: true,
@@ -282,7 +293,7 @@ export default defineNuxtConfig({
     identity: {
       type: 'Organization',
       name: 'Nuxt SEO',
-      logo: '/logo.svg',
+      logo: '/logo.png',
     },
   },
 

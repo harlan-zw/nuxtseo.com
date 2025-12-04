@@ -32,10 +32,10 @@ import { menu } from '~/composables/nav'
               Discord
             </UButton>
             <ColorModeButton verbose />
-            <ULink target="_blank" external href="/llms.txt" class="flex items-center gap-1 hover:underline transition">
-              <UIcon dynamic name="i-noto-sparkles" class="w-4 h-4" />
-              /llms.txt
-            </ULink>
+            <!--            <ULink target="_blank" external href="https://nuxtseo.com/llms.txt" class="flex items-center gap-1 hover:underline transition"> -->
+            <!--              <UIcon dynamic name="i-noto-sparkles" class="w-4 h-4" /> -->
+            <!--              /llms.txt -->
+            <!--            </ULink> -->
           </div>
         </div>
         <div class="py-10 grid xl:grid-cols-3 lg:gap-20 gap-10">

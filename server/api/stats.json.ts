@@ -60,15 +60,15 @@ export default defineCachedEventHandler(async (e) => {
             publishedAt: stats?.publishedAt,
             version: releases?.releases?.[0]?.name,
             versions,
-            stars: stars.stars || stats?.stars,
-            commitCount,
-            issuesCloses,
-            downloads: downloads.totalDownloads90,
-            totalDownloads90: downloads.totalDownloads90,
-            totalDownloads30: downloads.totalDownloads30,
-            averageDownloads30: downloads.averageDownloads30,
-            averageDownloads90: downloads.averageDownloads90,
-            percentageChange: downloads.percentageChange,
+            stars: stars.stars || stats?.stars || 0,
+            commitCount: commitCount || 0,
+            issuesCloses: issuesCloses || 0,
+            downloads: downloads.totalDownloads90 || 0,
+            totalDownloads90: downloads.totalDownloads90 || 0,
+            totalDownloads30: downloads.totalDownloads30 || 0,
+            averageDownloads30: downloads.averageDownloads30 || 0,
+            averageDownloads90: downloads.averageDownloads90 || 0,
+            percentageChange: downloads.percentageChange || 0,
           }
         }),
     )
@@ -79,7 +79,7 @@ export default defineCachedEventHandler(async (e) => {
     modules: moduleStats,
     uniqueContributors: [...uniqueContributors],
     totalCommits: moduleStats.reduce((acc, s) => acc + s.commitCount, 0),
-    totalIssuesClosed: moduleStats.reduce((acc, s) => acc + s.issuesCloses, 0),
+    totalIssueClosed: moduleStats.reduce((acc, s) => acc + s.issuesCloses, 0),
   }
 }, {
   // last for 1 day

@@ -1,7 +1,9 @@
-Congrats on shipping that latest release! Unfortunately, many of your users are going to be using the previous version of your app
-for hours to days afterwards until they refresh.
+**Version skew** is a mismatch between your deployed build and the chunks running in user browsers and crawler sessions. It can lead to several issues:
 
-Finally fixed that SEO issue? Great, but crawlers will often hit your site and request build chunks that no longer exist, leading
-to 500 errors and broken indexes.
+- 🕷️ **Crawlers 404 on stale chunks** - Googlebot requests `_nuxt/builds/abc123.js` which no longer exists post-deploy, logging 500s and potentially impacting indexing
+- 💥 **ChunkLoadError in production** - Users mid-session get `Failed to fetch dynamically imported module` when navigating to routes with invalidated chunks
+- 🔄 **Delayed rollout** - Your latest release sits unloaded until users hard refresh, sometimes hours or days later
 
-You've just been "skewed"! Skew is the version difference between what your users are running and what is currently deployed.
+Nuxt's built-in behavior (hard-reload when a new deployment is detected) helps, but in many cases it's [not enough](https://github.com/nuxt/nuxt/issues/29624).
+
+Nuxt Skew Protection solves this with proactive update prompts and persistent build assets across deploys.

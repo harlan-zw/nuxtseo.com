@@ -15,7 +15,7 @@
     "twoslash:verify": "nuxt-content-twoslash verify --content-dir content"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^6.2.0",
+    "@antfu/eslint-config": "^6.4.1",
     "@anthropic-ai/sdk": "^0.71.0",
     "@iconify-json/carbon": "^1.2.14",
     "@iconify-json/heroicons": "^1.2.3",
@@ -29,12 +29,13 @@
     "@iconify-json/unjs": "^1.2.3",
     "@iconify-json/vscode-icons": "^1.2.37",
     "@inspira-ui/plugins": "^0.0.1",
-    "@nuxt/content": "^3.8.2",
+    "@nuxt/content": "^3.9.0",
     "@nuxt/devtools": "3.1.1",
     "@nuxt/fonts": "^0.12.1",
     "@nuxt/image": "^2.0.0",
     "@nuxt/scripts": "^0.13.0",
     "@nuxt/ui": "^4.2.1",
+    "@nuxtjs/mcp-toolkit": "0.5.1",
     "@nuxtjs/seo": "^3.2.2",
     "@prosekit/core": "^0.8.7",
     "@prosekit/extensions": "^0.12.2",
@@ -51,7 +52,7 @@
     "motion-v": "^1.7.4",
     "nitro-cloudflare-dev": "^0.2.2",
     "nuxt": "^4.2.1",
-    "nuxt-ai-ready": "^0.1.2",
+    "nuxt-ai-ready": "^0.2.1",
     "nuxt-ai-search": "^0.1.0",
     "nuxt-lodash": "^2.5.3",
     "nuxt-skew-protection": "0.3.5",
@@ -59,13 +60,14 @@
     "ofetch": "^1.5.1",
     "prosekit": "^0.16.3",
     "radix-vue": "^1.9.17",
-    "shiki": "^3.18.0",
+    "shiki": "^3.19.0",
     "shiki-transformer-color-highlight": "^1.0.0",
     "sponsorkit": "^17.0.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
     "tailwindcss-animate": "^1.0.7",
-    "wrangler": "^4.51.0"
+    "wrangler": "^4.52.1",
+    "zod": "^4.1.13"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -4,13 +4,13 @@ import type { ProEmailSchemaOutput, ProWaitlistFeedbackSchemaOutput } from '~~/t
 import { modules } from '~~/modules'
 import {
   ProEmailSchema,
-
   ProWaitlistFeedbackSchema,
-
 } from '~~/types/schemas'
 import { stripHeaderAnchorLinks } from '~~/utils/content'
 import { reviews } from '~/composables/data'
 import { proAd } from '~/utils/ads'
+
+const filteredModules = computed(() => modules.filter(m => m.pro))
 
 const faq = [
   {
@@ -96,72 +96,105 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
           <div class="xl:flex gap-10">
             <div class="flex flex-col justify-center">
               <h1 class="text-neutral-900/90 dark:text-neutral-100 text-4xl md:text-6xl leading-tight font-bold tracking-tight" style="line-height: 1.3;">
-                <span class="extra-italic">Build for </span><br><span class="font-cursive dark:text-pro-200 text-blue-400 px-1">what's next</span>.
+                <span class="extra-italic">The futures</span><br><span class="font-cursive dark:text-pro-300 text-blue-400 px-1"> SEO Modules</span> for todays <span class="bg-green-500/10 px-2">Nuxters</span>.
               </h1>
               <p class="max-w-xl text-neutral-700 dark:text-neutral-300 mt-4 max-w-3xl text-base md:text-xl">
-                Build out your technical SEO using modern LLM tooling. Get discovered and cited by AI models.
-                Be ready for the future of search.
+                Technical SEO for LLMs and AI search engines is here. Vibe code your semantic data. Be on first name basis
+                with LLMs and protect yourself from irrelevance.
               </p>
 
               <div class="flex mb-5 items-center gap-4 mt-5 md:mt-10  justify-start">
-                <UButton size="lg" to="/docs/nuxt-seo/getting-started/introduction">
-                  Get Started
+                <UButton size="lg" to="#pricing" color="pro" icon="i-carbon-rocket" class="font-semibold">
+                  Get Early Access Now
                 </UButton>
                 <UButton size="lg" icon="i-carbon-download" variant="ghost" to="/docs/nuxt-seo/getting-started/installation">
-                  Install Nuxt SEO
+                  Read the docs
                 </UButton>
               </div>
             </div>
           </div>
         </div>
         <div class="flex items-center justify-center h-full xl:mr-50 mt-7 xl:mt-0 relative">
-          <div class="flex flex-wrap xl:max-w-[400px] items-center gap-6 justify-center">
-            <motion.div
-              v-for="(module, i) in modules.filter(m => m.pro)"
-              :key="module.slug"
-              layout
-              :initial="{
-                opacity: 0,
-                y: 40,
-                scale: 0.8,
-                rotateZ: -10,
-              }"
-              :animate="{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                rotateZ: 0,
-                transition: animatedIn ? { duration: 0.2 } : {
-                  type: 'spring',
-                  damping: 12,
-                  stiffness: 100,
-                  delay: i * 0.3,
-                },
-              }"
-              :while-hover="{
-                scale: 1.1,
-                rotateZ: 5,
-                y: -5,
-              }"
-              class="cursor-pointer transform-gpu"
-            >
-              <NuxtLink :to="module.to">
-                <UIcon
-                  :name="module.icon"
-                  class="size-6 sm:size-10 xl:size-25 text-blue-300"
-                />
-              </NuxtLink>
-            </motion.div>
-          </div>
+          <AnimatedModuleIcons :modules="filteredModules" />
         </div>
       </section>
     </UContainer>
-    <div class="bg-green-100/50 dark:bg-black/50 py-10 mb-10">
+    <section class="px-10 mx-auto mb-10 bg-gradient bg-green-500/5 p-8 ">
+      <UContainer class="space-y-10">
+        <div>
+          <h2 class="font-semibold text-2xl mb-2 flex items-center gap-2">
+            <UIcon name="i-carbon-3rd-party-connected" class="text-blue-300" /> AI Modules
+          </h2>
+          <p class="dark:text-neutral-300">
+            Two new modules to help you nurture your organic SEO growth.
+          </p>
+        </div>
+        <div class="space-y-10 mb-10">
+          <!-- Nuxt AI Ready -->
+          <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
+            <div class="space-y-5">
+              <ModuleCardAIIndex />
+              <div class="prose dark:prose-invert max-w-none">
+                <h3 class="text-xl font-semibold mb-3">
+                  Why Nuxt AI Ready?
+                </h3>
+                <ContentRenderer :value="snippets.find(s => s.id.endsWith('nuxt-ai-index.md'))" />
+              </div>
+            </div>
+            <div class="flex items-start justify-center">
+              <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg flex items-center justify-center min-h-[300px]">
+                <iframe src="https://nuxtseo.com/llms.txt" class="w-full h-full block" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Nuxt Skew Protection -->
+          <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
+            <div class="space-y-5">
+              <ModuleCardSkewProtection />
+              <div class="prose dark:prose-invert max-w-none">
+                <h3 class="text-xl font-semibold mb-3">
+                  Why Nuxt Skew Protection?
+                </h3>
+                <ContentRenderer :value="snippets.find(s => s.id.endsWith('nuxt-skew-protection.md'))" />
+              </div>
+            </div>
+            <div class="flex items-start justify-center">
+              <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 space-y-6">
+                <SkewProtectionDemoAuto />
+              </div>
+            </div>
+          </div>
+
+          <!-- Magic Redirects -->
+          <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
+            <div class="space-y-5">
+              <ModuleCardMagicRedirects />
+              <div class="prose dark:prose-invert max-w-none">
+                <h3 class="text-xl font-semibold mb-3">
+                  Why Magic Redirects?
+                </h3>
+                <ContentRenderer :value="snippets.find(s => s.id.endsWith('magic-redirects.md'))" />
+              </div>
+            </div>
+            <div class="flex items-start justify-center">
+              <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 flex items-center justify-center min-h-[300px]">
+                <div class="text-[var(--ui-text-muted)] text-sm">
+                  Live example coming soon
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </UContainer>
+    </section>
+
+    <section class="bg-green-100/50 dark:bg-black/50 py-10 mb-10">
       <div class="px-10 max-w-4xl mx-auto">
         <div class="max-w-xl prose prose-gray relative">
           <div class="mb-7">
             <h2 class="font-semibold text-2xl mb-3 flex items-center gap-2">
-              Introduction
+              Supporting The Nuxt Ecosystem
             </h2>
             <p class="dark:text-neutral-300 mb-3">
               Hi there, I'm looking to push the Nuxt SEO ecosystem even further, but I'll need your help!
@@ -189,75 +222,7 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
           </div>
         </div>
       </div>
-    </div>
-    <section class="px-10 max-w-4xl mx-auto mb-10">
-      <h2 class="font-semibold text-2xl mb-2 flex items-center gap-2">
-        <UIcon name="i-carbon-3rd-party-connected" class="text-blue-300" /> 3 New Modules
-      </h2>
-      <p class="dark:text-neutral-300">
-        Three new modules to help you nurture your organic SEO growth.
-      </p>
     </section>
-
-    <div class="px-10 max-w-6xl mx-auto space-y-10 mb-10">
-      <!-- Nuxt Skew Protection -->
-      <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
-        <div class="space-y-5">
-          <ModuleCardSkewProtection />
-          <div class="prose dark:prose-invert max-w-none">
-            <h3 class="text-xl font-semibold mb-3">
-              Why Nuxt Skew Protection?
-            </h3>
-            <ContentRenderer :value="snippets.find(s => s.id.endsWith('nuxt-skew-protection.md'))" />
-          </div>
-        </div>
-        <div class="flex items-start justify-center">
-          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 space-y-6">
-            <SkewProtectionDemoAuto />
-          </div>
-        </div>
-      </div>
-
-      <!-- Nuxt AI Ready -->
-      <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
-        <div class="space-y-5">
-          <ModuleCardAIIndex />
-          <div class="prose dark:prose-invert max-w-none">
-            <h3 class="text-xl font-semibold mb-3">
-              Why Nuxt AI Ready?
-            </h3>
-            <ContentRenderer :value="snippets.find(s => s.id.endsWith('nuxt-ai-index.md'))" />
-          </div>
-        </div>
-        <div class="flex items-start justify-center">
-          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 flex items-center justify-center min-h-[300px]">
-            <div class="text-[var(--ui-text-muted)] text-sm">
-              Live example coming soon
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Magic Redirects -->
-      <div class="lg:grid grid-cols-2 gap-12 space-y-5 lg:space-y-0">
-        <div class="space-y-5">
-          <ModuleCardMagicRedirects />
-          <div class="prose dark:prose-invert max-w-none">
-            <h3 class="text-xl font-semibold mb-3">
-              Why Magic Redirects?
-            </h3>
-            <ContentRenderer :value="snippets.find(s => s.id.endsWith('magic-redirects.md'))" />
-          </div>
-        </div>
-        <div class="flex items-start justify-center">
-          <div class="sticky top-24 w-full bg-[var(--ui-bg-muted)] rounded-lg p-8 flex items-center justify-center min-h-[300px]">
-            <div class="text-[var(--ui-text-muted)] text-sm">
-              Live example coming soon
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- LLMWise Section -->
     <section class="px-10 max-w-4xl mx-auto mb-10">
@@ -301,7 +266,7 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
       </div>
 
       <USeparator class="my-3" />
-      <div class="lg:grid grid-cols-2 gap-5 space-y-5 lg:space-y-0">
+      <div id="pricing" class="lg:grid grid-cols-2 gap-5 space-y-5 lg:space-y-0">
         <div class="flex flex-col items-center justify-center">
           <div class="relative max-w-sm mx-auto ring-green-500 ring  rounded-2xl  p-5 space-y-4 text-left">
             <UBadge variant="soft" color="warning" size="lg" class="absolute font-bold top-5 right-5">

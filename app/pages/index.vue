@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useAsyncData } from '#imports'
 import { useElementHover, useTransition, useWindowScroll } from '@vueuse/core'
-import { motion } from 'motion-v'
 import { ref } from 'vue'
 import { reviews, useStats } from '~/composables/data'
 import { humanNumber } from '~/composables/format'
@@ -51,12 +50,7 @@ const confetti = useScript<JSConfettiApi>({
   },
 })
 
-const animatedIn = ref(false)
-onMounted(() => {
-  setTimeout(() => {
-    animatedIn.value = true
-  }, modules.filter(m => m.slug !== 'nuxt-seo' && m.slug !== 'site-config' && !m.pro).length * 300 + 1000)
-})
+const filteredModules = computed(() => modules.filter(m => m.slug !== 'nuxt-seo' && m.slug !== 'site-config' && !m.pro))
 
 const scoreEl = ref()
 const score = ref<number>(0)
@@ -223,44 +217,7 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
           </div>
         </div>
         <div class="flex items-center justify-center h-full xl:mr-50 mt-7 xl:mt-0 relative">
-          <div class="flex flex-wrap xl:max-w-[400px] items-center gap-6 justify-center">
-            <motion.div
-              v-for="(module, i) in modules.filter(m => m.slug !== 'nuxt-seo' && m.slug !== 'site-config' && !m.pro)"
-              :key="module.slug"
-              layout
-              :initial="{
-                opacity: 0,
-                y: 40,
-                scale: 0.8,
-                rotateZ: -10,
-              }"
-              :animate="{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                rotateZ: 0,
-                transition: animatedIn ? { duration: 0.2 } : {
-                  type: 'spring',
-                  damping: 12,
-                  stiffness: 100,
-                  delay: i * 0.3,
-                },
-              }"
-              :while-hover="{
-                scale: 1.1,
-                rotateZ: 5,
-                y: -5,
-              }"
-              class="cursor-pointer transform-gpu"
-            >
-              <NuxtLink :to="module.to">
-                <UIcon
-                  :name="module.icon"
-                  class="size-6 sm:size-10 xl:size-25 text-blue-300"
-                />
-              </NuxtLink>
-            </motion.div>
-          </div>
+          <AnimatedModuleIcons :modules="filteredModules" />
         </div>
       </section>
     </UContainer>

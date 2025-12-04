@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 const module = {
-  label: 'Nuxt AI Index',
-  description: 'Platform-agnostic AI Index that exposes your content in a structured way that AI agents can easily read, search and understand.',
-  icon: 'i-carbon-bot',
+  label: 'Nuxt AI Ready',
+  description: 'Best practice AI & LLM discoverability for Nuxt sites ',
+  icon: 'i-carbon-ai-label',
   scheduled: '12th October 2025',
 }
 

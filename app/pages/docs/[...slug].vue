@@ -10,10 +10,9 @@ definePageMeta({
 
 const route = useRoute()
 
-const currentPage = inject('currentPage')
-const { page, surround, lastCommit } = currentPage.value || {}
 const module = inject<Ref<NuxtSEOModule>>('module')
-if (!page.value?.id) {
+const { page, surround, lastCommit } = await useCurrentDocPage()
+if (!page?.value?.id) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
@@ -73,8 +72,8 @@ const repoLinks = computed(() => [
 </script>
 
 <template>
-  <div v-if="page">
-    <div class="max-w-[66ch] ml-auto md:ml-0 md:mr-auto">
+  <div class="flex justify-between w-full">
+    <div class="xl:mx-auto max-w-[66ch]">
       <UPageHeader
         :title="page.title" :headline="headline" class="text-balance pt-4"
         :ui="{ title: 'leading-normal' }"
@@ -98,8 +97,7 @@ const repoLinks = computed(() => [
           <UButton label="Copy for LLMs" :to="repoLinks[1].to" icon="i-catppuccin-markdown" target="_blank" variant="outline" size="sm" class="md:inline-flex hidden" />
         </div>
       </UPageHeader>
-
-      <UPageBody prose class="pb-0">
+      <UPageBody prose class="pb-0 ">
         <ContentRenderer v-if="page.body" :value="page" class="mb-10" />
         <div class="justify-center flex items-center gap-5 font-semibold">
           <div class="flex items-center gap-2">
@@ -119,6 +117,23 @@ const repoLinks = computed(() => [
         <USeparator v-if="surround?.length" class="my-8" />
         <UContentSurround :surround="surround" />
       </UPageBody>
+    </div>
+
+    <div v-if="page?.body?.toc?.links?.length > 1" class="hidden xl:block max-w-[300px] w-full flex justify-end">
+      <div class="pt-11 pl-10 gap-5 flex flex-col">
+        <div>
+          <div class="mb-5 flex items-center gap-2 text-[var(--ui-text-accented)]">
+            <UIcon name="i-tabler-align-left-2" class="size-4" />
+            <div class="text-xs font-medium">
+              On this page
+            </div>
+          </div>
+          <TableOfContents :links="page.body.toc.links" />
+        </div>
+        <div class="max-w-[200px]">
+          <Ads />
+        </div>
+      </div>
     </div>
   </div>
 </template>

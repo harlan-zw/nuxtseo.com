@@ -1,3 +1,6 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <svg viewBox="0 0 64 64" class="pop-quick w-7 h-7">
     <defs>
@@ -60,5 +63,3 @@
   animation: popNode 0.6s ease-out forwards;
 }
 </style>
-<script setup lang="ts">
-</script>
