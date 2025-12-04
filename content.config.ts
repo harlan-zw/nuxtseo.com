@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs'
 import { defineCollection, defineContentConfig } from '@nuxt/content'
 import { asSeoCollection } from '@nuxtjs/seo/content'
 import { relative, resolve } from 'pathe'
-import z from 'zod'
+import { z } from 'zod'
 import { logger } from './logger'
 import { LinkCheckerModule, NuxtAiReadyModule, NuxtAiSearchModule, NuxtSEO, NuxtSkewProtectionModule, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule } from './modules'
 

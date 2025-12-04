@@ -126,7 +126,7 @@ function onSubmitProWaitlistFeedback(event: FormSubmitEvent<ProWaitlistFeedbackS
             <UIcon name="i-carbon-3rd-party-connected" class="text-blue-300" /> AI Modules
           </h2>
           <p class="dark:text-neutral-300">
-            Two new modules to help you nurture your organic SEO growth.
+            New modules for the age of AI search engines and LLMs.
           </p>
         </div>
         <div class="space-y-10 mb-10">
