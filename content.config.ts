@@ -47,6 +47,8 @@ function getSubModuleCollection(m: NuxtSEOModule) {
   }))
 }
 
+logger.info(`Using GitHub Access Token ending with ${process.env.NUXT_GITHUB_ACCESS_TOKEN.slice(-4)}`)
+
 export const content = defineContentConfig({
   collections: {
     nuxtSeo: getSubModuleCollection(NuxtSEO),
