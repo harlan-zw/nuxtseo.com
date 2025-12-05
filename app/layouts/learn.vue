@@ -99,25 +99,27 @@ watch(learnPlatform, (newPlatform) => {
                 <div>
                   <div class="flex items-center gap-2 mb-3">
                     <UIcon name="i-ph-books-duotone" class="size-6 mb-2 text-(--ui-primary)-400 dark:text-sky-200" />
-                    <div class="mb-3 text-sm font-bold">Learn SEO</div>
+                    <div class="mb-3 text-sm font-bold">
+                      Learn SEO
+                    </div>
                   </div>
                   <div class="inline-flex rounded-md border border-[var(--ui-border)] overflow-hidden">
-                  <button
-                    v-for="(p, i) in platforms"
-                    :key="p.value"
-                    type="button"
-                    class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-all duration-150" :class="[
-                      learnPlatform === p.value
-                        ? 'bg-[var(--ui-bg-elevated)] text-[var(--ui-text-highlighted)]'
-                        : 'bg-transparent text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] hover:bg-[var(--ui-bg-muted)]',
-                      i === 0 ? '' : 'border-l border-[var(--ui-border)]',
-                    ]"
-                    @click="learnPlatform = p.value"
-                  >
-                    <UIcon :name="p.icon" class="size-4" />
-                    {{ p.label }}
-                  </button>
-                </div>
+                    <button
+                      v-for="(p, i) in platforms"
+                      :key="p.value"
+                      type="button"
+                      class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-all duration-150" :class="[
+                        learnPlatform === p.value
+                          ? 'bg-[var(--ui-bg-elevated)] text-[var(--ui-text-highlighted)]'
+                          : 'bg-transparent text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] hover:bg-[var(--ui-bg-muted)]',
+                        i === 0 ? '' : 'border-l border-[var(--ui-border)]',
+                      ]"
+                      @click="learnPlatform = p.value"
+                    >
+                      <UIcon :name="p.icon" class="size-4" />
+                      {{ p.label }}
+                    </button>
+                  </div>
                 </div>
                 <nav v-for="group in navigation" :key="group.title" aria-title="Documentation Section" class="space-y-3">
                   <h3 class="text-sm font-bold mb-3">
