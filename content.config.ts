@@ -62,12 +62,28 @@ export const content = defineContentConfig({
     skewProtection: getSubModuleCollection(NuxtSkewProtectionModule),
     aiReady: getSubModuleCollection(NuxtAiReadyModule),
     aiSearch: getSubModuleCollection(NuxtAiSearchModule),
-    learn: defineCollection(asSeoCollection({
+    learnSeoNuxt: defineCollection(asSeoCollection({
       type: 'page',
       source: {
         include: '**/*.md',
-        cwd: resolve('content/learn'),
-        prefix: '/learn',
+        cwd: resolve('content/learn-seo/nuxt'),
+        prefix: '/learn-seo/nuxt',
+      },
+      schema: z.object({
+        icon: z.string().optional(),
+        publishedAt: z.string().optional(),
+        updatedAt: z.string().optional(),
+        keywords: z.array(z.string()).optional(),
+        readTime: z.string(),
+        ogImageComponent: z.string().optional(),
+      }),
+    })),
+    learnSeoVue: defineCollection(asSeoCollection({
+      type: 'page',
+      source: {
+        include: '**/*.md',
+        cwd: resolve('content/learn-seo/vue'),
+        prefix: '/learn-seo/vue',
       },
       schema: z.object({
         icon: z.string().optional(),

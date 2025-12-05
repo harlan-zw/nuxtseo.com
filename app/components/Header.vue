@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import UIcon from '#ui/components/Icon.vue'
+import { Motion } from 'motion-v'
+import { modules } from '~~/modules'
 import { useStats } from '../composables/data'
+import { useLearnPlatform } from '../composables/learnPlatform'
 import { menu } from '../composables/nav'
 
 const { data: stats } = await useStats()
+const learnPlatform = useLearnPlatform()
+
+const platforms = [
+  { label: 'Nuxt', value: 'nuxt', icon: 'i-logos-nuxt-icon' },
+  { label: 'Vue', value: 'vue', icon: 'i-logos-vue' },
+] as const
 const route = useRoute()
 
 const nuxtSeoStars = computed(() => {
@@ -15,10 +24,31 @@ const isPro = computed(() => {
   return route.path.startsWith('/pro')
     || route.path.startsWith('/docs/skew-protection')
     || route.path.startsWith('/docs/ai-ready')
+    || route.path.startsWith('/docs/ai-search')
 })
 
 const navigation = computed(() => {
-  return menu.value.map((item) => {
+  const menuItems = [...menu.value]
+  if (isPro.value) {
+    // replace menu[1] with pro menu
+    menuItems[1] = {
+      label: 'Modules',
+      icon: 'i-carbon-3rd-party-connected',
+      children: modules.filter(m => m.slug !== 'nuxt-seo' && m.pro).map(m => ({
+        label: m.label,
+        icon: m.icon,
+        to: `/docs/${m.slug}/getting-started/introduction`,
+        disabled: m.soon,
+        class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
+        // need to pass custom module details as ui props so we can modify slot markup
+        ui: {
+          soon: m.soon,
+          pro: m.pro,
+        },
+      })),
+    }
+  }
+  return menuItems.map((item) => {
     return {
       ...item,
       title: item.label,
@@ -40,27 +70,46 @@ const navigation = computed(() => {
       <NuxtLink
         to="/"
         title="Home" aria-label="Title"
-        class="flex mr-4 items-end gap-1.5 font-bold text-base text-(--ui-text-highlighted) font-title"
+        class="flex mr-4 items-end gap-1.5 font-bold text-base text-(--ui-text-highlighted) font-title w-[150px]"
       >
         <LogoPro v-if="isPro" />
         <Logo v-else />
       </NuxtLink>
+    </template>
+    <template #default>
       <div class="hidden lg:flex items-center">
         <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[0]]" class="justify-center" />
-        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[1], menu[2]]" class="justify-center">
+        <UNavigationMenu :ui="{ viewport: 'min-w-[450px]' }" :items="[menu[1], menu[3]]" class="justify-center">
           <template #item-content="{ item }">
-            <div v-if="item.to === '/pro'">
-              <div class="text-xs px-2 pt-2">
-                <UButton variant="ghost" to="/pro" class="w-full">
-                  <LogoPro />
-                </UButton>
-              </div>
-              <div class="text-xs px-2 pt-2">
-                <span class="font-semibold text-toned">Pro Modules</span>
+            <div v-if="item.label === 'Learn SEO'" class="px-2 pt-2">
+              <div class="inline-flex rounded-md border border-[var(--ui-border)] overflow-hidden">
+                <button
+                  v-for="(p, i) in platforms"
+                  :key="p.value"
+                  type="button"
+                  class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-all duration-150" :class="[
+                    learnPlatform === p.value
+                      ? 'bg-[var(--ui-bg-elevated)] text-[var(--ui-text-highlighted)]'
+                      : 'bg-transparent text-[var(--ui-text-muted)] hover:text-[var(--ui-text)] hover:bg-[var(--ui-bg-muted)]',
+                    i === 0 ? '' : 'border-l border-[var(--ui-border)]',
+                  ]"
+                  @click="learnPlatform = p.value"
+                >
+                  <UIcon :name="p.icon" class="size-4" />
+                  {{ p.label }}
+                </button>
               </div>
             </div>
             <ul class="grid grid-cols-3 p-2 gap-2">
-              <li v-for="module in item.children" :key="module.to" class="text-center">
+              <Motion
+                v-for="(module, idx) in item.children"
+                :key="module.to"
+                as="li"
+                class="text-center"
+                :initial="{ opacity: 0, y: -8 }"
+                :animate="{ opacity: 1, y: 0 }"
+                :transition="{ duration: 0.15, delay: idx * 0.03 }"
+              >
                 <UButton variant="ghost" :to="module.to" class="w-full">
                   <div class="w-full">
                     <div class="flex items-center justify-center gap-1 w-full">
@@ -76,10 +125,11 @@ const navigation = computed(() => {
                     </div>
                   </div>
                 </UButton>
-              </li>
+              </Motion>
             </ul>
           </template>
         </UNavigationMenu>
+        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[2]]" class="justify-center" />
       </div>
     </template>
 
@@ -89,9 +139,6 @@ const navigation = computed(() => {
 
     <template #right>
       <div class="flex items-center justify-end lg:-mr-1.5 ml-3 gap-3">
-        <div class="hidden lg:block">
-          <UNavigationMenu :items="menu.slice(3)" :ui="{ viewport: 'min-w-[500px] -left-full' }" class="justify-center" />
-        </div>
         <UTooltip text="Star on GitHub">
           <UButton class="hidden sm:flex" to="https://github.com/harlan-zw/nuxt-seo" target="_blank" color="primary" variant="ghost">
             <template #leading>

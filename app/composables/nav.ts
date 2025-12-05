@@ -1,5 +1,6 @@
 import { modules } from '../../modules'
 import { mapPath } from './data'
+import { useLearnPlatform } from './learnPlatform'
 
 export function transformNavigation(res: any, doMap = true) {
   const nav = (doMap ? mapPath(res) : res) as any[]
@@ -113,6 +114,9 @@ export function transformNavigation(res: any, doMap = true) {
 // ]
 
 export const menu = computed(() => {
+  const platform = useLearnPlatform()
+  const learnBase = `/learn-seo/${platform.value}`
+
   return [
     {
       label: 'Get Started',
@@ -136,47 +140,51 @@ export const menu = computed(() => {
         },
       })),
     },
-
     {
       label: 'Pro',
       icon: 'i-ph-sparkle-duotone',
       to: '/pro',
-      children: modules.filter(m => m.pro).map(m => ({
-        label: m.label,
-        icon: m.icon,
-        to: `/docs/${m.slug}/getting-started/introduction`,
-        disabled: m.soon,
-        class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
-        // need to pass custom module details as ui props so we can modify slot markup
-        ui: {
-          soon: m.soon,
-          pro: m.pro,
-        },
-      })),
+      // children: modules.filter(m => m.pro).map(m => ({
+      //   label: m.label,
+      //   icon: m.icon,
+      //   to: `/docs/${m.slug}/getting-started/introduction`,
+      //   disabled: m.soon,
+      //   class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
+      //   // need to pass custom module details as ui props so we can modify slot markup
+      //   ui: {
+      //     soon: m.soon,
+      //     pro: m.pro,
+      //   },
+      // })),
     },
     {
       label: 'Learn SEO',
       icon: 'i-ph-books-duotone',
       children: [
         {
-          label: 'Mastering Meta Management',
+          label: 'Mastering Meta',
           icon: 'i-heroicons-h1-solid',
-          to: '/learn/mastering-meta',
+          to: `${learnBase}/mastering-meta`,
         },
         {
-          label: 'Controlling Web Crawlers',
+          label: 'Controlling Crawlers',
           icon: 'i-ph-robot-duotone',
-          to: '/learn/controlling-crawlers',
+          to: `${learnBase}/controlling-crawlers`,
         },
         {
           label: 'Launch & Listen',
-          icon: 'i-tabler-slashes',
-          to: '/learn/launch-and-listen',
+          icon: 'i-ph-rocket-duotone',
+          to: `${learnBase}/launch-and-listen`,
         },
         {
           label: 'Routes & Rendering',
           icon: 'i-carbon-recording',
-          to: '/learn/routes-and-rendering',
+          to: `${learnBase}/routes-and-rendering`,
+        },
+        {
+          label: 'Staying Secure',
+          icon: 'i-carbon-security',
+          to: `${learnBase}/security`,
         },
       ],
     },

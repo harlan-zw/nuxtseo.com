@@ -112,7 +112,7 @@ They use the greenest of the greenfield: Nuxt v4, [Nuxt UI v3](https://ui3.nuxt.
 
 You'll also find some new features:
 - [Releases](/releases) page to see what's new in each version.
-- New learning resources to help you get started withtechnical SEO, check out the [Controlling Web Crawlers](learn/controlling-crawlers) and [Page Titles](/learn/mastering-meta/titles) guides.
+- New learning resources to help you get started with technical SEO, check out the [Controlling Web Crawlers](/learn-seo/nuxt/controlling-crawlers) and [Page Titles](/learn-seo/nuxt/mastering-meta/titles) guides.
 - The ability to switch majors on the sidebar, this will be possible for future major versions as the content structure has changed to support this.
 - Feedback buttons on every docs page, let me know how I'm doing!
 

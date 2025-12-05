@@ -30,7 +30,7 @@ export default defineNuxtConfig({
               .then(buffer => JSON.parse(buffer.toString()))
             const preSize = routes.exclude.length
             routes.exclude = routes.exclude.filter((path) => {
-              if (path.startsWith('/docs') || path.startsWith('/learn')) {
+              if (path.startsWith('/docs') || path.startsWith('/learn-seo')) {
                 return false
               }
               if (path.startsWith('/skew-protection') || path.startsWith('/nuxt-seo') || path.startsWith('/experiments') || path.startsWith('/og-image') || path.startsWith('/schema-org') || path.startsWith('/sitemap') || path.startsWith('/robots') || path.startsWith('/site-config') || path.startsWith('/link-checker')) {
@@ -41,8 +41,8 @@ export default defineNuxtConfig({
             if (!routes.exclude.includes('/docs/*')) {
               routes.exclude.push('/docs/*')
             }
-            if (!routes.exclude.includes('/learn/*')) {
-              routes.exclude.push('/learn/*')
+            if (!routes.exclude.includes('/learn-seo/*')) {
+              routes.exclude.push('/learn-seo/*')
             }
             if (preSize !== routes.exclude.length) {
               logger.info(`Optimizing CloudFlare \`_routes.json\` for prerendered Nuxt SEO ${gray(`(${100 - Math.round(routes.exclude.length / preSize * 100)}% smaller)`)}`)
@@ -63,10 +63,6 @@ export default defineNuxtConfig({
     xslColumns: [
       { label: 'URL', width: '100%' },
     ],
-  },
-
-  aiReady: {
-    bulkRoute: false,
   },
 
   ui: {
@@ -382,10 +378,10 @@ export default defineNuxtConfig({
     '/docs/nuxt-seo/guides/default-meta': { redirect: { to: '/docs/seo-utils/guides/default-meta', statusCode: 301 } },
     '/docs/nuxt-seo/guides/fallback-title': { redirect: { to: '/docs/seo-utils/guides/fallback-title', statusCode: 301 } },
     '/docs/nuxt-seo/guides/redirect-canonical': { redirect: { to: '/docs/seo-utils/guides/canonical-url', statusCode: 301 } },
-    '/docs/nuxt-seo/guides/title-templates': { redirect: { to: '/learn/mastering-titles-in-nuxt', statusCode: 301 } },
-    '/docs/nuxt-seo/guides/trailing-slashes': { redirect: { to: '/learn/trailing-slashes', statusCode: 301 } },
+    '/docs/nuxt-seo/guides/title-templates': { redirect: { to: '/learn-seo/nuxt/mastering-meta/titles', statusCode: 301 } },
+    '/docs/nuxt-seo/guides/trailing-slashes': { redirect: { to: '/learn-seo/nuxt/routes-and-rendering/trailing-slashes', statusCode: 301 } },
     '/docs/nuxt-seo/guides/i18n': { redirect: { to: '/docs/nuxt-seo/getting-started/introduction', statusCode: 301 } },
-    '/docs/nuxt-seo/seo-guides/going-live': { redirect: { to: '/learn/going-live', statusCode: 301 } },
+    '/docs/nuxt-seo/seo-guides/going-live': { redirect: { to: '/learn-seo/nuxt/launch-and-listen/going-live', statusCode: 301 } },
     '/docs/nuxt-seo/api/breadcrumbs': { redirect: { to: '/docs/seo-utils/api/breadcrumbs', statusCode: 301 } },
     '/docs/nuxt-seo/api/config': { redirect: { to: '/docs/nuxt-seo/getting-started/introduction', statusCode: 301 } },
     '/docs/nuxt-seo/guides/configuring-modules': { redirect: { to: '/docs/nuxt-seo/guides/using-the-modules', statusCode: 301 } },
@@ -396,6 +392,18 @@ export default defineNuxtConfig({
     '/docs/robots/guides/i18n': { redirect: { to: '/docs/robots/advanced/i18n', statusCode: 301 } },
     '/docs/robots/guides/content': { redirect: { to: '/docs/robots/advanced/content', statusCode: 301 } },
     '/docs/robots/guides/yandex': { redirect: { to: '/docs/robots/advanced/yandex', statusCode: 301 } },
+
+    // learn → learn-seo/nuxt redirects
+    '/learn': { redirect: { to: '/learn-seo/nuxt', statusCode: 301 } },
+    '/learn/mastering-meta': { redirect: { to: '/learn-seo/nuxt/mastering-meta', statusCode: 301 } },
+    '/learn/mastering-meta/**': { redirect: { to: '/learn-seo/nuxt/mastering-meta/**', statusCode: 301 } },
+    '/learn/controlling-crawlers': { redirect: { to: '/learn-seo/nuxt/controlling-crawlers', statusCode: 301 } },
+    '/learn/controlling-crawlers/**': { redirect: { to: '/learn-seo/nuxt/controlling-crawlers/**', statusCode: 301 } },
+    '/learn/routes-and-rendering': { redirect: { to: '/learn-seo/nuxt/routes-and-rendering', statusCode: 301 } },
+    '/learn/routes-and-rendering/**': { redirect: { to: '/learn-seo/nuxt/routes-and-rendering/**', statusCode: 301 } },
+    '/learn/launch-and-listen': { redirect: { to: '/learn-seo/nuxt/launch-and-listen', statusCode: 301 } },
+    '/learn/launch-and-listen/**': { redirect: { to: '/learn-seo/nuxt/launch-and-listen/**', statusCode: 301 } },
+    '/learn/security': { redirect: { to: '/learn-seo/nuxt/security', statusCode: 301 } },
   },
 
   css: [

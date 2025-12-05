@@ -41,7 +41,7 @@ When we make a search on Google we want this behavior:
 - `nuxt robots v2` - lands on the v2 documentation
 - `nuxt robots` - lands on the latest version of the documentation
 
-The strongest signal to search engines is the URL structure, but we can also [control search crawlers](/learn/controlling-crawlers).
+The strongest signal to search engines is the URL structure, but we can also [control search crawlers](/learn-seo/nuxt/controlling-crawlers).
 
 ### URL Structure
 
@@ -83,7 +83,7 @@ https://nodejs.org/docs/latest/api/documentation.html -> canonicals to https://n
 
 ## Canonical Non-Latest Versions
 
-- **[Canonical](/learn/controlling-crawlers/canonical-urls):** Tells search engines which version of a page to index.
+- **[Canonical](/learn-seo/nuxt/controlling-crawlers/canonical-urls):** Tells search engines which version of a page to index.
 
 There is some debate on whether to canonical non-latest versions to the latest version or not.
 
@@ -108,7 +108,7 @@ useHead({
 
 ## Noindexing Experimental Versions
 
-- **[Noindex](/learn/controlling-crawlers/meta-tags):** Prevents search engines from indexing a page.
+- **[Noindex](/learn-seo/nuxt/controlling-crawlers/meta-tags):** Prevents search engines from indexing a page.
 
 When working on experimental versions such as `beta`, `alpha`, of the docs, it's usually safest to just avoid these ending up in the
 search results. This can be done by adding a `noindex` tag to the page.
@@ -140,13 +140,13 @@ useRobotsRule(computed(() => route.params.version !== 'beta'))
 
 ## Titles
 
-- **[Titles](/learn/mastering-page-titles):** The title of a page is a strong signal to search engines about the content.
+- **[Titles](/learn-seo/nuxt/mastering-meta/titles):** The title of a page is a strong signal to search engines about the content.
 
 When it comes to titles and descriptions, it's important to include the version number in the title and description of the page.
 
 This helps users quickly identify which version of the docs they are on and helps search engines understand the content.
 
-The easiest way to set this up naturally and dynamically is to use [Title Templates](/learn/mastering-page-titles#template-params).
+The easiest way to set this up naturally and dynamically is to use [Title Templates](/learn-seo/nuxt/mastering-meta/titles#template-params).
 
 ```vue [pages/docs/[version]/[...slug].vue]
 <script lang="ts" setup>
