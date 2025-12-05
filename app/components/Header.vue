@@ -30,6 +30,10 @@ const isPro = computed(() => {
 const navigation = computed(() => {
   const menuItems = [...menu.value]
   if (isPro.value) {
+    menuItems[0] = {
+      ...menuItems[0],
+      to: '/docs/nuxt-seo/pro/getting-started',
+    }
     // replace menu[1] with pro menu
     menuItems[1] = {
       label: 'Modules',
@@ -78,8 +82,8 @@ const navigation = computed(() => {
     </template>
     <template #default>
       <div class="hidden lg:flex items-center">
-        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[0]]" class="justify-center" />
-        <UNavigationMenu :ui="{ viewport: 'min-w-[450px]' }" :items="[menu[1], menu[3]]" class="justify-center">
+        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[navigation[0]]" class="justify-center" />
+        <UNavigationMenu :ui="{ viewport: 'min-w-[450px]' }" :items="[navigation[1], navigation[2]]" class="justify-center">
           <template #item-content="{ item }">
             <div v-if="item.label === 'Learn SEO'" class="px-2 pt-2">
               <div class="inline-flex rounded-md border border-[var(--ui-border)] overflow-hidden">
@@ -129,7 +133,7 @@ const navigation = computed(() => {
             </ul>
           </template>
         </UNavigationMenu>
-        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[menu[2]]" class="justify-center" />
+        <UNavigationMenu :ui="{ viewport: 'min-w-[400px]' }" :items="[navigation.slice(-1)]" class="justify-center" />
       </div>
     </template>
 

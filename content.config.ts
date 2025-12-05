@@ -5,7 +5,7 @@ import { asSeoCollection } from '@nuxtjs/seo/content'
 import { relative, resolve } from 'pathe'
 import { z } from 'zod'
 import { logger } from './logger'
-import { LinkCheckerModule, NuxtAiReadyModule, NuxtAiSearchModule, NuxtSEO, NuxtSkewProtectionModule, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule } from './modules'
+import { LinkCheckerModule, NuxtAiReadyModule, NuxtAiSearchModule, NuxtSkewProtectionModule, OgImageModule, RobotsModule, SchemaOrgModule, SeoUtilsModule, SiteConfigModule, SitemapModule } from './modules'
 
 const schema = z.object({
   new: z.boolean().optional(),
@@ -51,7 +51,22 @@ logger.info(`Using GitHub Access Token ending with ${process.env.NUXT_GITHUB_ACC
 
 export const content = defineContentConfig({
   collections: {
-    nuxtSeo: getSubModuleCollection(NuxtSEO),
+    nuxtSeo: defineCollection(asSeoCollection({
+      type: 'page',
+      source: {
+        include: '**/*.md',
+        cwd: resolve('content/nuxt-seo'),
+        prefix: '/docs/nuxt-seo',
+      },
+      schema: z.object({
+        icon: z.string().optional(),
+        publishedAt: z.string().optional(),
+        updatedAt: z.string().optional(),
+        keywords: z.array(z.string()).optional(),
+        readTime: z.string(),
+        ogImageComponent: z.string().optional(),
+      }),
+    })),
     robots: getSubModuleCollection(RobotsModule),
     sitemap: getSubModuleCollection(SitemapModule),
     ogImage: getSubModuleCollection(OgImageModule),

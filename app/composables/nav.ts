@@ -141,23 +141,6 @@ export const menu = computed(() => {
       })),
     },
     {
-      label: 'Pro',
-      icon: 'i-ph-sparkle-duotone',
-      to: '/pro',
-      // children: modules.filter(m => m.pro).map(m => ({
-      //   label: m.label,
-      //   icon: m.icon,
-      //   to: `/docs/${m.slug}/getting-started/introduction`,
-      //   disabled: m.soon,
-      //   class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
-      //   // need to pass custom module details as ui props so we can modify slot markup
-      //   ui: {
-      //     soon: m.soon,
-      //     pro: m.pro,
-      //   },
-      // })),
-    },
-    {
       label: 'Learn SEO',
       icon: 'i-ph-books-duotone',
       children: [
@@ -187,6 +170,23 @@ export const menu = computed(() => {
           to: `${learnBase}/security`,
         },
       ],
+    },
+    {
+      label: 'Pro',
+      icon: 'i-ph-sparkle-duotone',
+      to: '/pro',
+      // children: modules.filter(m => m.pro).map(m => ({
+      //   label: m.label,
+      //   icon: m.icon,
+      //   to: `/docs/${m.slug}/getting-started/introduction`,
+      //   disabled: m.soon,
+      //   class: m.soon ? 'opacity-30 cursor-not-allowed' : '',
+      //   // need to pass custom module details as ui props so we can modify slot markup
+      //   ui: {
+      //     soon: m.soon,
+      //     pro: m.pro,
+      //   },
+      // })),
     },
     // {
     //   label: 'Recipes',
