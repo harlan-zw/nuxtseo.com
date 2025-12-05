@@ -5,9 +5,9 @@ defineProps<Partial<NuxtSEOModule>>()
 </script>
 
 <template>
-  <div class="showcase-card relative h-full">
+  <div class="w-full flex items-center justify-between h-full lg:bg-white/3 lg:border border-[var(--ui-border)] lg:dark:bg-gray-900/10 mx-auto rounded-lg relative">
     <div class="h-full">
-      <div class="group relative border hover:border-blue-400 transition rounded-xl overflow-hidden h-full">
+      <div class="group relative transition rounded-xl overflow-hidden h-full">
         <div
           class="h-48 relative flex items-center justify-center bg-no-repeat bg-cover border-b-2 border-neutral-100/30 dark:border-neutral-900/10"
           style="background-image: url('/grid.png')"

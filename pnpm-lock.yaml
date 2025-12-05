@@ -120,8 +120,8 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1(@parcel/watcher@2.5.1)(@types/node@24.10.1)(@vue/compiler-sfc@3.5.25)(better-sqlite3@12.5.0)(cac@6.7.14)(db0@0.3.4(better-sqlite3@12.5.0))(eslint@9.39.1(jiti@2.6.1))(ioredis@5.8.2)(lightningcss@1.30.2)(magicast@0.5.1)(optionator@0.9.4)(rollup@4.53.3)(terser@5.44.1)(typescript@5.9.3)(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))(yaml@2.8.2)
       nuxt-ai-ready:
-        specifier: ^0.2.1
-        version: 0.2.2(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
+        specifier: ^0.2.4
+        version: 0.2.4(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
       nuxt-ai-search:
         specifier: ^0.1.0
         version: 0.1.0(@nuxt/kit@4.2.1(magicast@0.5.1))(better-sqlite3@12.5.0)(h3@1.15.4)(magicast@0.5.1)(nuxt-site-config@3.2.11(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))(zod@4.1.13)
@@ -162,8 +162,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.1.17)
       wrangler:
-        specifier: ^4.52.1
-        version: 4.52.1
+        specifier: ^4.53.0
+        version: 4.53.0
       zod:
         specifier: ^4.1.13
         version: 4.1.13
@@ -495,11 +495,11 @@ packages:
     resolution: {integrity: sha512-Nu8ahitGFFJztxUml9oD/DLb7Z28C8cd8F46IVQ7y5Btz575pvMY8AqZsXkX7Gds29eCKdMgIHjIvzskHgPSFg==}
     engines: {node: '>=18.0.0'}
 
-  '@cloudflare/unenv-preset@2.7.12':
-    resolution: {integrity: sha512-SIBo+k58R9OyBsxF1jL6GdL7XHbzatT86c0be+UY5v5tg6TAuJ1/2QsRuC3pHgKVHile1HcJqEEORoS9hv8hNw==}
+  '@cloudflare/unenv-preset@2.7.13':
+    resolution: {integrity: sha512-NulO1H8R/DzsJguLC0ndMuk4Ufv0KSlN+E54ay9rn9ZCQo0kpAPwwh3LhgpZ96a3Dr6L9LqW57M4CqC34iLOvw==}
     peerDependencies:
       unenv: 2.0.0-rc.24
-      workerd: ^1.20251125.0
+      workerd: ^1.20251202.0
     peerDependenciesMeta:
       workerd:
         optional: true
@@ -2656,8 +2656,8 @@ packages:
     peerDependencies:
       vue: ^2.7.0 || ^3.0.0
 
-  '@toon-format/toon@2.0.1':
-    resolution: {integrity: sha512-0oohzByDG/VTvsPT7iCfUdoB6yndopkPulh9Kk76fhV6YReVSGqr6ni5EMSxn3umNyfwylI0nOjLYtjJTIiT0w==}
+  '@toon-format/toon@2.1.0':
+    resolution: {integrity: sha512-JwWptdF5eOA0HaQxbKAzkpQtR4wSWTEfDlEy/y3/4okmOAX1qwnpLZMmtEWr+ncAhTTY1raCKH0kteHhSXnQqg==}
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -5486,8 +5486,8 @@ packages:
     resolution: {integrity: sha512-WXbAa4X7GUqZgkRLXgZL5pmM2CoESExNLL64qRI/8oxq10VFpd/eFwRpzB5Yo5GZ3aCb4X7vhWo/vEC8xjMs+g==}
     hasBin: true
 
-  mdream@0.15.1:
-    resolution: {integrity: sha512-9pN92k94ckn3jWRaYwk7Ezz+9OFBZ+3xZZHRVb2KeaRTT6my+0TGWrFN8x9HrPflynExlb5vyD12QSwI4XpGww==}
+  mdream@0.15.2:
+    resolution: {integrity: sha512-+eGIaOhJR56tY2/edKd4GNnZy3ClU9/pe9AgHKg9bD4A7zU1L4wGBu89DXplweJMLrb13LfGO++t5b4R6b27MA==}
     hasBin: true
 
   mdurl@2.0.0:
@@ -5635,8 +5635,8 @@ packages:
     resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
     hasBin: true
 
-  miniflare@4.20251202.0:
-    resolution: {integrity: sha512-Pa5iBAVzzVT/yr7rcyr75ETm5IGCpdT61foGx+6jDj+vzISNfWZgEcSxWk1nlJboJumUJ10kC498hQudpdbDWg==}
+  miniflare@4.20251202.1:
+    resolution: {integrity: sha512-cRp2QNgnt9wpLMoNs4MOzzomyfe9UTS9sPRxIpUvxMl+mweCZ0FHpWWQvCnU7wWlfAP8VGZrHwqSsV5ERA6ahQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -5814,8 +5814,8 @@ packages:
   nuxt-ai-ready@0.0.3:
     resolution: {integrity: sha512-zmKdn8PUboEDjtViotJhjbRkJUZw+Gx4M0xw6G8o5x+nzaznGjK4p5He7qz2ua6LnIv9pxY7TFBlGToVcStzlg==}
 
-  nuxt-ai-ready@0.2.2:
-    resolution: {integrity: sha512-jXTTEWz2DYXji0Zn58lUr+U2X+HFyIHGFamGd1rqCBdyUGXjbI8WiXYc7HEOm9PIDR6PwPmqhr75+CWeuBXGpw==}
+  nuxt-ai-ready@0.2.4:
+    resolution: {integrity: sha512-JvJkti/hUQS6K45ZeCYbdyzfCsHBcGeGPAlXIUijO0inYjOs2PKLgHXAp/Xl33u74hx64fHYRtcG3MWFC4OCWw==}
 
   nuxt-ai-search@0.1.0:
     resolution: {integrity: sha512-N0JzzhCcAtCuM5AT4R5jUnORgav55UZ/Gb9XXTVHWfd7v7/CIDSmxLGbPXYcwLto3VDr7GfL1T8R8oKf+oA3yw==}
@@ -7709,8 +7709,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@4.52.1:
-    resolution: {integrity: sha512-rIzDxzPnLAaqBF+SdHGd9Az0ELEWtIBwPp5diCR58p2F4C+KgNGGpPMFswMntuViQ2RKRgGbk4jIzStJoUUfjQ==}
+  wrangler@4.53.0:
+    resolution: {integrity: sha512-/wvnHlRnlHsqaeIgGbmcEJE5NFYdTUWHCKow+U5Tv2XwQXI9vXUqBwCLAGy/BwqyS5nnycRt2kppqCzgHgyb7Q==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
@@ -8266,7 +8266,7 @@ snapshots:
     dependencies:
       mime: 3.0.0
 
-  '@cloudflare/unenv-preset@2.7.12(unenv@2.0.0-rc.24)(workerd@1.20251202.0)':
+  '@cloudflare/unenv-preset@2.7.13(unenv@2.0.0-rc.24)(workerd@1.20251202.0)':
     dependencies:
       unenv: 2.0.0-rc.24
     optionalDependencies:
@@ -10828,7 +10828,7 @@ snapshots:
       '@tanstack/virtual-core': 3.13.12
       vue: 3.5.25(typescript@5.9.3)
 
-  '@toon-format/toon@2.0.1': {}
+  '@toon-format/toon@2.1.0': {}
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
@@ -14156,7 +14156,7 @@ snapshots:
       pathe: 2.0.3
       tinyglobby: 0.2.15
 
-  mdream@0.15.1:
+  mdream@0.15.2:
     dependencies:
       cac: 6.7.14
       pathe: 2.0.3
@@ -14411,7 +14411,7 @@ snapshots:
 
   mini-svg-data-uri@1.4.4: {}
 
-  miniflare@4.20251202.0:
+  miniflare@4.20251202.1:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       acorn: 8.14.0
@@ -14696,13 +14696,13 @@ snapshots:
       - magicast
       - vue
 
-  nuxt-ai-ready@0.2.2(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
+  nuxt-ai-ready@0.2.4(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3)):
     dependencies:
       '@nuxt/kit': 4.2.1(magicast@0.5.1)
-      '@toon-format/toon': 2.0.1
+      '@toon-format/toon': 2.1.0
       consola: 3.4.2
       defu: 6.1.4
-      mdream: 0.15.1
+      mdream: 0.15.2
       minimatch: 10.1.1
       nuxt-site-config: 3.2.11(h3@1.15.4)(magicast@0.5.1)(vue@3.5.25(typescript@5.9.3))
       pathe: 2.0.3
@@ -17108,13 +17108,13 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20251202.0
       '@cloudflare/workerd-windows-64': 1.20251202.0
 
-  wrangler@4.52.1:
+  wrangler@4.53.0:
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.1
-      '@cloudflare/unenv-preset': 2.7.12(unenv@2.0.0-rc.24)(workerd@1.20251202.0)
+      '@cloudflare/unenv-preset': 2.7.13(unenv@2.0.0-rc.24)(workerd@1.20251202.0)
       blake3-wasm: 2.1.5
       esbuild: 0.27.0
-      miniflare: 4.20251202.0
+      miniflare: 4.20251202.1
       path-to-regexp: 6.3.0
       unenv: 2.0.0-rc.24
       workerd: 1.20251202.0

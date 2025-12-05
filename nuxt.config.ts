@@ -70,6 +70,9 @@ export default defineNuxtConfig({
   },
 
   ui: {
+    experimental: {
+      componentDetection: true,
+    },
     mdc: true,
     content: true,
     theme: {

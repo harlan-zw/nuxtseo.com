@@ -3,6 +3,7 @@ import type { NuxtSEOModule } from '@nuxtjs/seo/const'
 import { titleCase } from 'scule'
 import { joinURL } from 'ufo'
 import { getLastPathSegment, getPathSegments } from '~~/utils/urls'
+import { transformNavigation } from '~/composables/nav'
 
 definePageMeta({
   layout: 'docs',
@@ -45,7 +46,10 @@ useHead({
   },
 })
 
-const headline = computed(() => titleCase(getLastPathSegment(getPathSegments(route.path, route.path.split('/').length - 2))))
+const headline = computed(() => {
+  const path = titleCase(getLastPathSegment(getPathSegments(route.path, route.path.split('/').length - 2)))
+  return transformNavigation([{ ...route }], false)[0]?.title || path
+})
 
 defineOgImageComponent('Module', {
   title: page.value?.title || '',
@@ -73,7 +77,7 @@ const repoLinks = computed(() => [
 
 <template>
   <div class="flex justify-between w-full">
-    <div class="xl:mx-auto max-w-[66ch]">
+    <div class="xl:mx-auto w-full max-w-[66ch]">
       <UPageHeader
         :title="page.title" :headline="headline" class="text-balance pt-4"
         :ui="{ title: 'leading-normal' }"
@@ -119,9 +123,9 @@ const repoLinks = computed(() => [
       </UPageBody>
     </div>
 
-    <div v-if="page?.body?.toc?.links?.length > 1" class="hidden xl:block max-w-[300px] w-full flex justify-end">
+    <div class="hidden xl:block max-w-[300px] w-full flex justify-end">
       <div class="pt-11 pl-10 gap-5 flex flex-col">
-        <div>
+        <div v-if="page?.body?.toc?.links?.length > 1">
           <div class="mb-5 flex items-center gap-2 text-[var(--ui-text-accented)]">
             <UIcon name="i-tabler-align-left-2" class="size-4" />
             <div class="text-xs font-medium">

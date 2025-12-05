@@ -23,64 +23,7 @@ const {
 } = await useLazyAsyncData(() => `navigation-${navCollection.value}`, () => queryCollectionNavigation(navCollection.value!), {
   default: () => [],
   watch: [navCollection],
-  async transform(res) {
-    const nav = mapPath(res)
-    return (nav || []).map((m) => {
-      if (m.path.includes('/api')) {
-        m.icon = 'i-logos-nuxt-icon'
-        m.title = 'Nuxt API'
-      }
-      else if (m.path.includes('/nitro-api')) {
-        m.icon = 'i-unjs-nitro'
-        m.title = 'Nitro API'
-      }
-      else if (m.path.includes('/releases')) {
-        m.icon = 'i-noto-sparkles'
-        m.title = 'Releases'
-      }
-      else if (m.path.includes('/migration-guide')) {
-        m.icon = 'i-noto-globe-with-meridians'
-        m.title = 'Migration Guides'
-      }
-      else if (m.path.includes('/guides')) {
-        m.title = 'Core Concepts'
-      }
-      if (m.children?.length) {
-        m.children = m.children.map((c) => {
-          if (c.children?.length === 1) {
-            c = c.children[0]
-          }
-          return c
-        })
-        m.children = m.children.map((c) => {
-          if (c.path.includes('/api/config')) {
-            c.icon = 'i-vscode-icons-file-type-typescript-official'
-            c.title = 'nuxt.config.ts'
-          }
-          else if (c.path.includes('/api/schema')) {
-            c.icon = 'i-vscode-icons-file-type-typescript-official'
-            c.title = 'runtime/types.ts'
-          }
-          else if (c.title.endsWith('()')) {
-            c.html = true
-            const [fnName] = c.title.split('()')
-            c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span style="--shiki-light: #6F42C1; --shiki-default: #6F42C1; --shiki-dark: #82AAFF;">${fnName}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #BABED8;">()</span></code>`
-          }
-          else if (c.title.startsWith('<') && c.title.endsWith('>') && !c.title.includes('<code')) {
-            const inner = c.title.slice(1, -1)
-            c.html = true
-            c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span class="line" line="2"><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;">  &lt;</span><span style="--shiki-light: #22863A; --shiki-default: #22863A; --shiki-dark: #F07178;">${inner}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;"> /&gt;
-</span></span></code>`
-          }
-          if (c.children?.length === 1) {
-            c = c.children[0]
-          }
-          return c
-        })
-      }
-      return m
-    })
-  },
+  transform: transformNavigation,
 })
 provide('search', search)
 provide('navigation', navigation)
@@ -96,15 +39,15 @@ const subSectionLinks = computed(() => {
   }
   return [
     {
-      label: 'Guides',
+      label: 'User Guides',
       to: `/docs/${activeModule.value.slug}/getting-started/introduction`,
-      active: !route.path.startsWith(`/docs/${activeModule.value.slug}/releases`) && !route.path.startsWith(`/docs/${activeModule.value.slug}/api`),
+      active: !route.path.startsWith(`/docs/${activeModule.value.slug}/releases`) && !route.path.startsWith(`/docs/${activeModule.value.slug}/api`) && !route.path.startsWith(`/docs/${activeModule.value.slug}/nitro-api`),
     },
     {
       label: 'API',
       icon: 'i-heroicons-code',
       to: navigation.value.find(m => m.path.endsWith('/api'))?.children?.[0]?.path,
-      active: route.path.startsWith(`/docs/${activeModule.value.slug}/api`),
+      active: route.path.startsWith(`/docs/${activeModule.value.slug}/api`) || route.path.startsWith(`/docs/${activeModule.value.slug}/nitro-api`),
     },
     {
       label: 'Releases',
@@ -231,7 +174,7 @@ const toolbarQuery = ref(null)
             <div class="max-w-[1400px] mx-auto lg:pt-5">
               <UPage :ui="{ left: 'lg:col-span-3 xl:col-span-2', center: 'col-span-5 lg:col-span-7 xl:col-span-8' }">
                 <template #left>
-                  <UPageAside class="max-w-[300px] pt-8">
+                  <UPageAside class="max-w-[300px] lg:max-h-[calc(100vh-150px)] pt-8">
                     <DocsSidebarHeader :key="`${activeModule?.slug || ''}-${navigation?.length || 0}`" />
                   </UPageAside>
                 </template>

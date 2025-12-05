@@ -1,4 +1,85 @@
 import { modules } from '../../modules'
+import { mapPath } from './data'
+
+export function transformNavigation(res: any, doMap = true) {
+  const nav = (doMap ? mapPath(res) : res) as any[]
+  return (nav || []).map((m) => {
+    if (m.path.includes('/api')) {
+      m.icon = 'i-logos-nuxt-icon'
+      m.title = 'Nuxt API'
+    }
+    else if (m.path.includes('/nitro-api')) {
+      m.icon = 'i-unjs-nitro'
+      m.title = 'Nitro API'
+    }
+    else if (m.path.includes('/releases')) {
+      m.icon = 'i-noto-sparkles'
+      m.title = 'Releases'
+    }
+    else if (m.path.includes('/migration-guide')) {
+      m.icon = 'i-noto-globe-with-meridians'
+      m.title = 'Migration Guides'
+    }
+    else if (m.path.includes('/guides')) {
+      m.title = 'Core Concepts'
+    }
+    if (m.children?.length) {
+      m.children = m.children.map((c) => {
+        if (c.children?.length === 1) {
+          c = c.children[0]
+        }
+        return c
+      })
+      m.children = m.children.map((c) => {
+        if (c.path.includes('/api/config')) {
+          c.icon = 'i-vscode-icons-file-type-typescript-official'
+          c.title = 'nuxt.config.ts'
+        }
+        if (c.path.endsWith('hooks')) {
+          c.icon = 'i-carbon-webhook'
+          c.iconUi = 'opacity-75'
+        }
+        else if (c.path.includes('/api/schema')) {
+          c.icon = 'i-vscode-icons-file-type-typescript-official'
+          c.title = 'runtime/types.ts'
+        }
+        else if (c.title.endsWith('()')) {
+          c.html = true
+          const [fnName] = c.title.split('()')
+          c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span style="--shiki-light: #6F42C1; --shiki-default: #6F42C1; --shiki-dark: #82AAFF;">${fnName}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #BABED8;">()</span></code>`
+        }
+        else if (c.title.startsWith('<') && c.title.endsWith('>') && !c.title.includes('<code')) {
+          const inner = c.title.slice(1, -1)
+          c.html = true
+          c.title = `<code class="language-ts shiki shiki-themes github-light github-light material-theme-palenight" language="ts"><span class="line" line="2"><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;">  &lt;</span><span style="--shiki-light: #22863A; --shiki-default: #22863A; --shiki-dark: #F07178;">${inner}</span><span style="--shiki-light: #24292E; --shiki-default: #24292E; --shiki-dark: #89DDFF;"> /&gt;
+</span></span></code>`
+        }
+        if (c.children?.length === 1) {
+          c = c.children[0]
+        }
+        return c
+      })
+      // make sure childen ending in hooks are always last
+      m.children.sort((a, b) => {
+        if (a.path.endsWith('hooks') && !b.path.endsWith('hooks')) {
+          return 1
+        }
+        if (!a.path.endsWith('hooks') && b.path.endsWith('hooks')) {
+          return -1
+        }
+        // always sort functions alphabetically top (if they include ()), should be first
+        if (a.title.includes('()') && !b.title.includes('()')) {
+          return -1
+        }
+        if (!a.title.includes('()') && b.title.includes('()')) {
+          return 1
+        }
+        return 0
+      })
+    }
+    return m
+  })
+}
 
 // const ecosystemLinks = [
 //   {

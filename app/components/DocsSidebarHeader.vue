@@ -32,7 +32,12 @@ const bottom = computed(() => {
   if (['migration-guide', 'releases'].includes(getLastPathSegment(getPathSubSection(route.path)))) {
     return [{ title: 'Changelog', to: `/docs/${activeModule.value.slug}/releases/changelog`, icon: 'i-carbon-book' }, ...links]
   }
-  return links
+  return [
+    // find getting started
+    links.find(l => getLastPathSegment(l.path) === 'getting-started'),
+    links.find(l => getLastPathSegment(l.path) === 'guides'),
+    ...links.filter(l => getLastPathSegment(l.path) !== 'guides' && getLastPathSegment(l.path) !== 'getting-started'),
+  ].filter(Boolean)
 })
 
 const topLinks = computed(() => [
@@ -93,7 +98,9 @@ const ui = computed(() => tv({ extend: tv(contentNavTheme), ...appConfig.ui?.con
                 >
                   <div class="flex items-center gap-2">
                     <UIcon
-                      v-if="link.icon" :name="link.icon"
+                      v-if="link.icon"
+                      :name="link.icon"
+                      :class="link.iconUi"
                       class="w-4 h-4 transition-all hover:brightness-50 brightness-120"
                     />
                     <div :class="link.children?.length ? 'text-sm font-bold' : ''">
