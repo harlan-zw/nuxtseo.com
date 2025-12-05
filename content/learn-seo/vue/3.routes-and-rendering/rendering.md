@@ -90,9 +90,9 @@ HTML generated once at build time. Use tools like VitePress or Vite SSG plugin.
 **Vite SSG example:**
 
 ```ts
+import vue from '@vitejs/plugin-vue'
 // vite.config.ts
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
 import ViteSSG from 'vite-ssg'
 
 export default defineConfig({

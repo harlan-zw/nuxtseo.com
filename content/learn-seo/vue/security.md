@@ -69,9 +69,9 @@ app.use(helmet({
   frameguard: { action: 'deny' },
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"]
+      defaultSrc: ['\'self\''],
+      styleSrc: ['\'self\'', '\'unsafe-inline\''],
+      scriptSrc: ['\'self\'']
     }
   },
   referrerPolicy: { policy: 'strict-origin-when-cross-origin' }
@@ -150,8 +150,8 @@ Identify legitimate crawlers through:
 
 ```ts
 // utils/verify-crawler.js
-import dns from 'dns'
-import { promisify } from 'util'
+import dns from 'node:dns'
+import { promisify } from 'node:util'
 
 const reverse = promisify(dns.reverse)
 
@@ -220,11 +220,13 @@ app.use(helmet({
   // Control referrer information
   referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   // Enable strict CSP in production
-  contentSecurityPolicy: process.env.NODE_ENV === 'production' ? {
-    directives: {
-      defaultSrc: ["'self'"]
-    }
-  } : false
+  contentSecurityPolicy: process.env.NODE_ENV === 'production'
+    ? {
+        directives: {
+          defaultSrc: ['\'self\'']
+        }
+      }
+    : false
 }))
 ```
 
@@ -279,7 +281,8 @@ app.use((req, res, next) => {
   // Add slight delays to automated requests
   if (isBot(req.headers['user-agent'])) {
     setTimeout(next, 500)
-  } else {
+  }
+  else {
     next()
   }
 })

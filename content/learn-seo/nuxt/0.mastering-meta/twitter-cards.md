@@ -165,8 +165,7 @@ Set different cards for different pages:
 <!-- ~/pages/blog/[slug].vue -->
 <script setup lang="ts">
 const { data: post } = await useAsyncData('post', () =>
-  queryContent('blog', route.params.slug).findOne()
-)
+  queryContent('blog', route.params.slug).findOne())
 
 useSeoMeta({
   twitterCard: 'summary_large_image',
