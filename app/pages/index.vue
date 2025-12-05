@@ -386,7 +386,7 @@ const [DefineSectionTemplate, ReuseSectionTemplate] = createReusableTemplate()
                 <div>
                   <div class="font-light justify-center flex items-center gap-3 text-6xl mb-2">
                     <UIcon name="i-carbon-checkmark" />
-                    {{ humanNumber(stats.totalIssuesClosed) }}
+                    {{ humanNumber(stats.totalIssueClosed) }}
                   </div>
                   <div class="text-sm opacity-80">
                     Issues Closed
