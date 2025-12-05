@@ -62,14 +62,6 @@ export const content = defineContentConfig({
     skewProtection: getSubModuleCollection(NuxtSkewProtectionModule),
     aiReady: getSubModuleCollection(NuxtAiReadyModule),
     aiSearch: getSubModuleCollection(NuxtAiSearchModule),
-    pro: defineCollection(asSeoCollection({
-      type: 'page',
-      source: {
-        include: '**/*.md',
-        cwd: resolve('content/pro'),
-        prefix: '/pro',
-      },
-    })),
     learn: defineCollection(asSeoCollection({
       type: 'page',
       source: {

@@ -15,7 +15,7 @@ keywords:
 
 ## Introduction
 
-While [robots.txt](/learn/controlling-crawlers/robots-txt) and [meta robots](/learn/controlling-crawlers/meta-tags) provide basic crawler control, they're merely suggestions that can be ignored. A comprehensive security strategy is crucial for protecting sensitive content from malicious crawlers.
+[Robots.txt](/learn/controlling-crawlers/robots-txt) and [meta robots](/learn/controlling-crawlers/meta-tags) are polite suggestions. Malicious crawlers ignore them. You need actual security to protect sensitive content.
 
 **✅ Good Security Practices:**
 
@@ -28,10 +28,10 @@ While [robots.txt](/learn/controlling-crawlers/robots-txt) and [meta robots](/le
 
 **❌ Don't Rely On:**
 
-- robots.txt for sensitive data
-- IP blocking alone
-- User-agent detection
-- Client-side only protection
+- robots.txt for sensitive data (lazy and ineffective)
+- IP blocking alone (easily bypassed)
+- User-agent detection (trivial to fake)
+- Client-side only protection (not real security)
 - Security through obscurity
 
 ## Quick Setup
@@ -206,7 +206,7 @@ export default defineEventHandler((event) => {
 
 ### Security Headers
 
-Implement robust security headers:
+Add security headers:
 
 ```ts
 export default defineNuxtConfig({
@@ -253,11 +253,13 @@ export default defineEventHandler((event) => {
 
 ### Using Web Application Firewalls
 
-Consider using services like Cloudflare or AWS WAF to:
+Services like Cloudflare or AWS WAF can:
 - Block malicious IPs
 - Prevent DDoS attacks
 - Filter suspicious requests
 - Monitor traffic patterns
+
+**Opinion:** If you're running a small blog, a WAF is overkill. Add it when you're actually getting attacked.
 
 ## Common Attacks
 
